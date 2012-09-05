@@ -1,0 +1,96 @@
+@charset "utf-8";
+/* CSS Document por Hexagram www.hexagram.cl */
+
+.input{
+	/*background-color:#FFFFFF;*/
+	/*border:#0b2d60 1px solid;*/
+	padding:2px;
+	background-position: left;
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	font-size:10px;
+	color:#333333;
+	text-transform:uppercase;
+        text-shadow: 0px 1px 0px #ffffff;
+	-moz-border-radius: 5px 5px 5px 5px;
+	-webkit-border-radius: 5px 5px 5px 5px;
+}
+
+.input:hover{
+	background-color:#CCCCCC;
+	/*border:#0b2d60 1px solid;*/
+	text-transform:uppercase;
+}
+
+.input:focus{
+	background-color:#FFFFFF;
+	border:#0b2d60 2px solid;
+	text-transform:uppercase;
+	text-align: right;
+}
+
+select{
+        background-color:#FFFFFF;
+        /*border:#0b2d60 1px solid;*/
+        /*padding:2px;	*/
+        background-position: left;	
+        /*font-family:Verdana, Arial, Helvetica, sans-serif;*/
+        /*font-size:10px;*/
+        /*font-weight:bold;*/
+        /*color:#333333;*/
+        -moz-border-radius:5px 0 0 5px;
+        -webkit-border-radius: 5px 0px 0px 5px;
+        /*text-transform: uppercase;*/
+}
+
+select:hover{
+	background-color:#CCCCCC;
+	border:#0b2d60 1px solid;
+	/*text-transform: uppercase;*/
+}
+				
+.select:focus{
+	background-color:#FFFFFF;
+	border:#0b2d60 2px solid;
+	text-transform: uppercase;
+}
+
+.boton{
+background-image:url(../img/boton.png);
+border:0px;
+width:85px;
+height:48px;
+text-align:center;
+display:block;
+padding-bottom:15px;
+color:#0b2d60;
+font-weight:normal;
+text-decoration:none;
+background-color: transparent;
+}	
+.boton:hover{
+font-weight:bold;
+background-color: transparent;
+}
+
+.titulos-form		{
+	color:#042552;
+	font-weight: bold;
+	text-transform: uppercase;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	padding: 10px 0;
+}
+
+.txt		{
+	color:#999999;
+	font-weight: normal;
+	font-weight: bold;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 14px;
+}
+
+.txt-i{
+	color:#FFFFFF;
+	font-weight: normal;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 9px;
+}

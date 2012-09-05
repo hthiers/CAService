@@ -1,0 +1,197 @@
+@charset "utf-8";
+/* Jorge Martinez Figueroa
+	www.hexagram.cl        */
+	
+a {
+	color: red;
+	background-color: transparent;
+	text-decoration: none;
+	/*font-size:14px;*/
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	text-transform:capitalize;
+}
+
+a:hover {
+	color: #666666;
+	text-decoration: underline;
+	background-color: transparent;
+}
+
+a.menu_sup{
+    color: #ffffff;
+    text-shadow: 0px 1px 0px #000000;
+    font-weight:bold;
+}
+
+#medio_contratos a {
+	color: #2c096c;
+	background-color: transparent;
+	text-decoration: none;
+	font-size:16px;
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	text-transform:capitalize;
+	font-weight:bold;
+}
+
+#medio_contratos a:hover {
+	color: #FF0000;
+	text-decoration: none;
+	background-color: transparent;
+	padding-left:0px;
+}
+
+#medio_recibos a {
+	color: #2c096c;
+	background-color: transparent;
+	text-decoration: none;
+	font-size:16px;
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	text-transform:capitalize;
+	font-weight:bold;
+}
+
+#medio_recibos a:hover {
+	color: #FF0000;
+	text-decoration: none;
+	background-color: transparent;
+	padding-left:0px;
+}
+
+#banner a {
+	color: #FFFFFF;
+	background-color: transparent;
+	text-decoration: none;
+        text-shadow: 0px 1px 0px #000000;
+	font-size:11px;
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	text-transform:capitalize;
+	font-weight:bold;
+}
+
+#banner a:hover {
+	color: #FFFFFF;
+	text-decoration: underline;
+	background-color: transparent;
+}
+
+#medio_propiedad a {
+	color: #2c096c;
+	background-color: transparent;
+	text-decoration: none;
+	font-size:16px;
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	text-transform:capitalize;
+	font-weight:bold;
+}
+
+#medio_propiedad a:hover {
+	color: #FF0000;
+	text-decoration: none;
+	background-color: transparent;
+	padding-left:0px;
+}
+
+#tabla_cliente a {
+	color: #2c096c;
+	background-color: transparent;
+	text-decoration: none;
+	font-size:16px;
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	text-transform:capitalize;
+	font-weight:bold;
+}
+
+#tabla_cliente a:hover {
+	color: #FF0000;
+	text-decoration: none;
+	background-color: transparent;
+	padding-left:0px;
+}
+
+#tabla_contrato a {
+	color: #2c096c;
+	background-color: transparent;
+	text-decoration: none;
+	font-size:10px;
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	text-transform:capitalize;
+	font-weight:bold;
+}
+
+#tabla_contrato a:hover {
+	color: #FF0000;
+	text-decoration: none;
+	background-color: transparent;
+	padding-left:0px;
+}
+
+#error a {
+	color: #2c096c;
+	background-color: transparent;
+	text-decoration: none;
+	font-size:20px;
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	text-transform:capitalize;
+	font-weight:bold;
+}
+
+#error a:hover {
+	color: #FF0000;
+	text-decoration: none;
+	background-color: transparent;
+	padding-left:0px;
+}
+
+.contrato{ text-transform:capitalize; }
+.menuinicio
+{
+	color: #5C5B5B;
+	margin: 0;
+	padding: 0px 0px 6px 0px;
+	font-size: 28px;
+	line-height: 34px;
+	letter-spacing: -1px;
+	font-weight: bold;
+        font-family: Helvetica, Arial, sans-serif;
+}
+.submenu
+{
+        font-family: Helvetica, "Helvetica Neue", "Lucida Grande", Arial, Verdana, sans-serif;
+        font-size: 14px;
+        margin-top: .5em; color: #666;
+	
+}
+.titulos{ font-family:Verdana, Arial, Helvetica, sans-serif; font-size:14px; font-weight:bold; text-transform:capitalize;}
+.titulos_top{ font-family:Verdana, Arial, Helvetica, sans-serif; font-size:16px; font-weight:bold; text-transform:capitalize; color:#999999;}
+.texto{ font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; color:#0b2d60;}
+.texto2{ font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; color:#fff;}
+.error{	font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; color:#FF0000;}
+.banner{ font-family:Verdana, Arial, Helvetica, sans-serif; font-size:10px; color:#FFFFFF; }
+.fin{ font-family:Verdana, Arial, Helvetica, sans-serif; font-size:10px; color:#999999;}
+.titulo_error{ font-family:Verdana, Arial, Helvetica, sans-serif; font-size:34px; color:#FF0000; font-weight:bold;}
+
+/* Alerta Twitter */
+.flash{
+padding-top:8px;
+padding-bottom:8px;
+background-color: #d2f361;
+color:#0b2d60;
+font-weight:bold;
+font-size:20px;
+position:fixed;
+width:100%;
+}
+
+.tw{
+color:#0b2d60;
+font-weight:bold;
+font-size:15px;
+}
+
+#space
+{
+height:20px;
+}
+
+/* Fin Alerta Twitter */
+.fin2{ font:10px   color:#000;}

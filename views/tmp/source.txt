@@ -1,0 +1,130 @@
+{
+  "aaData": [
+    [
+      "Cliente A",
+      "Maximiliano Booth",
+      "15/05/2012",
+      "10:00",
+      "Activo"
+    ],
+    [
+      "Cliente B",
+      "Maximiliano Booth",
+      "19/05/2012",
+      "15:00",
+      "Activo"
+    ],
+	[
+      "Cliente C",
+      "Maximiliano Booth",
+      "06/05/2012",
+      "09:00",
+      "Finalizado"
+    ],
+	[
+      "Cliente A",
+      "Maximiliano Booth",
+      "15/05/2012",
+      "10:00",
+      "Activo"
+    ],
+    [
+      "Cliente B",
+      "Maximiliano Booth",
+      "19/05/2012",
+      "15:00",
+      "Activo"
+    ],
+	[
+      "Cliente F",
+      "Maximiliano Booth",
+      "06/05/2012",
+      "09:00",
+      "Finalizado"
+    ],
+	[
+      "Cliente F",
+      "Maximiliano Booth",
+      "15/05/2012",
+      "10:00",
+      "Activo"
+    ],
+    [
+      "Cliente H",
+      "Usuario B",
+      "19/05/2012",
+      "15:00",
+      "Finalizado"
+    ],
+    [
+      "Cliente Z",
+      "Usuario B",
+      "06/05/2012",
+      "09:00",
+      "Finalizado"
+    ],
+    [
+      "Cliente A",
+      "Maximiliano Booth",
+      "15/05/2012",
+      "10:00",
+      "Activo"
+    ],
+    [
+      "Cliente B",
+      "Maximiliano Booth",
+      "19/05/2012",
+      "15:00",
+      "Activo"
+    ],
+	[
+      "Cliente C",
+      "Maximiliano Booth",
+      "06/05/2012",
+      "09:00",
+      "Finalizado"
+    ],
+	[
+      "Cliente A",
+      "Maximiliano Booth",
+      "15/05/2012",
+      "10:00",
+      "Activo"
+    ],
+    [
+      "Cliente B",
+      "Maximiliano Booth",
+      "19/05/2012",
+      "15:00",
+      "Activo"
+    ],
+	[
+      "Cliente F",
+      "Maximiliano Booth",
+      "06/05/2012",
+      "09:00",
+      "Finalizado"
+    ],
+	[
+      "Cliente F",
+      "Maximiliano Booth",
+      "15/05/2012",
+      "10:00",
+      "Activo"
+    ],
+    [
+      "Cliente H",
+      "Usuario B",
+      "19/05/2012",
+      "15:00",
+      "Finalizado"
+    ],
+	[
+      "Cliente Z",
+      "Usuario B",
+      "06/05/2012",
+      "09:00",
+      "Finalizado"
+    ]
+  ]
+}

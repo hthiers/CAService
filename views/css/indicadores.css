@@ -1,0 +1,16 @@
+table, td, th{
+	font:12px Verdana, Geneva, sans-serif; 
+}
+td{ 
+padding:6px;
+border:2px solid #cfdce9;
+color: #8a8d90; 
+background:#ffff
+}
+th{
+text-align:center;
+padding:6px;
+border:2px solid #cfdce9;
+color: #8a8d90;
+background:#ebeff3;
+}

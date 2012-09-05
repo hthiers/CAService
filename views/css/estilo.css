@@ -1,0 +1,413 @@
+body{
+    margin:0 auto;
+    background-color:#f6f6f6; 
+    text-transform:none; 
+    background-repeat:repeat-x; 
+}
+#cabecera{
+    width:1020px; 
+    /*height:90px; */
+    border-left:#CCCCCC 1px solid; 
+    border-right:#CCCCCC 1px solid; 
+    margin:0 auto;
+    /*background-image:url(../img/header.png);*/
+}
+#banner{
+    /*width:1020px;*/
+    height:20px;
+    text-align:left;
+    padding-top:3px;
+    /*padding-left:5px;*/
+    border-left:#CCCCCC 1px solid;
+    border-right:#CCCCCC 1px solid;
+    margin:0 auto;
+    background-color:#476085;
+    border-bottom:1px solid;
+    font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; color:#fff;
+}
+.banner_welcome{
+    margin-left: 5px;
+    padding: 0;
+    float: left;
+}
+.banner_title{
+    margin-right: 5px;
+    padding: 0;
+    float: right;
+}
+#salir{
+    width:40px;
+    height:20px; 
+    text-align:left; 
+    padding-top:3px; 
+    padding-left:5px; 
+    border-left:#CCCCCC 1px solid; 
+    border-right:#CCCCCC 1px solid; 
+    margin:0 auto;
+    background-color:#476085;
+}
+#menu{
+    width:1020px;
+    height:25px; 
+    text-align:left; 
+    padding-top:3px; 
+    /*padding-left:5px; */
+    border-left:#CCCCCC 1px solid; 
+    border-right:#CCCCCC 1px solid; 
+    margin:0 auto;
+    background-color:#476085;
+}
+/* TO FIX! There should not be 2 menu classes */
+#menu_div{
+    color: #ffffff;
+    /*width:1020px;*/
+    height:25px; 
+    text-align:left; 
+    padding:3px;
+    /*padding-left:5px; */
+    border-left:#CCCCCC 1px solid; 
+    border-right:#CCCCCC 1px solid;
+    border-top: #CCCCCC 1px solid;
+    margin:0 auto;
+    background-color:#476085;
+}
+#central{
+    background-color:#FFFFFF;
+    width:850px; 
+    height:auto; 
+    padding-bottom:50px;
+    padding-top: 5px;
+    /*border-bottom:#CCCCCC 1px solid; 
+    border-left:#CCCCCC 1px solid; 
+    border-right:#CCCCCC 1px solid; */
+    margin:auto;
+}
+
+#contenido{
+    text-align:left;
+    margin:auto;
+    background-color:#FFFFFF;
+    /*width:1000px; */
+    height:auto;
+}
+#contenido label {
+    float: left;
+}
+
+#exportar{
+    text-align:right;
+    margin-right:25px;
+    background-color:#FFFFFF;
+    width:960px; 
+    height:auto;
+}
+#info{
+    /*width:1020px; */
+    /*height:50px; */
+    margin:0 auto; 
+    padding:5px 0;
+    background-color:#476085;
+    border: 1px solid #476085;
+}
+.Estilo1 {
+    color: #FFFFFF;
+    font-size: 12px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    text-align:center;
+}
+.Estilo2 {
+    color: #FFFFFF;
+    font-weight: bold;
+}
+
+.Estilo7 {font-family: Georgia}
+
+input.bien{
+    border: 1px;
+    border-color: #476085;
+    border-style: solid;
+    border-radius: 5px;
+    width: 200px;
+    height: 25px;
+    padding-left: 12px;
+    font-family: Georgia;
+    font-size: 18px;
+    font-style: italic;
+    color: #bcbcbc;
+    background-repeat: no-repeat;
+    background-position: center right;
+    padding-right: 25px;
+} 
+.botonedit{
+	/*background-color:#476085;*/
+width:60px;
+    height:30px;
+    display:block;
+    color:#1111;
+    text-align: right;
+}
+.boton{
+    background-color:#476085;
+    width:109px;
+    height:35px;
+    text-align:center;
+    /*display:block;*/
+    color:#ffffff;
+
+    -moz-border-radius:10px 10px 10px 10px;
+    -webkit-border-radius: 10px 10px 10px 10px;
+}	
+.a
+{
+    font-size:10px;
+    font-style:normal;
+    color: #fffff;
+}
+/*  mi nuevo menu */
+
+
+/*th{background:#476085 url(tr_back.gif) repeat-x;color:#fff; text-align:center; border:#FFF 1px solid;}*/
+.headers {
+    background: #476085;
+}
+th{
+    color:#fff; 
+    text-align:center; 
+    border:#FFF 1px solid;
+}
+
+#central #contenido2 {
+    text-align:left;
+    margin-left:12px;
+}
+
+a{
+    cursor: pointer;
+}
+#contenidoindex{
+text-align:left;
+float:left;
+background-color:#FFFFFF;
+width:600px; 
+height:400px; 
+}
+#infoindex{
+text-align:left;
+
+background-color:#FFFFFF;
+width:400px; 
+height:400px; 
+}
+
+#oculto{
+text-align:center;
+margin:0 auto 0 auto; width:600px;
+
+}
+
+#excel{
+text-align:right;
+float:right;
+margin-right:-130px;
+
+}
+input.error { border: 1px solid red; }
+select.error{ border: 1px solid red; }
+
+div.message{
+    background: transparent url(msg_arrow.gif) no-repeat scroll left center;
+    padding-left: 7px;
+	}
+
+	div.error{
+    background-color:#F3E6E6;
+    border-color: #924949;
+    border-style: solid solid solid none;
+    border-width: 2px;
+    padding: 5px;
+	}
+#sms{
+	width:400px;
+	height:30px;
+	border: #000 1px solid;	
+}
+
+h4.error_page {
+	color: #F00;
+	margin: 0 auto;
+	padding: 10px;
+	width: 23%;
+}
+
+/*
+* DATA TABLE ERROR/MESSAGE BOX
+*/
+#debugbox {
+	border: 1px solid #000000;
+	background-color: #CCC;
+	font-family: "Courier New", Courier, monospace;
+	font-size: 11px;
+}
+#errorbox_success {
+        color: #ffffff;
+	margin: 5px auto;
+	width: 50%;
+	text-align: center;
+	background-color: #9acd32;
+	padding: 5px;
+}
+#errorbox_failure {
+        color: #ffffff;
+	margin: 5px auto;
+	width: 50%;
+	text-align: center;
+	background-color: #ff4500;
+	padding: 5px;
+}
+
+/*
+* DATA TABLE CUSTOM FILTRES
+* centered (default) or left aligned options
+*/
+#dt_filtres{
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    color: #000;
+    margin: 2px auto;
+    font-size: 12px;
+}
+
+#dt_filtres th {
+    /*background-color: #f5f5f5;*/
+    border: none;
+    color: #000;
+    padding: 2px;
+}
+
+#dt_filtres td {
+    border: none;
+    text-align: center;
+}
+
+#dt_filtres input {
+    width: 70px;
+    height: 21px;
+}
+
+#dt_filtres .cbo_max_width {
+    /*
+    * ideal max with for dt filtres box
+    */
+    width: 300px;
+}
+
+/*
+* DATA TABLE EDITION OPTIONS
+*/
+#edition_options {
+    display: none;
+}
+
+/*
+* ADD FORM TABLE
+*/
+#moduleForm {
+    margin: auto;
+    /*width: 457px;*/
+}
+#moduleForm table {
+    /*width: 550px;*/
+    height: 118px;
+    border: 0;
+    margin: 0 auto;
+}
+#moduleForm table td {
+    padding: 5px 0;
+}
+#moduleForm .submit {
+    padding: 0 60px;
+    text-align: center;
+}
+
+/*
+* PROFILE TABLE
+*/
+#normaltable {
+    margin: 0 auto;
+    text-align: left;
+    width: 450px;
+    font-size: 11px;
+}
+#normaltable th {
+    padding: 5px;
+}
+#normaltable td {
+    background-color: #E5F1F4;
+}
+#normaltable input {
+    font-size: 12px;
+}
+.button {
+    padding: 2px;
+}
+.options input {
+    margin-left: 30px;
+}
+.centered_buttons {
+    text-align: center;
+}
+
+/*
+* HIDDEN OBJECTS
+*/
+#hidden_object, #edit_sign {
+    display: none;
+}
+
+/*
+* SIGNAL BOX
+*/
+#edit_sign {
+    background-color: yellow;
+    clear: both;
+    font: 12px sans-serif;
+    height: 20px;
+    margin: 0 auto;
+    padding: 5px;
+    text-align: center;
+}
+
+/*
+* NO SCRIPT BLOCK
+*/
+noscript div {
+    background-color: #ffcc33;
+    font-size: 18px;
+    font-family: sans-serif;
+    height: 300px;
+    left: 10%;
+    top: 20%;
+    padding: 10px 50px;
+    position: absolute;
+    width: 980px;
+    z-index: 1000;
+}
+noscript h4 {
+    font-size: 23px;
+    margin: 15px 2px 5px 2px;
+}
+noscript p {
+    margin: 30px 5px 5px 5px;
+}
+
+/*
+* VERIFICATION BLOCKS
+*/
+#i1, #ia1 {
+    color: green;
+}
+#i2, #ia2 {
+    color: red;
+}
