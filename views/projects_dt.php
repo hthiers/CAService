@@ -17,36 +17,34 @@ require('templates/header.tpl.php'); #session & header
 </style>
 <script type="text/javascript" language="javascript" src="views/lib/jquery.dataTables.min.js"></script>
 <script type="text/javascript" charset="utf-8">
-$.fn.dataTableExt.afnFiltering.push(
-    function( oSettings, aData, iDataIndex ) {
-        var iCliente = $('#cboCliente option:selected').val();
-        var iEstado = $('#cboEstado option:selected').val();
-        var iVersion = aData[3] == "-" ? 0 : aData[3]*1;
-        
-        if ( iCliente == "" && iEstado == "" )
-        {
-            return true;
-        }
-        else if ( iCliente == "" && aData[4] == iEstado )
-        {
-            return true;
-        }
-        else if ( iCliente == aData[0] && "" == iEstado )
-        {
-            return true;
-        }
-//        else if ( iCliente < iVersion && iVersion < iEstado )
+//$.fn.dataTableExt.afnFiltering.push(
+//    function( oSettings, aData, iDataIndex ) {
+//        var iCliente = $('#cboCliente option:selected').val();
+//        var iEstado = $('#cboEstado option:selected').val();
+//        var iVersion = aData[3] == "-" ? 0 : aData[3]*1;
+//        
+//        if ( iCliente == "" && iEstado == "" )
 //        {
 //            return true;
 //        }
-        return false;
-    }
-);
+//        else if ( iCliente == "" && aData[4] == iEstado )
+//        {
+//            return true;
+//        }
+//        else if ( iCliente == aData[0] && "" == iEstado )
+//        {
+//            return true;
+//        }
+////        else if ( iCliente < iVersion && iVersion < iEstado )
+////        {
+////            return true;
+////        }
+//        return false;
+//    }
+//);
     
 $(document).ready(function() {
     oTable = $('#example').dataTable({
-            "bProcessing": true,
-            "sAjaxSource": '<?php echo $rootPath;?>views/tmp/source.txt',
             "sDom": '<"top"lpf>rt<"clear">',
             "oLanguage": {
                 "sInfo": "_TOTAL_ registros",
@@ -65,18 +63,7 @@ $(document).ready(function() {
                 }
             },
             "sPaginationType": "full_numbers",
-            "aaSorting": [[0, "asc"]],
-            "aoColumnDefs": [
-                { "mDataProp": null, "aTargets": [-1] },
-                {
-                    "fnRender": function ( oObj ) {
-                        var str_inputs = '<a href=\"<?php echo $rootPath;?>?controller=Trabajos&amp;action=verTrabajo&amp;id=<?php echo rand(100,300); ?>\">VER</a>';
-
-                        return str_inputs;
-                        },
-                        "aTargets": [-1]
-                }
-            ]
+            "aaSorting": [[0, "asc"]]
     });
     
     $('#cboCliente').change(function() { oTable.fnDraw(); } );
@@ -99,10 +86,11 @@ require('templates/menu.tpl.php'); #banner & menu
         if($debugMode)
         {
             print('<div id="debugbox">');
+            print("tenant: ".$session->id_tenant.", user: ".$session->id_user."<br/>");
             print_r($titulo); print('<br />');
             print_r($listado); print('<br />');
             print(htmlspecialchars($error_flag, ENT_QUOTES)); print('<br />');
-            print_r($permiso_editar); print('<br />');
+            #print_r($permiso_editar); print('<br />');
             print('</div>');
         }
         ?>
@@ -191,7 +179,28 @@ require('templates/menu.tpl.php'); #banner & menu
             </tr>
         </thead>
         <tbody>
-
+            <?php
+            while($item = $listado->fetch(PDO::FETCH_ASSOC))
+            {
+            ?>
+            <tr>
+                <td><?php echo $item['id_project'];?></td>
+                <td><?php echo $item['code_project'];?></td>
+                <td><?php echo $item['label_project'];?></td>
+                <td><?php echo $item['date_ini'];?></td>
+                <td><?php echo $item['date_end'];?></td>
+                <td>
+                    <form method="post"  action="<?php echo $rootPath.'?controller=segments&amp;action=segmentsEditForm';?>">
+                        <?php 
+                        echo "<input name='id_project' type='hidden' value='$item[id_tenant]' />\n";
+                        echo "<input class='input' type='submit' value='VER' />\n";
+                        ?>
+                    </form>
+                </td>
+            </tr>
+            <?php
+            }
+            ?>
         </tbody>
         </table>
 

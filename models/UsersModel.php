@@ -4,10 +4,15 @@ class UsersModel extends ModelBase
 	public function getUserAccount($username, $password)
 	{
 		//realizamos la consulta de todos los segmentos
-		$consulta = $this->db->prepare("SELECT user_id,user_name
-                            FROM tt_user
-                            WHERE user_name='$username' 
-                              AND user_password='$password'");
+		$consulta = $this->db->prepare("SELECT 
+                                id_user
+                                , code_user
+                                , id_tenant
+                                , name_user
+                                , id_profile
+                            FROM cas_user
+                            WHERE name_user='$username'");
+                              #AND user_password='$password'");
 		$consulta->execute();
 		
 		//devolvemos la coleccion para que la vista la presente.
@@ -17,8 +22,29 @@ class UsersModel extends ModelBase
         public function getUserAccountByID($id)
 	{
 		//realizamos la consulta de todos los segmentos
-		$consulta = $this->db->prepare("SELECT ID,USUARIO,NOMBRE,APELLIDOP,APELLIDOM,PRIVILEGIO,CLAVE
-                            FROM t_usuario WHERE ID='$id'");
+		$consulta = $this->db->prepare("SELECT 
+                                 id_user
+                                , code_user
+                                , id_tenant
+                                , name_user
+                                , id_profile
+                            FROM cas_user WHERE id_user='$id'");
+		$consulta->execute();
+		
+		//devolvemos la coleccion para que la vista la presente.
+		return $consulta;
+	}
+        
+        public function getUserAccountByCode($code_user)
+	{
+		//realizamos la consulta de todos los segmentos
+		$consulta = $this->db->prepare("SELECT 
+                                 id_user
+                                , code_user
+                                , id_tenant
+                                , name_user
+                                , id_profile
+                            FROM cas_user WHERE code_user='$code_user'");
 		$consulta->execute();
 		
 		//devolvemos la coleccion para que la vista la presente.

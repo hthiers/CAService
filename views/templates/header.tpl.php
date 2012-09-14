@@ -2,8 +2,8 @@
 header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
 header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // Date in the past
 
-#session vars
-#$session = FR_Session::singleton();
+//session vars
+$session = FR_Session::singleton();
 
 #system vars for view level
 $config = Config::singleton();

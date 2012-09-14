@@ -1,49 +1,46 @@
 <?php
-class TrabajosController extends ControllerBase
+class ProjectsController extends ControllerBase
 {
     /*******************************************************************************
     * SEGMENTS
     *******************************************************************************/
 
     //SHOW
-    public function trabajosDt($error_flag = 0, $message = "")
+    public function projectsDt($error_flag = 0, $message = "")
     {
-//        $session = FR_Session::singleton();
-//
-//        //Incluye el modelo que corresponde
-//        require_once 'models/SegmentsModel.php';
-//        require_once 'models/UsersModel.php';
-//
-//        //Creamos una instancia de nuestro "modelo"
-//        $segmentModel = new SegmentsModel();
-//        $userModel = new UsersModel();
-//
-//        //Le pedimos al modelo todos los items
-//        $listado = $segmentModel->getAllSegments();
-//
-//        // Obtener permisos de edición
+        $session = FR_Session::singleton();
+
+        //Incluye el modelo que corresponde
+        require_once 'models/ProjectsModel.php';
+        require_once 'models/UsersModel.php';
+
+        //Creamos una instancia de nuestro "modelo"
+        $projectsModel = new ProjectsModel();
+        $userModel = new UsersModel();
+
+        //Le pedimos al modelo todos los items
+        $listado = $projectsModel->getAllProjectsByTenant($session->id_tenant);
+
+        // Obtener permisos de edición
 //        $permisos = $userModel->getUserModulePrivilegeByModule($session->id, 7);
 //        if($row = $permisos->fetch(PDO::FETCH_ASSOC)){
 //            $data['permiso_editar'] = $row['EDITAR'];
 //        }
 //
-//        //Pasamos a la vista toda la información que se desea representar
-//        $data['listado'] = $listado;
-//
-//        //Titulo pagina
-        $data['titulo'] = "REGISTRO DE TRABAJOS";
-//
-        $data['controller'] = "trabajos";
-        $data['action'] = "trabajosVer";
-        $data['action_b'] = "trabajosDt";
-//
-//        //Posible error
-//        $data['error_flag'] = $this->errorMessage->getError($error_flag, $message);
-//
-//        //Finalmente presentamos nuestra plantilla
-//        $this->view->show("segments_dt.php", $data);
-        
-        $this->view->show("trabajos_dt.php", $data);
+        //Pasamos a la vista toda la información que se desea representar
+        $data['listado'] = $listado;
+
+        //Titulo pagina
+        $data['titulo'] = "LISTA DE TRABAJOS";
+
+        $data['controller'] = "projects";
+//        $data['action'] = "trabajosVer";
+//        $data['action_b'] = "trabajosDt";
+
+        //Posible error
+        $data['error_flag'] = $this->errorMessage->getError($error_flag, $message);
+
+        $this->view->show("projects_dt.php", $data);
     }
     
     public function verTrabajo(){

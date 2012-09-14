@@ -15,7 +15,7 @@ class UsersController extends ControllerBase
             $account = new UsersModel();
 
             //Le pedimos al modelo que busque la cuenta de usuario (nombre de usuario y contraseña)
-            $username = "admin";
+            $username = "hernan";
             $password = "12345";
             $result = $account->getUserAccount($username, $password);
             $values = $result->fetch(PDO::FETCH_ASSOC);
@@ -28,15 +28,18 @@ class UsersController extends ControllerBase
 
                 //Start session
                 $session = FR_Session::singleton();
-                $session->id = $values['user_id'];
-                $session->usuario = $values['user_name'];
+                $session->id_user = $values['id_user'];
+                $session->id_tenant = $values['id_tenant'];
+                $session->id_profile = $values['id_profile'];
+                $session->code_user = $values['code_user'];
+                $session->name_user = $values['name_user'];
 //
 //                header("Location: ".$this->root."?controller=users&action=userProfile");
 //            }
 //            else
 //                header("Location: ".$this->root."?controller=index&action=indexErrorLogin");
             
-            header("Location: ".$this->root."?controller=Trabajos&action=trabajosDt");
+            header("Location: ".$this->root."?controller=Projects&action=projectsDt");
 	}
 
 	public function logOut()
