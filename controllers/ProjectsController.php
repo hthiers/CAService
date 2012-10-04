@@ -49,7 +49,7 @@ class ProjectsController extends ControllerBase
         
         $data['titulo'] = "TRABAJO #".$id_trabajo;
         
-        $this->view->show("trabajo_vista.php", $data);
+        $this->view->show("projects_vista.php", $data);
     }
     
     public function nuevoTrabajoForm(){

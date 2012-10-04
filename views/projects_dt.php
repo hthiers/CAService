@@ -10,10 +10,10 @@ require('templates/header.tpl.php'); #session & header
 
 <!-- AGREGAR JS & CSS AQUI -->
 <style type="text/css" title="currentStyle">
-	@import "views/css/datatable.css";
-        table.dataTable, table.filtres {
-            width: 100%;
-        }
+    @import "views/css/datatable.css";
+    table.dataTable, table.filtres {
+        width: 100%;
+    }
 </style>
 <script type="text/javascript" language="javascript" src="views/lib/jquery.dataTables.min.js"></script>
 <script type="text/javascript" charset="utf-8">
@@ -190,7 +190,7 @@ require('templates/menu.tpl.php'); #banner & menu
                 <td><?php echo $item['date_ini'];?></td>
                 <td><?php echo $item['date_end'];?></td>
                 <td>
-                    <form method="post"  action="<?php echo $rootPath.'?controller=segments&amp;action=segmentsEditForm';?>">
+                    <form method="post"  action="<?php echo $rootPath.'?controller=Projects&amp;action=verTrabajo';?>">
                         <?php 
                         echo "<input name='id_project' type='hidden' value='$item[id_tenant]' />\n";
                         echo "<input class='input' type='submit' value='VER' />\n";

@@ -74,7 +74,7 @@ require('templates/header.tpl.php'); #session & header
         });
         
         $("#btn_stop").click(function (event){
-           window.location.replace("<?php echo $rootPath;?>?controller=Trabajos&action=trabajosDt"); 
+           window.location.replace("<?php echo $rootPath;?>?controller=Projects&action=projects_dt"); 
         });
     });
 
