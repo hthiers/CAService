@@ -11,8 +11,8 @@ class UsersModel extends ModelBase
                                 , name_user
                                 , id_profile
                             FROM cas_user
-                            WHERE name_user='$username'");
-                              #AND user_password='$password'");
+                            WHERE name_user='$username'
+                              AND password_user='$password'");
 		$consulta->execute();
 		
 		//devolvemos la coleccion para que la vista la presente.

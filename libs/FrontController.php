@@ -26,7 +26,7 @@ class FrontController
 		//Formamos el nombre del Controlador o en su defecto, tomamos que es el IndexController
 		if(! empty($_GET['controller']))
 		{
-			$controllerName = $_GET['controller'] . 'Controller';
+			$controllerName = ucfirst($_GET['controller']) . 'Controller';
 		}
 		else
 		{

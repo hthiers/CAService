@@ -3,11 +3,11 @@ class UsersController extends ControllerBase
 {
 	public function logIn()
 	{
-//            //Parametros login form
-//            isset($_POST['txtusername'],$_POST['txtpassword'],$usuario1,$datos,$priv);
-//            $username = $_POST['txtusername'];
-//            $password = md5($_POST['txtpassword']);
-//
+            //Parametros login form
+            isset($_POST['txtusername'],$_POST['txtpassword'],$usuario1,$datos,$priv);
+            $username = $_POST['txtusername'];
+            $password = md5($_POST['txtpassword']);
+
             //Incluye el modelo que corresponde
             require_once 'models/UsersModel.php';
 
@@ -15,14 +15,12 @@ class UsersController extends ControllerBase
             $account = new UsersModel();
 
             //Le pedimos al modelo que busque la cuenta de usuario (nombre de usuario y contraseña)
-            $username = "hernan";
-            $password = "12345";
             $result = $account->getUserAccount($username, $password);
             $values = $result->fetch(PDO::FETCH_ASSOC);
-//
-//            //Segun resultado iniciamos sesion (ir a sistema) o lanzamos error (volver a home)
-//            if(isset($values['ID']) == true && $values['ID'] > 0)
-//            {
+
+            //Segun resultado iniciamos sesion (ir a sistema) o lanzamos error (volver a home)
+            if(isset($values['ID']) == true && $values['ID'] > 0)
+            {
                 //Set timezone
                 date_default_timezone_set($this->timezone);
 
@@ -33,13 +31,11 @@ class UsersController extends ControllerBase
                 $session->id_profile = $values['id_profile'];
                 $session->code_user = $values['code_user'];
                 $session->name_user = $values['name_user'];
-//
-//                header("Location: ".$this->root."?controller=users&action=userProfile");
-//            }
-//            else
-//                header("Location: ".$this->root."?controller=index&action=indexErrorLogin");
-            
-            header("Location: ".$this->root."?controller=Projects&action=projectsDt");
+
+                header("Location: ".$this->root."?controller=Projects&action=projectsDt");
+            }
+            else
+                header("Location: ".$this->root."?controller=index&action=indexErrorLogin");
 	}
 
 	public function logOut()
