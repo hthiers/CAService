@@ -1,5 +1,8 @@
 <?php
 require('templates/header_index.tpl.php');
+
+if(isset($_GET['errorCode']))
+    $error_code = $_GET['errorCode'];
 ?>
 
 <!-- AGREGAR JS & CSS AQUI -->
@@ -29,7 +32,7 @@ $(document).ready(function(){
     <div id="central">
         <div id="contenido">
             
-            <?php if(isset($error) && $error == 1) echo "<div id='errorbox_failure'>Usuario o contraseña inválido!</div>"; ?>
+            <?php if(isset($error) && $error == 1) echo "<div id='errorbox_failure'>Usuario o contraseña inválido! - ERR#".$error_code."</div>"; ?>
             
             <h2 class="menuinicio">Inicio de sesión</h2>
             <p class="submenu">
@@ -59,9 +62,10 @@ $(document).ready(function(){
         </div>
     </div>
     <!-- END CENTRAL -->
-
-</div>
-<!-- END CABECERA -->
+    
+    <div id="ads">
+        <a href="http://www.freedomain.co.nr/" target="_blank"><img src="views/img/freedomain_banner.gif" width="88" height="31" border="0" alt="Free Domain Name - www.YOU.co.nr!"></a>
+    </div>
 
 <!-- FOOTER -->
 <?php require('templates/footer_index.tpl.php'); ?>
