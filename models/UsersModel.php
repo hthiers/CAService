@@ -13,6 +13,8 @@ class UsersModel extends ModelBase
                             FROM cas_user
                             WHERE name_user='$username'");
                               #AND password_user='$password'");
+                #sin pass para debug
+                
 		$consulta->execute();
 		
 		//devolvemos la coleccion para que la vista la presente.
