@@ -21,24 +21,37 @@ class UsersController extends ControllerBase
 
             $values = $result->fetch(PDO::FETCH_ASSOC);
 
-            //Segun resultado iniciamos sesion (ir a sistema) o lanzamos error (volver a home)
-            if(isset($values['id_user']) == true && $values['id_user'] > 0)
-            {
-                //Set timezone
-                date_default_timezone_set($this->timezone);
+             //Set timezone
+            date_default_timezone_set($this->timezone);
 
-                //Start session
-                $session = FR_Session::singleton();
-                $session->id_user = $values['id_user'];
-                $session->id_tenant = $values['id_tenant'];
-                $session->id_profile = $values['id_profile'];
-                $session->code_user = $values['code_user'];
-                $session->name_user = $values['name_user'];
-
-                header("Location: ".$this->root."?controller=Projects&action=projectsDt");
-            }
-            else
-                header("Location: ".$this->root."?controller=index&action=indexErrorLogin&errorCode=".$error[0].", ".$rows);
+            //Start session
+            $session = FR_Session::singleton();
+            $session->id_user = $values['id_user'];
+            $session->id_tenant = $values['id_tenant'];
+            $session->id_profile = $values['id_profile'];
+            $session->code_user = $values['code_user'];
+            $session->name_user = $values['name_user'];
+            
+            header("Location: ".$this->root."?controller=Projects&action=projectsDt");
+            
+//            //Segun resultado iniciamos sesion (ir a sistema) o lanzamos error (volver a home)
+//            if(isset($values['id_user']) == true && $values['id_user'] > 0)
+//            {
+//                //Set timezone
+//                date_default_timezone_set($this->timezone);
+//
+//                //Start session
+//                $session = FR_Session::singleton();
+//                $session->id_user = $values['id_user'];
+//                $session->id_tenant = $values['id_tenant'];
+//                $session->id_profile = $values['id_profile'];
+//                $session->code_user = $values['code_user'];
+//                $session->name_user = $values['name_user'];
+//
+//                header("Location: ".$this->root."?controller=Projects&action=projectsDt");
+//            }
+//            else
+//                header("Location: ".$this->root."?controller=index&action=indexErrorLogin&errorCode=".$error[0].", ".$rows.", $values[id_user]");
 	}
 
 	public function logOut()
