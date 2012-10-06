@@ -7,8 +7,6 @@ class UsersController extends ControllerBase
             isset($_POST['txtusername'],$_POST['txtpassword'],$usuario1,$datos,$priv);
             $username = $_POST['txtusername'];
             $password = md5($_POST['txtpassword']);
-
-            print_r($_POST);
             
             //Incluye el modelo que corresponde
             require_once 'models/UsersModel.php';
