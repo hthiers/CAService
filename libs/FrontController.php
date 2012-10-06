@@ -4,7 +4,7 @@
  * Inicializa motor del sistema invocando todas las librerias necesarias.
  */
 class FrontController
-{   
+{
 	static function main()
 	{
 		//Incluimos algunas clases:

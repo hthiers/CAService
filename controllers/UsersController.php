@@ -8,6 +8,8 @@ class UsersController extends ControllerBase
             $username = $_POST['txtusername'];
             $password = md5($_POST['txtpassword']);
 
+            print_r($_POST);
+            
             //Incluye el modelo que corresponde
             require_once 'models/UsersModel.php';
 
@@ -16,10 +18,12 @@ class UsersController extends ControllerBase
 
             //Le pedimos al modelo que busque la cuenta de usuario (nombre de usuario y contraseña)
             $result = $account->getUserAccount($username, $password);
+//            $error = $result->
+
             $values = $result->fetch(PDO::FETCH_ASSOC);
 
             //Segun resultado iniciamos sesion (ir a sistema) o lanzamos error (volver a home)
-            if(isset($values['ID']) == true && $values['ID'] > 0)
+            if(isset($values['id_user']) == true && $values['id_user'] > 0)
             {
                 //Set timezone
                 date_default_timezone_set($this->timezone);

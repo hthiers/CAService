@@ -38,7 +38,7 @@ $(document).ready(function(){
             </p>
             
             <div style="margin-top: 10px;">
-                <form id="form1" name="form1" method="post" action="<?php echo $rootPath.'?controller=Users&action=logIn';?>">
+                <form id="form1" name="form1" method="post" action="?controller=Users&action=logIn">
                     <table>
                         <tr>
                             <td>Usuario</td>
