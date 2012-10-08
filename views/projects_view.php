@@ -74,7 +74,7 @@ require('templates/header.tpl.php'); #session & header
         });
         
         $("#btn_stop").click(function (event){
-           window.location.replace("<?php echo $rootPath;?>?controller=Projects&action=projects_dt"); 
+           window.location.replace("<?php echo $rootPath;?>?controller=Projects&action=projectsDt"); 
         });
     });
 
@@ -105,9 +105,8 @@ require('templates/menu.tpl.php'); #banner & menu
         {
             print('<div id="debugbox">');
             print_r($titulo); print('<br />');
-            print_r($listado); print('<br />');
+            print_r($pdo); print('<br />');
             print(htmlspecialchars($error_flag, ENT_QUOTES)); print('<br />');
-            print_r($permiso_editar); print('<br />');
             print('</div>');
         }
         ?>
@@ -128,11 +127,13 @@ require('templates/menu.tpl.php'); #banner & menu
         ?>
 
         <div id="dt_filtres">
+            
+            <?php if(isset($pdo)): $values = $pdo->fetch(PDO::FETCH_ASSOC); ?>
             <form>
                 <table class="table_left">
                     <tr>
                         <td class="middle">Responsable</td>
-                        <td class="middle"><input readonly="readonly" class="input_box" name="resp" type="text" value="Maximiliano Booth" /></td>
+                        <td class="middle"><input readonly="readonly" class="input_box" name="resp" type="text" value="<?php echo $values['name_user']; ?>" /></td>
                     </tr>
                     <tr>
                         <td class="middle">Cliente</td>
@@ -169,6 +170,11 @@ require('templates/menu.tpl.php'); #banner & menu
                 </table>
                 <div style="clear: both;"></div>
             </form>
+            <?php
+            else:
+                echo "<h4>Ha ocurrido un error grave</h4>";
+            endif;
+            ?>
         </div>
 
     </div>

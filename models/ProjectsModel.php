@@ -2,7 +2,7 @@
 class ProjectsModel extends ModelBase
 {
 	/*******************************************************************************
-	* Proyects
+	* Projects
 	*******************************************************************************/
 	
 	public function getAllProjectsByTenant($id_tenant)
@@ -25,6 +25,47 @@ class ProjectsModel extends ModelBase
             //devolvemos la coleccion para que la vista la presente.
             return $consulta;
 	}
+        
+        /**
+         * Get project by id and tenant
+         * @param type $id_project
+         * @param int $id_tenant
+         * @return type PDO
+         */
+	public function getProjectById($id_project, $id_tenant)
+	{
+            $consulta = $this->db->prepare("
+                    SELECT 
+                        A.ID_PROJECT
+                        , A.CODE_PROJECT
+                        , B.ID_TENANT
+                        , A.LABEL_PROJECT
+                        , A.DATE_INI
+                        , A.DATE_END
+                        , D.ID_USER
+                        , D.NAME_USER
+                    FROM  CAS_PROJECT A
+                    INNER JOIN CAS_TENANT B
+                    ON A.ID_TENANT = B.ID_TENANT
+                    INNER JOIN CAS_PROJECT_HAS_CAS_USER C
+                    ON A.ID_PROJECT = C.CAS_PROJECT_ID_PROJECT
+                    INNER JOIN CAS_USER D
+                    ON C.CAS_USER_ID_USER = D.ID_USER
+                    WHERE A.ID_PROJECT = $id_project
+                      AND B.ID_TENANT = $id_tenant");
+
+            $consulta->execute();
+
+            return $consulta;
+	}
+        
+        
+        
+        
+        /********************************
+         * OLD STUFF
+         ********************************
+         */
         
         //GET ALL SEGMENTS
 	public function getAllSegmentsSimple()
@@ -58,31 +99,6 @@ class ProjectsModel extends ModelBase
                     INNER JOIN t_gbu b 
                     ON a.COD_GBU = b.COD_GBU
                     WHERE A.NAME_SEGMENT = '$name_segment'");
-
-            $consulta->execute();
-
-            //devolvemos la coleccion para que la vista la presente.
-            return $consulta;
-	}
-        
-        /**
-         * Get segment by COD_SEGMENT
-         * @param type $code_segment
-         * @return type PDO
-         */
-	public function getSegmentByCode($code_segment)
-	{
-            //realizamos la consulta de todos los segmentos
-            $consulta = $this->db->prepare("
-                    SELECT 
-                        a.COD_SEGMENT
-                        , a.NAME_SEGMENT
-                        , b.COD_GBU AS GBU_COD_GBU
-                        , b.NAME_GBU AS GBU_NAME_GBU
-                    FROM  t_segment a
-                    INNER JOIN t_gbu b 
-                    ON a.COD_GBU = b.COD_GBU
-                    WHERE A.COD_SEGMENT = '$code_segment'");
 
             $consulta->execute();
 

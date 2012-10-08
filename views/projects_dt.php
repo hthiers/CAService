@@ -190,9 +190,9 @@ require('templates/menu.tpl.php'); #banner & menu
                 <td><?php echo $item['date_ini'];?></td>
                 <td><?php echo $item['date_end'];?></td>
                 <td>
-                    <form method="post"  action="<?php echo $rootPath.'?controller=Projects&amp;action=verTrabajo';?>">
+                    <form method="post"  action="<?php echo $rootPath.'?controller=projects&amp;action=projectsView';?>">
                         <?php 
-                        echo "<input name='id_project' type='hidden' value='$item[id_tenant]' />\n";
+                        echo "<input name='id_project' type='hidden' value='$item[id_project]' />\n";
                         echo "<input class='input' type='submit' value='VER' />\n";
                         ?>
                     </form>

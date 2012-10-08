@@ -1,11 +1,15 @@
 <?php
 class ProjectsController extends ControllerBase
 {
-    /*******************************************************************************
-    * SEGMENTS
-    *******************************************************************************/
+    /***************************************************************************
+    * PROJECTS
+    ***************************************************************************/
 
-    //SHOW
+    /**
+     * Show projects dt
+     * @param type $error_flag
+     * @param type $message 
+     */
     public function projectsDt($error_flag = 0, $message = "")
     {
         $session = FR_Session::singleton();
@@ -43,22 +47,53 @@ class ProjectsController extends ControllerBase
         $this->view->show("projects_dt.php", $data);
     }
     
-    public function verTrabajo(){
-        $id_trabajo = $_REQUEST['id'];
-        $data['id_trabajo'] = $id_trabajo;
+    /**
+     * show project info 
+     */
+    public function projectsView()
+    {
+        $session = FR_Session::singleton();
         
-        $data['titulo'] = "TRABAJO #".$id_trabajo;
+        $id_project = $_REQUEST['id_project'];
         
-        $this->view->show("projects_vista.php", $data);
+        require_once 'models/ProjectsModel.php';
+        $model = new ProjectsModel();
+        
+        $pdo = $model->getProjectById($id_project, $session->id_tenant);
+//        $values = $pdo->fetch(PDO::FETCH_ASSOC);
+//        
+//        if(isset($values)){
+//            $data['id_project'] = $values['id_project'];
+//            $data['code_project'] = $values['code_project'];
+//            $data['label_project'] = $values['label_project'];
+//            $data['date_ini'] = $values['date_ini'];
+//            $data['date_end'] = $values['date_end'];
+//        }
+        
+        $data['titulo'] = "TRABAJO #".$id_project;
+        $data['pdo'] = $pdo;
+        
+        $this->view->show("projects_view.php", $data);
     }
     
-    public function nuevoTrabajoForm(){
+    /**
+     * show new project form 
+     */
+    public function projectsNewForm(){
         $data['titulo'] = "NUEVO TRABAJO #xxxx";
         
-        $this->view->show("trabajo_nuevo.php", $data);
+        $this->view->show("projects_new.php", $data);
     }
 
-    //SHOW
+    
+    
+    
+    
+    /******************************
+     * OLD STUFF
+     * ****************************
+     */
+    
     public function segmentsAddForm($error_flag = 0)
     {
             //Import models
