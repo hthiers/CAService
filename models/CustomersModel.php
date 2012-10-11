@@ -1,55 +1,34 @@
 <?php
-class ClientesModel extends ModelBase
+class CustomersModel extends ModelBase
 {
 	/*******************************************************************************
-	* CLIENTES
+	* CUSTOMERS
 	*******************************************************************************/
 
 	//GET ALL CLIENTES
-	public function getAllClientes($type = null)
+	public function getAllCustomersByTenant($id_tenant)
 	{
-		//realizamos la consulta de todos los segmentos
-		if($type == null)
-			$consulta = $this->db->prepare("
-				SELECT COD_CLIENTE 
-                                    , NOM_CLIENTE
-                                    , B.COD_BUYER_CLASS
-                                    , B.BUYER_CLASS_NAME
-                                    , C.COD_CHANNEL
-                                    , C.CHANNEL_NAME
-                                    , TIPO
-                                    , ESTADO 
-                                FROM t_cliente A
-                                INNER JOIN T_BUYER_CLASS B
-                                ON A.COD_BUYER_CLASS = B.COD_BUYER_CLASS
-                                INNER JOIN T_CHANNEL C
-                                ON A.COD_CHANNEL = C.COD_CHANNEL
-                                WHERE ESTADO = 1
-                                ORDER BY NOM_CLIENTE");
-		else
-			$consulta = $this->db->prepare("
-				SELECT COD_CLIENTE
-                                    , NOM_CLIENTE
-                                    , B.COD_BUYER_CLASS
-                                    , B.BUYER_CLASS_NAME
-                                    , C.COD_CHANNEL
-                                    , C.CHANNEL_NAME
-                                    , TIPO
-                                    , ESTADO 
-				FROM t_cliente A
-                                INNER JOIN T_BUYER_CLASS B
-                                ON A.COD_BUYER_CLASS = B.COD_BUYER_CLASS
-                                INNER JOIN T_CHANNEL C
-                                ON A.COD_CHANNEL = C.COD_CHANNEL
-                                WHERE TIPO = '$type'
-                                  AND ESTADO = 1
-                                ORDER BY NOM_CLIENTE");
+                $consulta = $this->db->prepare("
+                        select 
+                            a.id_customer 
+                            , a.code_customer
+                            , b.id_tenant
+                            , a.label_customer
+                        from cas_customer a
+                        inner join cas_tenant b
+                        on a.id_tenant = b.id_tenant
+                        where b.id_tenant = $id_tenant");
 
 		$consulta->execute();
 		
 		//devolvemos la coleccion para que la vista la presente.
 		return $consulta;
 	}
+        
+        
+        /*************************
+         * OLD STUFF
+         *************************/
         
         /**
          * Get cliente por código de cliente

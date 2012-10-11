@@ -264,17 +264,20 @@ require('templates/menu.tpl.php'); #banner & menu
                     <table class="table_left">
                         <tr>
                             <td class="middle">Responsable</td>
-                            <td class="middle"><input readonly="readonly" class="input_box" name="resp" type="text" value="Maximiliano Booth" /></td>
+                            <td class="middle"><input readonly="readonly" class="input_box" name="resp" type="text" value="<?php echo $name_user; ?>" /></td>
                         </tr>
                         <tr>
                             <td class="middle">Cliente</td>
                             <td class="middle">
-                                <select class="input_box">
-                                    <option value="cliente">Cliente A</option>
-                                    <option value="cliente">Cliente B</option>
-                                    <option value="cliente">Cliente C</option>
-                                    <option value="cliente">Cliente D</option>
-                                </select>
+                                <?php
+                                echo "<select class='input_box' id='cbocustomers' name='cbocustomer'>\n";
+                                echo "<option value='' selected='selected'>SELECCIONAR</option>\n";
+                                while($row = $pdoCustomer->fetch(PDO::FETCH_ASSOC))
+                                {
+                                    echo "<option value='$row[code_customer]'>$row[label_customer]</option>\n";
+                                }
+                                echo "</select>\n";
+                                ?>
                                 &nbsp;
                                 <!--<button id="create-user">Nuevo</button>-->
                                 <a id="create-user" href="#">Nuevo</a>
