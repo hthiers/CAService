@@ -53,12 +53,12 @@ class ProjectsController extends ControllerBase
     public function projectsView()
     {
         $session = FR_Session::singleton();
-        
-        $id_project = $_REQUEST['id_project'];
-        
+
+        $id_project = $_POST['id_project'];
+
         require_once 'models/ProjectsModel.php';
         $model = new ProjectsModel();
-        
+
         $pdo = $model->getProjectById($id_project, $session->id_tenant);
 //        $values = $pdo->fetch(PDO::FETCH_ASSOC);
 //        
@@ -69,13 +69,13 @@ class ProjectsController extends ControllerBase
 //            $data['date_ini'] = $values['date_ini'];
 //            $data['date_end'] = $values['date_end'];
 //        }
-        
+
         $data['titulo'] = "TRABAJO #".$id_project;
         $data['pdo'] = $pdo;
-        
+
         $this->view->show("projects_view.php", $data);
     }
-    
+
     /*
      * Show new project form 
      */

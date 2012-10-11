@@ -51,23 +51,30 @@ class ProjectsModel extends ModelBase
 	{
             $consulta = $this->db->prepare("
                     SELECT 
-                        A.ID_PROJECT
-                        , A.CODE_PROJECT
-                        , B.ID_TENANT
-                        , A.LABEL_PROJECT
-                        , A.DATE_INI
-                        , A.DATE_END
-                        , D.ID_USER
-                        , D.NAME_USER
-                    FROM  CAS_PROJECT A
-                    INNER JOIN CAS_TENANT B
-                    ON A.ID_TENANT = B.ID_TENANT
-                    INNER JOIN CAS_PROJECT_HAS_CAS_USER C
-                    ON A.ID_PROJECT = C.CAS_PROJECT_ID_PROJECT
-                    INNER JOIN CAS_USER D
-                    ON C.CAS_USER_ID_USER = D.ID_USER
-                    WHERE A.ID_PROJECT = $id_project
-                      AND B.ID_TENANT = $id_tenant");
+                        a.id_project
+                        , a.code_project
+                        , a.id_tenant
+                        , IFNULL(c.id_user, '') as id_user
+                        , IFNULL(c.code_user, '') as code_user
+                        , IFNULL(c.name_user, '') as name_user
+                        , IFNULL(e.id_customer, '') as id_customer
+                        , IFNULL(e.label_customer, '') as name_customer
+                        , a.label_project
+                        , a.date_ini
+                        , a.date_end
+                    FROM  cas_project a
+                    LEFT OUTER JOIN cas_project_has_cas_user b
+                    ON a.id_project = b.cas_project_id_project
+                    LEFT OUTER JOIN cas_user c
+                    ON (b.cas_user_id_user = c.id_user
+                        AND
+                        c.id_tenant = $id_tenant)
+                    LEFT OUTER JOIN cas_project_has_cas_customer d
+                    ON a.id_project = d.cas_project_id_project
+                    LEFT OUTER JOIN cas_customer e
+                    ON d.cas_customer_id_customer = e.id_customer
+                    WHERE a.id_tenant = $id_tenant
+                      AND a.id_project = $id_project");
 
             $consulta->execute();
 

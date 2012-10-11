@@ -106,7 +106,6 @@ require('templates/menu.tpl.php'); #banner & menu
             print('<div id="debugbox">');
             print_r($titulo); print('<br />');
             print_r($pdo); print('<br />');
-            print(htmlspecialchars($error_flag, ENT_QUOTES)); print('<br />');
             print('</div>');
         }
         ?>
@@ -120,10 +119,10 @@ require('templates/menu.tpl.php'); #banner & menu
         </p>
         
         <?php 
-        if (isset($error_flag)){
-            if(strlen($error_flag) > 0)
-                echo $error_flag;
-        }
+//        if (isset($error_flag)){
+//            if(strlen($error_flag) > 0)
+//                echo $error_flag;
+//        }
         ?>
 
         <div id="dt_filtres">
@@ -137,23 +136,21 @@ require('templates/menu.tpl.php'); #banner & menu
                     </tr>
                     <tr>
                         <td class="middle">Cliente</td>
-                        <td class="middle"><input readonly="readonly" class="input_box" name="cliente" type="text" value="Cliente A" /></td>
+                        <td class="middle"><input readonly="readonly" class="input_box" name="cliente" type="text" value="<?php echo $values['name_customer']; ?>" /></td>
                     </tr>
                     <tr>
                         <td>Descripci&oacute;n</td>
                         <td>
-                            <textarea readonly="readonly" class="input_box" name="descripcion"></textarea>
+                            <textarea readonly="readonly" class="input_box" name="descripcion">
+                                <?php echo $values['label_project']; ?>
+                            </textarea>
                         </td>
                     </tr>
                 </table>
                 <table class="table_right">
                     <tr>
                         <td class="middle">Fecha inicio</td>
-                        <td class="middle"><input readonly="readonly" class="input_box" name="fecha_ini" type="text" value="06/05/2012" /></td>
-                    </tr>
-                    <tr>
-                        <td class="middle">Hora inicio</td>
-                        <td class="middle"><input readonly="readonly" class="input_box" name="hora_ini" type="text" value="10:00" /></td>
+                        <td class="middle"><input readonly="readonly" class="input_box" name="fecha_ini" type="text" value="<?php echo $values['date_ini']; ?>" /></td>
                     </tr>
                     <tr>
                         <td colspan="2" style="text-align: center;">Control de tiempo 
