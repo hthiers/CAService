@@ -76,8 +76,8 @@ class ProjectsController extends ControllerBase
         $this->view->show("projects_view.php", $data);
     }
     
-    /**
-     * show new project form 
+    /*
+     * Show new project form 
      */
     public function projectsNewForm(){
         $session = FR_Session::singleton();
@@ -105,6 +105,7 @@ class ProjectsController extends ControllerBase
             $data['error'] = "ERROR";
         }
         
+        $data['new_code'] = $new_code;
         $data['titulo'] = "NUEVO TRABAJO #".$new_code;
         
         $pdoUser = $modelUser->getUserAccountByID($session->id_user);
@@ -122,7 +123,34 @@ class ProjectsController extends ControllerBase
         $this->view->show("projects_new.php", $data);
     }
 
-    
+    /*
+     * Add project action
+     */
+    public function projectsAdd()
+    {
+        $session = FR_Session::singleton();
+
+        $new_code = $_POST['new_code'];
+        $user = $_POST['resp'];
+        $customer = $_POST['cbocustomer'];
+        $desc = $_POST['descripcion'];
+        $hora_ini = $_POST['hora_ini'];
+        $fecha = $_POST['fecha'];
+        
+        require_once 'models/ProjectsModel.php';
+
+        //Creamos una instancia de nuestro "modelo"
+        $model = new ProjectsModel();
+        $result = $model->addNewProject($session->id_tenant, $new_code, $session->id_user, $customer, $desc, $hora_ini, $fecha);
+
+        //catch errors
+        $error = $result->errorInfo();
+
+        if($error[0] == 00000)
+            $this->projectsDt(1);
+        else
+            $this->projectsDt(10, "Ha ocurrido un error: ".$error[2]);
+    }
     
     
     

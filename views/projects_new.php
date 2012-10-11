@@ -72,6 +72,7 @@ require('templates/header.tpl.php'); #session & header
         var outStr = myDate.getHours()+':'+myDate.getMinutes()
        
         $("#hora_ini").val(outStr);
+        $("#hdnPicker").val(displayDate);
         
         // pop-ups en caso de ser necesario
         $('#pop_newcliente').click(function (event){
@@ -94,24 +95,30 @@ require('templates/header.tpl.php'); #session & header
         });
         
         $("#btn_stop").click(function (event){
-           window.location.replace("<?php echo $rootPath;?>?controller=Trabajos&action=trabajosDt");
+           window.location.replace("<?php echo $rootPath;?>?controller=projects&action=projectsDt");
         });
         $('#btn_stop').attr('disabled', 'disabled');
     });
     
     $(function() {
-            $.datepicker.regional['es'] = {
-		monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
-		'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
-                dayNames: ['Domingo','Lunes','Martes','Miercoles','Jueves','Viernes','Sábado'],
-		dayNamesShort: ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'],
-                dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sa']};
-            $.datepicker.setDefaults($.datepicker.regional['es']);
-            $( "#datepicker" ).datepicker({ firstDay: 1 });
+        $.datepicker.regional['es'] = {
+            monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+            'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+            dayNames: ['Domingo','Lunes','Martes','Miercoles','Jueves','Viernes','Sábado'],
+            dayNamesShort: ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'],
+            dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sa']};
+        $.datepicker.setDefaults($.datepicker.regional['es']);
+        $( "#datepicker" ).datepicker({
+            firstDay: 1,
+            dateFormat: "yy/mm/dd",
+            onSelect: function(date, picker){
+                $("#hdnPicker").val(date);
+            }
+        });
     });
     
     function iniTrabajo(){
-        $('.input_box').attr('disabled', 'disabled');
+        $('.input_box').attr('readonly', true);
         $('#datepicker').datepicker().datepicker('disable');
         //$('#trabajo_info').hide();
         //$('#trabajo_timing').css({"border-top": "none"});
@@ -119,6 +126,8 @@ require('templates/header.tpl.php'); #session & header
         $('#btn_play').attr('disabled', 'disabled');
         $('#btn_pause').removeAttr('disabled');
         $('#btn_stop').removeAttr('disabled');
+        
+        $('#formModule').submit();
     }
     
     function pausaTrabajo(){
@@ -233,9 +242,6 @@ require('templates/menu.tpl.php'); #banner & menu
         {
             print('<div id="debugbox">');
             print_r($titulo); print('<br />');
-            print_r($listado); print('<br />');
-            print(htmlspecialchars($error_flag, ENT_QUOTES)); print('<br />');
-            print_r($permiso_editar); print('<br />');
             print('</div>');
         }
         ?>
@@ -259,7 +265,7 @@ require('templates/menu.tpl.php'); #banner & menu
         ?>
 
         <div id="dt_filtres">
-            <form>
+            <form id="formModule" name="formModule" method="post" action="?controller=projects&amp;action=projectsAdd">
                 <div id="trabajo_info" style="float: left;">
                     <table class="table_left">
                         <tr>
@@ -274,7 +280,7 @@ require('templates/menu.tpl.php'); #banner & menu
                                 echo "<option value='' selected='selected'>SELECCIONAR</option>\n";
                                 while($row = $pdoCustomer->fetch(PDO::FETCH_ASSOC))
                                 {
-                                    echo "<option value='$row[code_customer]'>$row[label_customer]</option>\n";
+                                    echo "<option value='$row[id_customer]'>$row[label_customer]</option>\n";
                                 }
                                 echo "</select>\n";
                                 ?>
@@ -315,7 +321,10 @@ require('templates/menu.tpl.php'); #banner & menu
                         </td>
                     </tr>                    
                 </table>
-                <div style="clear: both;"></div>
+                <div style="clear: both;">
+                    <input id="hdnPicker" type="hidden" name="fecha" value="" />
+                    <input id="hdnCode" type="hidden" name="new_code" value="<?php echo $new_code; ?>" />
+                </div>
             </form>
         </div>
 

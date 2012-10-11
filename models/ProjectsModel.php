@@ -13,10 +13,19 @@ class ProjectsModel extends ModelBase
                         a.id_project
                         , a.code_project
                         , a.id_tenant
+                        , IFNULL(c.id_user, '') as id_user
+                        , IFNULL(c.code_user, '') as code_user
+                        , IFNULL(c.name_user, '') as name_user
                         , a.label_project
                         , a.date_ini
                         , a.date_end
                     FROM  cas_project a
+                    LEFT OUTER JOIN cas_project_has_cas_user b
+                    ON a.id_project = b.cas_project_id_project
+                    LEFT OUTER JOIN cas_user c
+                    ON (b.cas_user_id_user = c.id_user
+                        AND
+                        c.id_tenant = $id_tenant)
                     WHERE a.id_tenant = $id_tenant
                     ORDER BY a.label_project");
 
@@ -82,8 +91,40 @@ class ProjectsModel extends ModelBase
 	}
         
         
-        
-        
+	public function addNewProject($id_tenant, $new_code, $id_user, $id_customer, $descripcion, $hora_ini, $fecha)
+	{
+            $consulta = $this->db->prepare("INSERT INTO cas_project 
+                        (id_project, code_project, id_tenant, label_project, date_ini) 
+                            VALUES 
+                        ($new_code, '$new_code', $id_tenant, '$descripcion', '$fecha.$hora_ini')");
+            
+            $consulta->execute();
+
+            $error = $consulta->errorInfo();
+            $rows_n = $consulta->rowCount();
+
+            if($error[0] == 00000){
+               if($rows_n > 0){
+                   $consulta = $this->db->prepare("INSERT INTO cas_project_has_cas_user 
+                        (cas_project_id_project, cas_user_id_user) 
+                            VALUES 
+                        ($new_code, $id_user)");
+
+                   $consulta->execute();
+                   
+                   $consulta = $this->db->prepare("INSERT INTO cas_project_has_cas_customer 
+                        (cas_project_id_project, cas_customer_id_customer) 
+                            VALUES 
+                        ($new_code, $id_customer)");
+
+                   $consulta->execute();
+               }
+            }
+            
+            return $consulta;
+	}
+
+
         /********************************
          * OLD STUFF
          ********************************
@@ -155,26 +196,7 @@ class ProjectsModel extends ModelBase
 	
 	
 	
-	//ADD SEGMENT
-	public function addNewSegment($cod_segment, $name_segment, $cod_gbu)
-	{
-            require_once 'AdminModel.php';
-            $logModel = new AdminModel();
-            $sql = "INSERT INTO t_segment VALUES '$cod_segment', '$name_segment'";
-
-            $session = FR_Session::singleton();
-
-            $consulta = $this->db->prepare("INSERT INTO t_segment 
-                        (COD_SEGMENT, NAME_SEGMENT, COD_GBU) 
-                            VALUES 
-                        ('$cod_segment','$name_segment','$cod_gbu')");
-            $consulta->execute();
-
-            //Save log event - NOTE THAT IS ACTION IS NOT DEBUGGABLE
-            $logModel->addNewEvent($session->usuario, $sql, 'SEGMENTS');
-
-            return $consulta;
-	}
+	
 	
 	//EDIT SEGMENT
 	public function editSegment($cod_segment, $name_segment, $cod_gbu, $old_cod_segment, $old_name_segment, $old_gbu)

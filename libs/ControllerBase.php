@@ -3,7 +3,7 @@
  * Base Controller
  */
 abstract class ControllerBase {
-    
+
     protected $view;
     protected $root;
     protected $utils;
