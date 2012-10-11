@@ -172,8 +172,8 @@ require('templates/menu.tpl.php'); #banner & menu
             <tr class="headers">
                 <th>CLIENTE</th>
                 <th>RESPONSABLE</th>
-                <th>FECHA</th>
-                <th>HORA INICIO</th>
+                <th>DESCRIPCI&Oacute;N</th>
+                <th>FECHA INICIO</th>
                 <th>ESTADO</th>
                 <th>OPCIONES</th>
             </tr>
@@ -184,8 +184,8 @@ require('templates/menu.tpl.php'); #banner & menu
             {
             ?>
             <tr>
-                <td><?php echo $item['id_project'];?></td>
-                <td><?php echo $item['code_project'];?></td>
+                <td><?php echo $item['name_customer'];?></td>
+                <td><?php echo $item['name_user'];?></td>
                 <td><?php echo $item['label_project'];?></td>
                 <td><?php echo $item['date_ini'];?></td>
                 <td><?php echo $item['date_end'];?></td>

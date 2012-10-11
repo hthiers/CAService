@@ -16,6 +16,8 @@ class ProjectsModel extends ModelBase
                         , IFNULL(c.id_user, '') as id_user
                         , IFNULL(c.code_user, '') as code_user
                         , IFNULL(c.name_user, '') as name_user
+                        , IFNULL(e.id_customer, '') as id_customer
+                        , IFNULL(e.label_customer, '') as name_customer
                         , a.label_project
                         , a.date_ini
                         , a.date_end
@@ -26,6 +28,10 @@ class ProjectsModel extends ModelBase
                     ON (b.cas_user_id_user = c.id_user
                         AND
                         c.id_tenant = $id_tenant)
+                    LEFT OUTER JOIN cas_project_has_cas_customer d
+                    ON a.id_project = d.cas_project_id_project
+                    LEFT OUTER JOIN cas_customer e
+                    ON d.cas_customer_id_customer = e.id_customer
                     WHERE a.id_tenant = $id_tenant
                     ORDER BY a.label_project");
 
