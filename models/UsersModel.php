@@ -20,7 +20,7 @@ class UsersModel extends ModelBase
 		return $consulta;
 	}
         
-        public function getUserAccountByID($id)
+        public function getUserAccountByID($id_user)
 	{
 		//realizamos la consulta de todos los segmentos
 		$consulta = $this->db->prepare("SELECT 
@@ -29,7 +29,7 @@ class UsersModel extends ModelBase
                                 , id_tenant
                                 , name_user
                                 , id_profile
-                            FROM cas_user WHERE id_user='$id'");
+                            FROM cas_user WHERE id_user='$id_user'");
 		$consulta->execute();
 		
 		//devolvemos la coleccion para que la vista la presente.

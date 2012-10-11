@@ -80,7 +80,44 @@ class ProjectsController extends ControllerBase
      * show new project form 
      */
     public function projectsNewForm(){
-        $data['titulo'] = "NUEVO TRABAJO #xxxx";
+        $session = FR_Session::singleton();
+        
+        require_once 'models/ProjectsModel.php';
+        require_once 'models/UsersModel.php';
+        require_once 'models/CustomersModel.php';
+        
+        $model = new ProjectsModel();
+        $modelUser = new UsersModel();
+        $modelCustomer = new CustomersModel();
+        
+        $pdo = $model->getLastProject($session->id_tenant);
+        $value = null;
+        $value = $pdo->fetch(PDO::FETCH_ASSOC);
+        
+        if($value != null)
+        {
+            $last_code = $value['ID_PROJECT'];
+            $new_code = (int) $last_code + 1;
+        }
+        else
+        {
+            $new_code = 0;
+            $data['error'] = "ERROR";
+        }
+        
+        $data['titulo'] = "NUEVO TRABAJO #".$new_code;
+        
+        $pdoUser = $modelUser->getUserAccountByID($session->id_user);
+        $value = null;
+        $value = $pdoUser->fetch(PDO::FETCH_ASSOC);
+        
+        if($value != null)
+            $data['name_user'] = $value['name_user'];
+        else
+            $data['name_user'] = "ERROR";
+        
+        $pdoCustomer = $modelCustomer->getAllCustomersByTenant($session->id_tenant);
+        $data['pdoCustomer'] = $pdoCustomer;
         
         $this->view->show("projects_new.php", $data);
     }

@@ -60,6 +60,28 @@ class ProjectsModel extends ModelBase
 	}
         
         
+	public function getLastProject($id_tenant)
+	{
+            //get last segment
+            $consulta = $this->db->prepare("
+                    SELECT 
+                        A.ID_PROJECT
+                        , A.CODE_PROJECT
+                        , B.ID_TENANT
+                        , A.LABEL_PROJECT
+                    FROM  cas_project A
+                    INNER JOIN cas_tenant B
+                    ON A.ID_TENANT = B.ID_TENANT
+                    WHERE B.ID_TENANT = $id_tenant
+                    ORDER BY A.ID_PROJECT DESC
+                    LIMIT 1");
+
+            $consulta->execute();
+
+            return $consulta;
+	}
+        
+        
         
         
         /********************************
@@ -131,17 +153,7 @@ class ProjectsModel extends ModelBase
             return $consulta;
 	}
 	
-	//GET LATEST SEGMENT CODE
-	public function getNewSegmentCode()
-	{
-            //get last segment
-            $consulta = $this->db->prepare("SELECT COD_SEGMENT FROM t_segment 
-                    WHERE COD_SEGMENT NOT LIKE '%N/A%' ORDER BY COD_SEGMENT DESC LIMIT 1");
-
-            $consulta->execute();
-
-            return $consulta;
-	}
+	
 	
 	//ADD SEGMENT
 	public function addNewSegment($cod_segment, $name_segment, $cod_gbu)
