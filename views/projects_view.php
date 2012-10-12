@@ -104,7 +104,8 @@ require('templates/menu.tpl.php'); #banner & menu
         if($debugMode)
         {
             print('<div id="debugbox">');
-            print_r($titulo); print('<br />');
+            print("tenant: ".$session->id_tenant.", user: ".$session->id_user."<br/>");
+            print($titulo); print('<br />');
             print_r($pdo); print('<br />');
             print('</div>');
         }
