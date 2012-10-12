@@ -68,7 +68,7 @@ require('templates/header.tpl.php'); #session & header
     
     $(document).ready(function(){
         var myDate = new Date();
-        var displayDate = (myDate.getDate()) + '/' + (myDate.getMonth()+1) + '/' + myDate.getFullYear();
+        var displayDate = myDate.getFullYear() + '/' + (myDate.getMonth()+1) + '/' + (myDate.getDate());
         var outStr = myDate.getHours()+':'+myDate.getMinutes()
        
         $("#hora_ini").val(outStr);

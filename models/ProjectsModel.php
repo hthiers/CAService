@@ -109,7 +109,7 @@ class ProjectsModel extends ModelBase
             $consulta = $this->db->prepare("INSERT INTO cas_project 
                         (id_project, code_project, id_tenant, label_project, date_ini) 
                             VALUES 
-                        ($new_code, '$new_code', $id_tenant, '$descripcion', '$fecha.$hora_ini')");
+                        ($new_code, '$new_code', $id_tenant, '$descripcion', '$fecha. .$hora_ini')");
             
             $consulta->execute();
 
