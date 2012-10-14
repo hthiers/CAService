@@ -11,7 +11,7 @@ $rootPath = $config->get('rootPath');
 $debugMode = $config->get('debug');
 
 #session vars
-#if($session->id != null):
+if($session->id_tenant != null && $session->id_user != null):
 
 $navegador = $_SERVER['HTTP_USER_AGENT'];
 $navegador = substr($navegador,25,8);
@@ -63,5 +63,5 @@ $(document).unbind('keydown').bind('keydown', function (event) {
 	if($navegador == 'MSIE 6.0')
 		echo '<script type="text/javascript" language="javascript" src="views/lib/menuie6.js"></script>';
 	
-#endif; #session
+endif; #session
 ?>
