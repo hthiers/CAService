@@ -95,8 +95,8 @@ class ProjectsModel extends ModelBase
                         , A.code_project
                         , B.id_tenant
                         , A.label_project
-                        , a.desc_project
-                        , a.status_project
+                        , A.desc_project
+                        , A.status_project
                     FROM  cas_project A
                     INNER JOIN cas_tenant B
                     ON A.id_tenant = B.id_tenant
@@ -117,8 +117,8 @@ class ProjectsModel extends ModelBase
                         , A.code_project
                         , B.id_tenant
                         , A.label_project
-                        , a.desc_project
-                        , a.status_project
+                        , A.desc_project
+                        , A.status_project
                     FROM  cas_project A
                     INNER JOIN cas_tenant B
                     ON A.id_tenant = B.id_tenant
