@@ -13,7 +13,7 @@ class ProjectsController extends ControllerBase
     public function projectsDt($error_flag = 0, $message = "")
     {
         $session = FR_Session::singleton();
-
+        
         //Incluye el modelo que corresponde
         require_once 'models/ProjectsModel.php';
         require_once 'models/UsersModel.php';
@@ -46,7 +46,7 @@ class ProjectsController extends ControllerBase
 
         $this->view->show("projects_dt.php", $data);
     }
-    
+
     /**
      * show project info 
      */
@@ -55,6 +55,7 @@ class ProjectsController extends ControllerBase
         $session = FR_Session::singleton();
 
         $id_project = $_POST['id_project'];
+        $session->id_project = $id_project;
 
         require_once 'models/ProjectsModel.php';
         $model = new ProjectsModel();
@@ -81,19 +82,19 @@ class ProjectsController extends ControllerBase
      */
     public function projectsNewForm(){
         $session = FR_Session::singleton();
-        
+
         require_once 'models/ProjectsModel.php';
         require_once 'models/UsersModel.php';
         require_once 'models/CustomersModel.php';
-        
+
         $model = new ProjectsModel();
         $modelUser = new UsersModel();
         $modelCustomer = new CustomersModel();
-        
+
         $pdo = $model->getLastProject($session->id_tenant);
         $value = null;
         $value = $pdo->fetch(PDO::FETCH_ASSOC);
-        
+
         if($value != null)
         {
             $last_code = $value['code_project'];
@@ -104,22 +105,29 @@ class ProjectsController extends ControllerBase
             $new_code = 0;
             $data['error'] = "ERROR";
         }
-        
+
         $data['new_code'] = $new_code;
         $data['titulo'] = "NUEVO TRABAJO #".$new_code;
-        
+
         $pdoUser = $modelUser->getUserAccountByID($session->id_user);
         $value = null;
         $value = $pdoUser->fetch(PDO::FETCH_ASSOC);
-        
+
         if($value != null)
             $data['name_user'] = $value['name_user'];
         else
             $data['name_user'] = "ERROR";
-        
+
         $pdoCustomer = $modelCustomer->getAllCustomersByTenant($session->id_tenant);
         $data['pdoCustomer'] = $pdoCustomer;
-        
+
+        #fecha actual
+        $now = date("Y-m-d H:i:s");
+        $currentDateTime = new DateTime($now);
+
+        $data['current_date'] = $currentDateTime->format("Y-m-d");
+        $data['current_time'] = $currentDateTime->format("H:i");
+
         $this->view->show("projects_new.php", $data);
     }
 
@@ -138,12 +146,39 @@ class ProjectsController extends ControllerBase
         $fecha = $_POST['fecha'];
         $etiqueta = $_POST['etiqueta'];
         $estado = 1; #active by default
-        
+
         require_once 'models/ProjectsModel.php';
 
         //Creamos una instancia de nuestro "modelo"
         $model = new ProjectsModel();
         #$result = $model->addNewProject($session->id_tenant, $new_code, $session->id_user, $customer, $desc, $hora_ini, $fecha);
+        $result = $model->addNewProject($session->id_tenant, $new_code, $session->id_user, $customer, $etiqueta, $hora_ini, $fecha, $desc);
+
+        if($result != null){
+            $error = $result->errorInfo();
+
+            if($error[0] == 00000)
+                $this->projectsDt(1);
+            else
+                $this->projectsDt(10, "Ha ocurrido un error: ".$error[2]);   
+        }
+        else
+            $this->projectsDt(10, "Ha ocurrido un error grave!");   
+    }
+
+    /*
+     * Stop project action
+     */
+    public function projectsStop()
+    {
+        $session = FR_Session::singleton();
+
+        $id_project = $session->id_project;
+        
+        require_once 'models/ProjectsModel.php';
+
+        //Creamos una instancia de nuestro "modelo"
+        $model = new ProjectsModel();
         $result = $model->addNewProject($session->id_tenant, $new_code, $session->id_user, $customer, $etiqueta, $hora_ini, $fecha, $desc);
 
         

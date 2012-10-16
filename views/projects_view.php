@@ -74,7 +74,9 @@ if($session->id_tenant != null && $session->id_user != null):
         });
         
         $("#btn_stop").click(function (event){
-           window.location.replace("<?php echo $rootPath;?>?controller=Projects&action=projectsDt"); 
+            //$("#formModule").attr("action", "?controller=Projects&action=projectsStop");
+            //window.location.replace("<?php echo $rootPath;?>?controller=Projects&action=projectsDt"); 
+            $('#formModule').submit();
         });
     });
 
@@ -129,7 +131,7 @@ require('templates/menu.tpl.php'); #banner & menu
         <div id="dt_filtres">
             
             <?php if(isset($pdo)): $values = $pdo->fetch(PDO::FETCH_ASSOC); ?>
-            <form>
+            <form id="formModule" name="formModule" method="post" action="?controller=Projects&action=projectsStop">
                 <table class="table_left">
                     <tr>
                         <td class="middle">Responsable</td>

@@ -67,9 +67,12 @@ if($session->id_tenant != null && $session->id_user != null):
     var windowSizeArray = [ "width=200,height=200","width=300,height=400,scrollbars=yes" ];
     
     $(document).ready(function(){
-        var myDate = new Date();
-        var displayDate = myDate.getFullYear() + '/' + (myDate.getMonth()+1) + '/' + (myDate.getDate());
-        var outStr = myDate.getHours()+':'+myDate.getMinutes()
+        //var myDate = new Date();
+        //var displayDate = myDate.getFullYear() + '/' + (myDate.getMonth()+1) + '/' + (myDate.getDate());
+        //var outStr = myDate.getHours()+':'+myDate.getMinutes()
+       
+        var displayDate = "<?php echo $current_date; ?>";
+        var outStr = "<?php echo $current_time; ?>";
        
         $("#hora_ini").val(outStr);
         $("#hdnPicker").val(displayDate);
@@ -242,6 +245,8 @@ require('templates/menu.tpl.php'); #banner & menu
         {
             print('<div id="debugbox">');
             print_r($titulo); print('<br />');
+            print($current_date); print('<br />');
+            print($current_time); print('<br />');
             print('</div>');
         }
         ?>
