@@ -2,7 +2,7 @@
 require('templates/header.tpl.php'); #session & header
 
 #session
-#if($session->id != null):
+if($session->id_tenant != null && $session->id_user != null):
 
 #privs
 #if($session->privilegio > 0):
@@ -212,6 +212,6 @@ require('templates/menu.tpl.php'); #banner & menu
 
 <?php
 #endif; #privs
-#endif; #session
+endif; #session
 require('templates/footer.tpl.php');
 ?>

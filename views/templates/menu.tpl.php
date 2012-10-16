@@ -16,7 +16,7 @@ $url = (!empty($_SERVER['HTTPS'])) ? "https://".$_SERVER['SERVER_NAME'].$_SERVER
 
 <div class="fin" id="banner">
     <div class="banner_welcome">
-        Bienvenido <?php echo "<a href='#'>Usuario</a>"; ?>
+        Bienvenido <?php echo "<a href='#'>".$session->name_user."</a>"; ?>
         | 
         <a href="?controller=users&amp;action=logOut">Cerrar Sesi&oacute;n</a>
         |
