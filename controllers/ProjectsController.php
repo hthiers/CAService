@@ -172,26 +172,46 @@ class ProjectsController extends ControllerBase
     public function projectsStop()
     {
         $session = FR_Session::singleton();
-
-        $id_project = $session->id_project;
+        $frm_id_project = $_POST['id_project'];
         
-        require_once 'models/ProjectsModel.php';
+        if($session->id_project == $frm_id_project){
+            $session->id_project = null;
+            
+            #fecha actual
+            $now = date("Y-m-d H:i:s");
+            $currentDateTime = new DateTime($now);
+            $stop_date = $currentDateTime->format("Y-m-d H:i:s");
 
-        //Creamos una instancia de nuestro "modelo"
-        $model = new ProjectsModel();
-        $result = $model->addNewProject($session->id_tenant, $new_code, $session->id_user, $customer, $etiqueta, $hora_ini, $fecha, $desc);
+            require_once 'models/ProjectsModel.php';
+            $model = new ProjectsModel();
+            
+            #get times diff
+            $result = $model->getProjectById($frm_id_project, $session->id_tenant);
+            $values = $result->fetch(PDO::FETCH_ASSOC);
 
-        
-        if($result != null){
+            /*
+             * TRABAJANDO AQUI!!!!!!!
+             * 
+             * TOMANDO VALORES DE PROYECTO EN VISTA PARA TOMAR DIFERENCIA DE FECHAS
+             * Y ACTUALIZAR PROYECTO COMO FINALIZADO, INDICANDO FECHA DE FIN Y
+             * HORAS (Y MINUTOS) DE DURACION.
+             */
+
+            $result = $model->addNewProject($session->id_tenant, $new_code, $session->id_user, $customer, $etiqueta, $hora_ini, $fecha, $desc);
+            
+            if($result != null){
             $error = $result->errorInfo();
 
             if($error[0] == 00000)
                 $this->projectsDt(1);
             else
-                $this->projectsDt(10, "Ha ocurrido un error: ".$error[2]);   
+                $this->projectsDt(10, "Ha ocurrido un error: ".$error[2]);
+            }
+            else
+                $this->projectsDt(10, "Ha ocurrido un error grave!");
         }
         else
-            $this->projectsDt(10, "Ha ocurrido un error grave!");   
+            $this->projectsDt(10, "Ha ocurrido un error grave!");
     }
     
     

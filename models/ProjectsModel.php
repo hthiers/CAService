@@ -185,6 +185,23 @@ class ProjectsModel extends ModelBase
             
             return null;
 	}
+        
+        public function stopProject($id_tenant, $id_user, $id_project, $stop_time)
+        {
+            $consulta = $this->db->prepare("INSERT INTO cas_project 
+                        (id_project, code_project, id_tenant, label_project, date_ini, desc_project
+                        , status_project) 
+                            VALUES 
+                        (NULL, '$new_code', $id_tenant, '$etiqueta', '$fecha. .$hora_ini', '$descripcion', $estado)");
+            
+            $consulta->execute();
+
+            $error = $consulta->errorInfo();
+            $rows_n = $consulta->rowCount();
+        }
+        
+        
+        
 
 
         /********************************

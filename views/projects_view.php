@@ -174,7 +174,9 @@ require('templates/menu.tpl.php'); #banner & menu
                         </td>
                     </tr>
                 </table>
-                <div style="clear: both;"></div>
+                <div style="clear: both;">
+                    <input type="hidden" name="id_project" value="<?php echo $values['id_project']; ?>" />
+                </div>
             </form>
             <?php
             else:
