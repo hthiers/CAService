@@ -96,7 +96,7 @@ class ProjectsController extends ControllerBase
         
         if($value != null)
         {
-            $last_code = $value['CODE_PROJECT'];
+            $last_code = $value['code_project'];
             $new_code = (int) $last_code + 1;
         }
         else
@@ -158,6 +158,7 @@ class ProjectsController extends ControllerBase
         else
             $this->projectsDt(10, "Ha ocurrido un error grave!");   
     }
+    
     
     
     

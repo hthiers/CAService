@@ -92,16 +92,16 @@ class ProjectsModel extends ModelBase
             $consulta = $this->db->prepare("
                     SELECT 
                         A.id_project
-                        , A.CODE_PROJECT
-                        , B.ID_TENANT
-                        , A.LABEL_PROJECT
+                        , A.code_project
+                        , B.id_tenant
+                        , A.label_project
                         , a.desc_project
                         , a.status_project
                     FROM  cas_project A
                     INNER JOIN cas_tenant B
-                    ON A.ID_TENANT = B.ID_TENANT
-                    WHERE B.ID_TENANT = $id_tenant
-                    ORDER BY A.CODE_PROJECT DESC
+                    ON A.id_tenant = B.id_tenant
+                    WHERE B.id_tenant = $id_tenant
+                    ORDER BY A.code_project DESC
                     LIMIT 1");
 
             $consulta->execute();
@@ -114,16 +114,16 @@ class ProjectsModel extends ModelBase
             $consulta = $this->db->prepare("
                     SELECT 
                         A.id_project
-                        , A.CODE_PROJECT
-                        , B.ID_TENANT
-                        , A.LABEL_PROJECT
+                        , A.code_project
+                        , B.id_tenant
+                        , A.label_project
                         , a.desc_project
                         , a.status_project
                     FROM  cas_project A
                     INNER JOIN cas_tenant B
-                    ON A.ID_TENANT = B.ID_TENANT
-                    WHERE B.ID_TENANT = $id_tenant
-                      AND A.CODE_PROJECT = $code_project
+                    ON A.id_tenant = B.id_tenant
+                    WHERE B.id_tenant = $id_tenant
+                      AND A.code_project = $code_project
                     LIMIT 1");
 
             $consulta->execute();
@@ -138,9 +138,9 @@ class ProjectsModel extends ModelBase
                         A.id_project
                     FROM  cas_project A
                     INNER JOIN cas_tenant B
-                    ON A.ID_TENANT = B.ID_TENANT
-                    WHERE B.ID_TENANT = $id_tenant
-                      AND A.CODE_PROJECT = $code_project
+                    ON A.id_tenant = B.id_tenant
+                    WHERE B.id_tenant = $id_tenant
+                      AND A.code_project = $code_project
                     LIMIT 1");
 
             $consulta->execute();
