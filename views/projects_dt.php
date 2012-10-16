@@ -175,7 +175,7 @@ require('templates/menu.tpl.php'); #banner & menu
                 <th>ETIQUETA</th>
                 <th>INICIO</th>
                 <th>FIN</th>
-                <th>DESCRIPCION</th>
+                <th>ESTADO</th>
                 <th>OPCIONES</th>
             </tr>
         </thead>
