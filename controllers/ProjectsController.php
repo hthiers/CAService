@@ -146,13 +146,17 @@ class ProjectsController extends ControllerBase
         #$result = $model->addNewProject($session->id_tenant, $new_code, $session->id_user, $customer, $desc, $hora_ini, $fecha);
         $result = $model->addNewProject($session->id_tenant, $new_code, $session->id_user, $customer, $etiqueta, $hora_ini, $fecha, $desc);
 
-        //catch errors
-        $error = $result->errorInfo();
+        
+        if($result != null){
+            $error = $result->errorInfo();
 
-        if($error[0] == 00000)
-            $this->projectsDt(1);
+            if($error[0] == 00000)
+                $this->projectsDt(1);
+            else
+                $this->projectsDt(10, "Ha ocurrido un error: ".$error[2]);   
+        }
         else
-            $this->projectsDt(10, "Ha ocurrido un error: ".$error[2]);
+            $this->projectsDt(10, "Ha ocurrido un error grave!");   
     }
     
     

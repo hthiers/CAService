@@ -91,7 +91,7 @@ class ProjectsModel extends ModelBase
             //get last segment
             $consulta = $this->db->prepare("
                     SELECT 
-                        A.ID_PROJECT
+                        A.id_project
                         , A.CODE_PROJECT
                         , B.ID_TENANT
                         , A.LABEL_PROJECT
@@ -113,7 +113,7 @@ class ProjectsModel extends ModelBase
         {
             $consulta = $this->db->prepare("
                     SELECT 
-                        A.ID_PROJECT
+                        A.id_project
                         , A.CODE_PROJECT
                         , B.ID_TENANT
                         , A.LABEL_PROJECT
@@ -135,7 +135,7 @@ class ProjectsModel extends ModelBase
         {
             $consulta = $this->db->prepare("
                     SELECT 
-                        A.ID_PROJECT
+                        A.id_project
                     FROM  cas_project A
                     INNER JOIN cas_tenant B
                     ON A.ID_TENANT = B.ID_TENANT
@@ -163,27 +163,27 @@ class ProjectsModel extends ModelBase
             $error = $consulta->errorInfo();
             $rows_n = $consulta->rowCount();
 
-            if($error[0] == 00000){
-               $current = $this->getProjectIDByCode($new_code, $id_tenant)->fetch(PDO::FETCH_ASSOC);
+            if($error[0] == 00000 && $rows_n > 0){               
+                $current = $this->getProjectIDByCode($new_code, $id_tenant)->fetch(PDO::FETCH_ASSOC);
+
+                $consulta = $this->db->prepare("INSERT INTO cas_project_has_cas_user 
+                    (cas_project_id_project, cas_user_id_user) 
+                        VALUES 
+                    ($current[id_project], $id_user)");
+
+                $consulta->execute();
+
+                $consulta = $this->db->prepare("INSERT INTO cas_project_has_cas_customer 
+                    (cas_project_id_project, cas_customer_id_customer) 
+                        VALUES 
+                    ($current[id_project], $id_customer)");
+
+                $consulta->execute();
                 
-               if($rows_n > 0){
-                   $consulta = $this->db->prepare("INSERT INTO cas_project_has_cas_user 
-                        (cas_project_id_project, cas_user_id_user) 
-                            VALUES 
-                        ($current[ID_PROJECT], $id_user)");
-
-                   $consulta->execute();
-                   
-                   $consulta = $this->db->prepare("INSERT INTO cas_project_has_cas_customer 
-                        (cas_project_id_project, cas_customer_id_customer) 
-                            VALUES 
-                        ($current[ID_PROJECT], $id_customer)");
-
-                   $consulta->execute();
-               }
+                return $consulta;
             }
             
-            return $consulta;
+            return null;
 	}
 
 
