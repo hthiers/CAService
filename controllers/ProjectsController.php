@@ -96,7 +96,7 @@ class ProjectsController extends ControllerBase
         
         if($value != null)
         {
-            $last_code = $value['ID_PROJECT'];
+            $last_code = $value['CODE_PROJECT'];
             $new_code = (int) $last_code + 1;
         }
         else
@@ -136,12 +136,15 @@ class ProjectsController extends ControllerBase
         $desc = $_POST['descripcion'];
         $hora_ini = $_POST['hora_ini'];
         $fecha = $_POST['fecha'];
+        $etiqueta = $_POST['etiqueta'];
+        $estado = 1; #active by default
         
         require_once 'models/ProjectsModel.php';
 
         //Creamos una instancia de nuestro "modelo"
         $model = new ProjectsModel();
-        $result = $model->addNewProject($session->id_tenant, $new_code, $session->id_user, $customer, $desc, $hora_ini, $fecha);
+        #$result = $model->addNewProject($session->id_tenant, $new_code, $session->id_user, $customer, $desc, $hora_ini, $fecha);
+        $result = $model->addNewProject($session->id_tenant, $new_code, $session->id_user, $customer, $etiqueta, $hora_ini, $fecha, $desc);
 
         //catch errors
         $error = $result->errorInfo();

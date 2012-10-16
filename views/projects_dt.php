@@ -172,9 +172,10 @@ require('templates/menu.tpl.php'); #banner & menu
             <tr class="headers">
                 <th>CLIENTE</th>
                 <th>RESPONSABLE</th>
-                <th>DESCRIPCI&Oacute;N</th>
-                <th>FECHA INICIO</th>
-                <th>ESTADO</th>
+                <th>ETIQUETA</th>
+                <th>INICIO</th>
+                <th>FIN</th>
+                <th>DESCRIPCION</th>
                 <th>OPCIONES</th>
             </tr>
         </thead>
@@ -189,6 +190,7 @@ require('templates/menu.tpl.php'); #banner & menu
                 <td><?php echo $item['label_project'];?></td>
                 <td><?php echo $item['date_ini'];?></td>
                 <td><?php echo $item['date_end'];?></td>
+                <td><?php if($item['status_project'] == 1){ echo "activo";} else { echo "finalizado";};?></td>
                 <td>
                     <form method="post"  action="?controller=projects&amp;action=projectsView">
                         <?php 

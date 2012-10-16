@@ -140,10 +140,16 @@ require('templates/menu.tpl.php'); #banner & menu
                         <td class="middle"><input readonly="readonly" class="input_box" name="cliente" type="text" value="<?php echo $values['name_customer']; ?>" /></td>
                     </tr>
                     <tr>
+                        <td class="middle">Etiqueta</td>
+                        <td class="middle">
+                            <input type="text" class="input_box" readonly="readonly" name="etiqueta" value="<?php echo $values['label_project']; ?>" />
+                        </td>
+                    </tr>
+                    <tr>
                         <td>Descripci&oacute;n</td>
                         <td>
                             <textarea readonly="readonly" class="input_box" name="descripcion">
-                                <?php echo $values['label_project']; ?>
+                                <?php echo $values['desc_project']; ?>
                             </textarea>
                         </td>
                     </tr>

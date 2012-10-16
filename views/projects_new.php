@@ -290,6 +290,12 @@ require('templates/menu.tpl.php'); #banner & menu
                             </td>
                         </tr>
                         <tr>
+                            <td class="middle">Etiqueta</td>
+                            <td class="middle">
+                                <input type="text" class="input_box" name="etiqueta" />
+                            </td>
+                        </tr>
+                        <tr>
                             <td>Descripci&oacute;n</td>
                             <td>
                                 <textarea class="input_box" name="descripcion"></textarea>

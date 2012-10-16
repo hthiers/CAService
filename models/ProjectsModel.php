@@ -21,6 +21,8 @@ class ProjectsModel extends ModelBase
                         , a.label_project
                         , a.date_ini
                         , a.date_end
+                        , a.desc_project
+                        , a.status_project
                     FROM  cas_project a
                     LEFT OUTER JOIN cas_project_has_cas_user b
                     ON a.id_project = b.cas_project_id_project
@@ -62,6 +64,8 @@ class ProjectsModel extends ModelBase
                         , a.label_project
                         , a.date_ini
                         , a.date_end
+                        , a.desc_project
+                        , a.status_project
                     FROM  cas_project a
                     LEFT OUTER JOIN cas_project_has_cas_user b
                     ON a.id_project = b.cas_project_id_project
@@ -91,11 +95,13 @@ class ProjectsModel extends ModelBase
                         , A.CODE_PROJECT
                         , B.ID_TENANT
                         , A.LABEL_PROJECT
+                        , a.desc_project
+                        , a.status_project
                     FROM  cas_project A
                     INNER JOIN cas_tenant B
                     ON A.ID_TENANT = B.ID_TENANT
                     WHERE B.ID_TENANT = $id_tenant
-                    ORDER BY A.ID_PROJECT DESC
+                    ORDER BY A.CODE_PROJECT DESC
                     LIMIT 1");
 
             $consulta->execute();
@@ -103,13 +109,54 @@ class ProjectsModel extends ModelBase
             return $consulta;
 	}
         
+        public function getProjectByCode($code_project, $id_tenant)
+        {
+            $consulta = $this->db->prepare("
+                    SELECT 
+                        A.ID_PROJECT
+                        , A.CODE_PROJECT
+                        , B.ID_TENANT
+                        , A.LABEL_PROJECT
+                        , a.desc_project
+                        , a.status_project
+                    FROM  cas_project A
+                    INNER JOIN cas_tenant B
+                    ON A.ID_TENANT = B.ID_TENANT
+                    WHERE B.ID_TENANT = $id_tenant
+                      AND A.CODE_PROJECT = $code_project
+                    LIMIT 1");
+
+            $consulta->execute();
+
+            return $consulta;
+        }
         
-	public function addNewProject($id_tenant, $new_code, $id_user, $id_customer, $descripcion, $hora_ini, $fecha)
+        public function getProjectIDByCode($code_project, $id_tenant)
+        {
+            $consulta = $this->db->prepare("
+                    SELECT 
+                        A.ID_PROJECT
+                    FROM  cas_project A
+                    INNER JOIN cas_tenant B
+                    ON A.ID_TENANT = B.ID_TENANT
+                    WHERE B.ID_TENANT = $id_tenant
+                      AND A.CODE_PROJECT = $code_project
+                    LIMIT 1");
+
+            $consulta->execute();
+
+            return $consulta;
+        }
+        
+        
+	public function addNewProject($id_tenant, $new_code, $id_user, $id_customer, $etiqueta
+                , $hora_ini, $fecha, $descripcion, $estado = 1)
 	{
             $consulta = $this->db->prepare("INSERT INTO cas_project 
-                        (id_project, code_project, id_tenant, label_project, date_ini) 
+                        (id_project, code_project, id_tenant, label_project, date_ini, desc_project
+                        , status_project) 
                             VALUES 
-                        ($new_code, '$new_code', $id_tenant, '$descripcion', '$fecha. .$hora_ini')");
+                        (NULL, '$new_code', $id_tenant, '$etiqueta', '$fecha. .$hora_ini', '$descripcion', $estado)");
             
             $consulta->execute();
 
@@ -117,18 +164,20 @@ class ProjectsModel extends ModelBase
             $rows_n = $consulta->rowCount();
 
             if($error[0] == 00000){
+               $current = $this->getProjectIDByCode($new_code, $id_tenant)->fetch(PDO::FETCH_ASSOC);
+                
                if($rows_n > 0){
                    $consulta = $this->db->prepare("INSERT INTO cas_project_has_cas_user 
                         (cas_project_id_project, cas_user_id_user) 
                             VALUES 
-                        ($new_code, $id_user)");
+                        ($current[ID_PROJECT], $id_user)");
 
                    $consulta->execute();
                    
                    $consulta = $this->db->prepare("INSERT INTO cas_project_has_cas_customer 
                         (cas_project_id_project, cas_customer_id_customer) 
                             VALUES 
-                        ($new_code, $id_customer)");
+                        ($current[ID_PROJECT], $id_customer)");
 
                    $consulta->execute();
                }
