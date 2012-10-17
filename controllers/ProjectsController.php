@@ -98,18 +98,23 @@ class ProjectsController extends ControllerBase
         $modelCustomer = new CustomersModel();
 
         $pdo = $model->getLastProject($session->id_tenant);
+        $error = $pdo->errorInfo();
         $value = null;
         $value = $pdo->fetch(PDO::FETCH_ASSOC);
 
-        if($value != null)
+        if($error[0] != 00000){
+            $new_code = 1;
+            $data['error'] = "ERROR: ".$error[2];
+        }
+        elseif($value != null)
         {
             $last_code = $value['code_project'];
             $new_code = (int) $last_code + 1;
         }
         else
         {
-            $new_code = 0;
-            $data['error'] = "ERROR";
+            $new_code = 1;
+            $data['error'] = "NO PROJECTS";
         }
 
         $data['new_code'] = $new_code;
@@ -143,10 +148,16 @@ class ProjectsController extends ControllerBase
     public function projectsAdd()
     {
         $session = FR_Session::singleton();
+        $customer = null;
+        $error_user = null;
+        $error_cust = null;
 
         $new_code = $_POST['new_code'];
         $user = $_POST['resp'];
-        $customer = $_POST['cbocustomer'];
+        
+        if(isset($_POST['cbocustomer']))
+            $customer = $_POST['cbocustomer'];
+        
         $desc = $_POST['descripcion'];
         $hora_ini = $_POST['hora_ini'];
         $fecha = $_POST['fecha'];
@@ -157,23 +168,32 @@ class ProjectsController extends ControllerBase
 
         //Creamos una instancia de nuestro "modelo"
         $model = new ProjectsModel();
-        $result = $model->addNewProject($session->id_tenant, $new_code, $session->id_user, $customer, $etiqueta, $hora_ini, $fecha, $desc);
+        $result = $model->addNewProject($session->id_tenant, $new_code, $etiqueta, $hora_ini, $fecha, $desc);
 
-        if($result != null){
-            $error = $result->errorInfo();
-
-            if($error[0] == 00000){
-                #$this->projectsDt(1);
-                header("Location: ".$this->root."?controller=Projects&action=projectsDt&error_flag=11&message='testing result: ".$error[0]."'");
+        $error = $result->errorInfo();
+        $rows_n = $result->rowCount();
+        
+        if($error[0] == 00000 && $rows_n > 0){
+            $id_new_project = $model->getProjectIDByCodeINT($new_code, $session->id_tenant);
+            
+            $result_user = $model->addUserToProject($id_new_project, $session->id_user);            
+            $error_user = $result_user->errorInfo();
+            
+            if($customer != null){
+                $result_cust = $model->addCustomerToProject($id_new_project, $customer);
+                $error_cust = $result_cust->errorInfo();
             }
-            else{
-                #$this->projectsDt(10, "Ha ocurrido un error: ".$error[2]);
-                header("Location: ".$this->root."?controller=Projects&action=projectsDt&error_flag=10&message='Ha ocurrido un error: ".$error[2]."'");
-            }
+            
+            #$this->projectsDt(1);
+            header("Location: ".$this->root."?controller=Projects&action=projectsDt&error_flag=1");
         }
-        else{
+        elseif($error[0] == 00000 && $rows_n < 1){
             #$this->projectsDt(10, "Ha ocurrido un error grave!");
             header("Location: ".$this->root."?controller=Projects&action=projectsDt&error_flag=10&message='Ha ocurrido un error grave'");
+        }
+        else{
+            #$this->projectsDt(10, "Ha ocurrido un error: ".$error[2]);
+            header("Location: ".$this->root."?controller=Projects&action=projectsDt&error_flag=10&message='Ha ocurrido un error: ".$error[2]."'");
         }
     }
 

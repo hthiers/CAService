@@ -247,6 +247,12 @@ require('templates/menu.tpl.php'); #banner & menu
             print_r($titulo); print('<br />');
             print($current_date); print('<br />');
             print($current_time); print('<br />');
+            
+            if(isset($error)){
+                print($error); 
+                print('<br />');
+            }
+
             print('</div>');
         }
         ?>

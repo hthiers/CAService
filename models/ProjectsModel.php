@@ -131,6 +131,12 @@ class ProjectsModel extends ModelBase
             return $consulta;
         }
         
+        /**
+         * Get project ID by project CODE
+         * @param type $code_project
+         * @param type $id_tenant
+         * @return PDO
+         */
         public function getProjectIDByCode($code_project, $id_tenant)
         {
             $consulta = $this->db->prepare("
@@ -148,7 +154,43 @@ class ProjectsModel extends ModelBase
             return $consulta;
         }
         
-	public function addNewProject($id_tenant, $new_code, $id_user, $id_customer, $etiqueta
+        /**
+         * Get project ID by CODE
+         * @param type $code_project
+         * @param type $id_tenant
+         * @return Integer
+         */
+        public function getProjectIDByCodeINT($code_project, $id_tenant)
+        {
+            $consulta = $this->db->prepare("
+                    SELECT 
+                        A.id_project
+                    FROM  cas_project A
+                    INNER JOIN cas_tenant B
+                    ON A.id_tenant = B.id_tenant
+                    WHERE B.id_tenant = $id_tenant
+                      AND A.code_project = $code_project
+                    LIMIT 1");
+
+            $consulta->execute();
+
+            $row = $consulta->fetch(PDO::FETCH_ASSOC);
+            
+            return $row['id_project'];
+        }
+        
+        /**
+         * Add new project
+         * @param type $id_tenant
+         * @param type $new_code
+         * @param type $etiqueta
+         * @param type $hora_ini
+         * @param type $fecha
+         * @param type $descripcion
+         * @param type $estado
+         * @return PDO
+         */
+	public function addNewProject($id_tenant, $new_code, $etiqueta
                 , $hora_ini, $fecha, $descripcion, $estado = 1)
 	{
             $consulta = $this->db->prepare("INSERT INTO cas_project 
@@ -159,36 +201,7 @@ class ProjectsModel extends ModelBase
 
             $consulta->execute();
 
-            $error = $consulta->errorInfo();
-            $rows_n = $consulta->rowCount();
-
-            if($error[0] == 00000 && $rows_n > 0){             
-                $current = $this->getProjectIDByCode($new_code, $id_tenant)->fetch(PDO::FETCH_ASSOC);
-
-                #add user
-                $consulta = $this->addUserToProject($current['id_project'], $id_user);
-                
-//                $consulta = $this->db->prepare("INSERT INTO cas_project_has_cas_user 
-//                    (cas_project_id_project, cas_user_id_user) 
-//                        VALUES 
-//                    ($current[id_project], $id_user)");
-
-                $consulta->execute();
-
-                #add customer
-                $consulta = $this->addCustomerToProject($current['id_project'], $id_customer);
-                
-//                $consulta = $this->db->prepare("INSERT INTO cas_project_has_cas_customer 
-//                    (cas_project_id_project, cas_customer_id_customer) 
-//                        VALUES 
-//                    ($current[id_project], $id_customer)");
-
-                $consulta->execute();
-
-                return $consulta;
-            }
-
-            return null;
+            return $consulta;
 	}
         
         public function updateProject($id_tenant, $id_project, $code_project, $id_user, $id_customer, $etiqueta
