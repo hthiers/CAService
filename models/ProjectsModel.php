@@ -148,7 +148,6 @@ class ProjectsModel extends ModelBase
             return $consulta;
         }
         
-        
 	public function addNewProject($id_tenant, $new_code, $id_user, $id_customer, $etiqueta
                 , $hora_ini, $fecha, $descripcion, $estado = 1)
 	{
@@ -157,47 +156,82 @@ class ProjectsModel extends ModelBase
                         , status_project) 
                             VALUES 
                         (NULL, '$new_code', $id_tenant, '$etiqueta', '$fecha. .$hora_ini', '$descripcion', $estado)");
-            
+
             $consulta->execute();
 
             $error = $consulta->errorInfo();
             $rows_n = $consulta->rowCount();
 
-            if($error[0] == 00000 && $rows_n > 0){               
+            if($error[0] == 00000 && $rows_n > 0){             
                 $current = $this->getProjectIDByCode($new_code, $id_tenant)->fetch(PDO::FETCH_ASSOC);
 
-                $consulta = $this->db->prepare("INSERT INTO cas_project_has_cas_user 
-                    (cas_project_id_project, cas_user_id_user) 
-                        VALUES 
-                    ($current[id_project], $id_user)");
-
-                $consulta->execute();
-
-                $consulta = $this->db->prepare("INSERT INTO cas_project_has_cas_customer 
-                    (cas_project_id_project, cas_customer_id_customer) 
-                        VALUES 
-                    ($current[id_project], $id_customer)");
-
-                $consulta->execute();
+                #add user
+                $consulta = $this->addUserToProject($current['id_project'], $id_user);
                 
+//                $consulta = $this->db->prepare("INSERT INTO cas_project_has_cas_user 
+//                    (cas_project_id_project, cas_user_id_user) 
+//                        VALUES 
+//                    ($current[id_project], $id_user)");
+
+                $consulta->execute();
+
+                #add customer
+                $consulta = $this->addCustomerToProject($current['id_project'], $id_customer);
+                
+//                $consulta = $this->db->prepare("INSERT INTO cas_project_has_cas_customer 
+//                    (cas_project_id_project, cas_customer_id_customer) 
+//                        VALUES 
+//                    ($current[id_project], $id_customer)");
+
+                $consulta->execute();
+
                 return $consulta;
             }
-            
+
             return null;
 	}
         
-        public function stopProject($id_tenant, $id_user, $id_project, $stop_time)
+        public function updateProject($id_tenant, $id_project, $code_project, $id_user, $id_customer, $etiqueta
+                , $init_date, $stop_date, $desc, $estado)
         {
-            $consulta = $this->db->prepare("INSERT INTO cas_project 
-                        (id_project, code_project, id_tenant, label_project, date_ini, desc_project
-                        , status_project) 
-                            VALUES 
-                        (NULL, '$new_code', $id_tenant, '$etiqueta', '$fecha. .$hora_ini', '$descripcion', $estado)");
+            $consulta = $this->db->prepare("UPDATE cas_project 
+                        SET
+                        code_project = '$code_project'
+                        , label_project = '$etiqueta'
+                        , date_ini = '$init_date'
+                        , date_end = '$stop_date'
+                        , desc_project = '$desc'
+                        , status_project = '$estado'
+                        WHERE id_tenant = $id_tenant
+                          AND id_project = $id_project");
             
             $consulta->execute();
 
-            $error = $consulta->errorInfo();
-            $rows_n = $consulta->rowCount();
+            return $consulta;
+        }
+        
+        public function addUserToProject($id_project, $id_user)
+        {
+            $consulta = $this->db->prepare("INSERT INTO cas_project_has_cas_user 
+                    (cas_project_id_project, cas_user_id_user) 
+                        VALUES 
+                    ($id_project, $id_user)");
+            
+            $consulta->execute();
+
+            return $consulta;
+        }
+        
+        public function addCustomerToProject($id_project, $id_customer)
+        {
+            $consulta = $this->db->prepare("INSERT INTO cas_project_has_cas_customer 
+                    (cas_project_id_project, cas_customer_id_customer) 
+                        VALUES 
+                    ($id_project, $id_customer)");
+            
+            $consulta->execute();
+
+            return $consulta;
         }
         
         

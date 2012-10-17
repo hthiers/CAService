@@ -9,7 +9,7 @@ class Utils
     }
 
     //Avoid SQL Injection
-    public function cleanQuery($string)
+    public static function cleanQuery($string)
     {
         if(get_magic_quotes_gpc())  // prevents duplicate backslashes
         {
@@ -35,7 +35,7 @@ class Utils
     * @param boolean $redondear TRUE retorna el valor entero, FALSE retorna con decimales
     * @return int Diferencia entre fechas
     */
-    function diffDates($fecha_principal, $fecha_secundaria, $obtener = 'S', $redondear = false){
+    public static function diffDates($fecha_principal, $fecha_secundaria, $obtener = 'S', $redondear = false){
         $f0 = strtotime($fecha_principal);
         $f1 = strtotime($fecha_secundaria);
         

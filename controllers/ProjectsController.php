@@ -14,6 +14,12 @@ class ProjectsController extends ControllerBase
     {
         $session = FR_Session::singleton();
         
+        #support global messages
+        if(isset($_GET['error_flag']))
+            $error_flag = $_GET['error_flag'];
+        if(isset($_GET['message']))
+            $message = $_GET['message'];
+        
         //Incluye el modelo que corresponde
         require_once 'models/ProjectsModel.php';
         require_once 'models/UsersModel.php';
@@ -151,19 +157,24 @@ class ProjectsController extends ControllerBase
 
         //Creamos una instancia de nuestro "modelo"
         $model = new ProjectsModel();
-        #$result = $model->addNewProject($session->id_tenant, $new_code, $session->id_user, $customer, $desc, $hora_ini, $fecha);
         $result = $model->addNewProject($session->id_tenant, $new_code, $session->id_user, $customer, $etiqueta, $hora_ini, $fecha, $desc);
 
         if($result != null){
             $error = $result->errorInfo();
 
-            if($error[0] == 00000)
-                $this->projectsDt(1);
-            else
-                $this->projectsDt(10, "Ha ocurrido un error: ".$error[2]);   
+            if($error[0] == 00000){
+                #$this->projectsDt(1);
+                header("Location: ".$this->root."?controller=Projects&action=projectsDt&error_flag=11&message='testing result: ".$error[0]."'");
+            }
+            else{
+                #$this->projectsDt(10, "Ha ocurrido un error: ".$error[2]);
+                header("Location: ".$this->root."?controller=Projects&action=projectsDt&error_flag=10&message='Ha ocurrido un error: ".$error[2]."'");
+            }
         }
-        else
-            $this->projectsDt(10, "Ha ocurrido un error grave!");   
+        else{
+            #$this->projectsDt(10, "Ha ocurrido un error grave!");
+            header("Location: ".$this->root."?controller=Projects&action=projectsDt&error_flag=10&message='Ha ocurrido un error grave'");
+        }
     }
 
     /*
@@ -172,9 +183,12 @@ class ProjectsController extends ControllerBase
     public function projectsStop()
     {
         $session = FR_Session::singleton();
-        $frm_id_project = $_POST['id_project'];
+        $frm_id_project = null;
         
-        if($session->id_project == $frm_id_project){
+        if(isset($_POST['id_project']))
+            $frm_id_project = $_POST['id_project'];
+        
+        if($frm_id_project != null && $session->id_project == $frm_id_project){
             $session->id_project = null;
             
             #fecha actual
@@ -184,34 +198,40 @@ class ProjectsController extends ControllerBase
 
             require_once 'models/ProjectsModel.php';
             $model = new ProjectsModel();
-            
+
             #get times diff
             $result = $model->getProjectById($frm_id_project, $session->id_tenant);
             $values = $result->fetch(PDO::FETCH_ASSOC);
 
-            /*
-             * TRABAJANDO AQUI!!!!!!!
-             * 
-             * TOMANDO VALORES DE PROYECTO EN VISTA PARA TOMAR DIFERENCIA DE FECHAS
-             * Y ACTUALIZAR PROYECTO COMO FINALIZADO, INDICANDO FECHA DE FIN Y
-             * HORAS (Y MINUTOS) DE DURACION.
-             */
+            $init_date = $values['date_ini'];
+            $total_time = Utils::diffDates($stop_date, $init_date, 'H', false);
 
-            $result = $model->addNewProject($session->id_tenant, $new_code, $session->id_user, $customer, $etiqueta, $hora_ini, $fecha, $desc);
+            $result = $model->updateProject($session->id_tenant, $frm_id_project, $values['code_project']
+                    , $session->id_user, $values['id_customer'], $values['label_project'], $values['date_ini']
+                    , $stop_date, $values['desc_project'], 2);
             
             if($result != null){
-            $error = $result->errorInfo();
+                $error = $result->errorInfo();
+                $numr = $result->rowCount();
 
-            if($error[0] == 00000)
-                $this->projectsDt(1);
-            else
-                $this->projectsDt(10, "Ha ocurrido un error: ".$error[2]);
+                if($error[0] == 00000 && $numr > 0){
+                    #$this->projectsDt(1);
+                    header("Location: ".$this->root."?controller=Projects&action=projectsDt&error_flag=1");
+                }
+                else{
+                    #$this->projectsDt(10, "Ha ocurrido un error o no se lograron aplicar cambios: ".$error[2]);
+                    header("Location: ".$this->root."?controller=Projects&action=projectsDt&error_flag=10&message='No se lograron aplicar cambios: ".$error[2]."'");
+                }
             }
-            else
-                $this->projectsDt(10, "Ha ocurrido un error grave!");
+            else{
+                #$this->projectsDt(10, "Ha ocurrido un error grave!");
+                header("Location: ".$this->root."?controller=Projects&action=projectsDt&error_flag=10&message='Ha ocurrido un error grave!");
+            }
         }
-        else
-            $this->projectsDt(10, "Ha ocurrido un error grave!");
+        else{
+            #$this->projectsDt(10, "Error, el proyecto no ha sido encontrado.");
+            header("Location: ".$this->root."?controller=Projects&action=projectsDt&error_flag=10&message='Ha ocurrido un error grave!");
+        }
     }
     
     
