@@ -238,6 +238,8 @@ class ProjectsController extends ControllerBase
             #fecha actual
             $now = date("Y-m-d H:i:s");
             $currentDateTime = new DateTime($now);
+            $timezone = new DateTimeZone($session->timezone);
+            $currentDateTime = $currentDateTime->setTimezone($timezone);
             $stop_date = $currentDateTime->format("Y-m-d H:i:s");
 
             require_once 'models/ProjectsModel.php';
