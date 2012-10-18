@@ -21,6 +21,7 @@ class ProjectsModel extends ModelBase
                         , a.label_project
                         , a.date_ini
                         , a.date_end
+                        , a.time_total
                         , a.desc_project
                         , a.status_project
                     FROM  cas_project a
@@ -60,10 +61,11 @@ class ProjectsModel extends ModelBase
                         , IFNULL(c.code_user, '') as code_user
                         , IFNULL(c.name_user, '') as name_user
                         , IFNULL(e.id_customer, '') as id_customer
-                        , IFNULL(e.label_customer, '') as name_customer
+                        , IFNULL(e.label_customer, '') as label_customer
                         , a.label_project
                         , a.date_ini
                         , a.date_end
+                        , a.time_total
                         , a.desc_project
                         , a.status_project
                     FROM  cas_project a
@@ -205,7 +207,7 @@ class ProjectsModel extends ModelBase
 	}
         
         public function updateProject($id_tenant, $id_project, $code_project, $id_user, $id_customer, $etiqueta
-                , $init_date, $stop_date, $desc, $estado)
+                , $init_date, $stop_date, $total_time, $desc, $estado)
         {
             $consulta = $this->db->prepare("UPDATE cas_project 
                         SET
@@ -213,6 +215,7 @@ class ProjectsModel extends ModelBase
                         , label_project = '$etiqueta'
                         , date_ini = '$init_date'
                         , date_end = '$stop_date'
+                        , time_total = '$total_time'
                         , desc_project = '$desc'
                         , status_project = '$estado'
                         WHERE id_tenant = $id_tenant

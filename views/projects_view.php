@@ -60,7 +60,7 @@ if($session->id_tenant != null && $session->id_user != null):
     }
 </style>
 <script type="text/javascript" language="javascript" src="views/lib/jquery.dataTables.min.js"></script>
-<script type="text/javascript" charset="utf-8">
+<script type="text/javascript">
     $(document).ready(function(){
         $('.input_box').attr('disabled', 'disabled');
         $('#btn_play').attr('disabled', 'disabled');
@@ -114,13 +114,15 @@ require('templates/menu.tpl.php'); #banner & menu
         ?>
         <!-- END DEBUG -->
 
-        <p class="titulos-form"><?php echo $titulo; ?></p>
+        <?php #if(isset($pdo)): $values = $pdo->fetch(PDO::FETCH_ASSOC); ?>
+        
+        <p class="titulos-form"><?php echo $titulo.$code_project; ?></p>
 
         <p style="font-size: 12px; color: #999;">
             Nota: Esta pantalla permitir&iacute;a revisar un trabajo existente que seg&uacute;n su estado activo o finalizado, podr&iacute;a ser
             pausado o terminado. En este caso aparece un trabajo activo con los campos bloqueados y los botones de pausa y termino disponibles.
         </p>
-        
+
         <?php 
 //        if (isset($error_flag)){
 //            if(strlen($error_flag) > 0)
@@ -129,29 +131,32 @@ require('templates/menu.tpl.php'); #banner & menu
         ?>
 
         <div id="dt_filtres">
-            
-            <?php if(isset($pdo)): $values = $pdo->fetch(PDO::FETCH_ASSOC); ?>
+
+            <?php if($date_end == null): ?>
             <form id="formModule" name="formModule" method="post" action="?controller=Projects&action=projectsStop">
+            <?php else: ?>
+            <form>
+            <?php endif; ?>
                 <table class="table_left">
                     <tr>
                         <td class="middle">Responsable</td>
-                        <td class="middle"><input readonly="readonly" class="input_box" name="resp" type="text" value="<?php echo $values['name_user']; ?>" /></td>
+                        <td class="middle"><input readonly="readonly" class="input_box" name="resp" type="text" value="<?php echo $name_user; ?>" /></td>
                     </tr>
                     <tr>
                         <td class="middle">Cliente</td>
-                        <td class="middle"><input readonly="readonly" class="input_box" name="cliente" type="text" value="<?php echo $values['name_customer']; ?>" /></td>
+                        <td class="middle"><input readonly="readonly" class="input_box" name="cliente" type="text" value="<?php echo $label_customer; ?>" /></td>
                     </tr>
                     <tr>
                         <td class="middle">Etiqueta</td>
                         <td class="middle">
-                            <input type="text" class="input_box" readonly="readonly" name="etiqueta" value="<?php echo $values['label_project']; ?>" />
+                            <input type="text" class="input_box" readonly="readonly" name="etiqueta" value="<?php echo $label_project; ?>" />
                         </td>
                     </tr>
                     <tr>
                         <td>Descripci&oacute;n</td>
                         <td>
                             <textarea readonly="readonly" class="input_box" name="descripcion">
-                                <?php echo $values['desc_project']; ?>
+                                <?php echo $desc_project; ?>
                             </textarea>
                         </td>
                     </tr>
@@ -159,8 +164,9 @@ require('templates/menu.tpl.php'); #banner & menu
                 <table class="table_right">
                     <tr>
                         <td class="middle">Fecha inicio</td>
-                        <td class="middle"><input readonly="readonly" class="input_box" name="fecha_ini" type="text" value="<?php echo $values['date_ini']; ?>" /></td>
+                        <td class="middle"><input readonly="readonly" class="input_box" name="fecha_ini" type="text" value="<?php echo $date_ini; ?>" /></td>
                     </tr>
+                    <?php if($date_end == null): ?>
                     <tr>
                         <td colspan="2" style="text-align: center;">Control de tiempo 
                             <br /><br />
@@ -173,15 +179,31 @@ require('templates/menu.tpl.php'); #banner & menu
                             -->
                         </td>
                     </tr>
+                    <?php else: ?>
+                    <tr>
+                        <td class="middle">Fecha fin</td>
+                        <td class="middle"><input readonly="readonly" class="input_box" name="fecha_fin" type="text" value="<?php echo $date_end; ?>" /></td>
+                    </tr>
+                    <tr>
+                        <td class="middle">Tiempo total</td>
+                        <td class="middle">
+                            <input readonly="readonly" class="input_box" name="tiempo_total" type="text" value="<?php echo $time_h; ?>" /> horas
+                            
+                            <input type="hidden" id="time_total_s" name="time_total_s" value="<?php echo $time_s; ?>" />
+                            <input type="hidden" id="time_total_m" name="time_total_m" value="<?php echo $time_m; ?>" />
+                            <input type="hidden" id="time_total_h" name="time_total_h" value="<?php echo $time_h; ?>" />
+                        </td>
+                    </tr>
+                    <?php endif; ?>
                 </table>
                 <div style="clear: both;">
-                    <input type="hidden" name="id_project" value="<?php echo $values['id_project']; ?>" />
+                    <input type="hidden" name="id_project" value="<?php echo $id_project; ?>" />
                 </div>
             </form>
             <?php
-            else:
-                echo "<h4>Ha ocurrido un error grave</h4>";
-            endif;
+            #else:
+            #    echo "<h4>Ha ocurrido un error grave</h4>";
+            #endif;
             ?>
         </div>
 

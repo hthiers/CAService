@@ -175,7 +175,7 @@ require('templates/menu.tpl.php'); #banner & menu
                 <th>ETIQUETA</th>
                 <th>INICIO</th>
                 <th>FIN</th>
-                <th>ESTADO</th>
+                <th>TIEMPO</th>
                 <th>OPCIONES</th>
             </tr>
         </thead>
@@ -190,13 +190,19 @@ require('templates/menu.tpl.php'); #banner & menu
                 <td><?php echo $item['label_project'];?></td>
                 <td><?php echo $item['date_ini'];?></td>
                 <td><?php echo $item['date_end'];?></td>
-                <td><?php if($item['status_project'] == 1){ echo "activo";} else { echo "finalizado";};?></td>
+                <td>
+                    <?php 
+                    if($item['time_total'] == null): 
+                        echo "";
+                    else: 
+                        echo round((float)$item['time_total']/3600, 2);?>
+                        <span id="spnTime">hrs</span>
+                    <?php endif; ?>
+                </td>
                 <td>
                     <form method="post"  action="?controller=projects&amp;action=projectsView">
-                        <?php 
-                        echo "<input name='id_project' type='hidden' value='$item[id_project]' />\n";
-                        echo "<input class='input' type='submit' value='VER' />\n";
-                        ?>
+                        <input name="id_project" type="hidden" value="<?php echo $item['id_project']; ?>" />
+                        <input class="input" type="submit" value="VER" />
                     </form>
                 </td>
             </tr>

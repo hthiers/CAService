@@ -29,7 +29,7 @@ class ProjectsController extends ControllerBase
         $userModel = new UsersModel();
 
         //Le pedimos al modelo todos los items
-        $listado = $projectsModel->getAllProjectsByTenant($session->id_tenant);
+        $pdo = $projectsModel->getAllProjectsByTenant($session->id_tenant);
 
         // Obtener permisos de edición
 //        $permisos = $userModel->getUserModulePrivilegeByModule($session->id, 7);
@@ -38,7 +38,7 @@ class ProjectsController extends ControllerBase
 //        }
 //
         //Pasamos a la vista toda la información que se desea representar
-        $data['listado'] = $listado;
+        $data['listado'] = $pdo;
 
         //Titulo pagina
         $data['titulo'] = "LISTA DE TRABAJOS";
@@ -67,17 +67,37 @@ class ProjectsController extends ControllerBase
         $model = new ProjectsModel();
 
         $pdo = $model->getProjectById($id_project, $session->id_tenant);
-//        $values = $pdo->fetch(PDO::FETCH_ASSOC);
-//        
-//        if(isset($values)){
-//            $data['id_project'] = $values['id_project'];
-//            $data['code_project'] = $values['code_project'];
-//            $data['label_project'] = $values['label_project'];
-//            $data['date_ini'] = $values['date_ini'];
-//            $data['date_end'] = $values['date_end'];
-//        }
+        
+        $values = $pdo->fetch(PDO::FETCH_ASSOC);
+        if($values != null && $values != false){
+            #time
+            if($values['time_total'] != null){
+                $time_s = round($values['time_total'], 2);
+                $time_m = round((float)$time_s / 60, 2);
+                $time_h = round((float)$time_m / 60, 2);
+                $data['time_s'] = $time_s;
+                $data['time_m'] = $time_m;
+                $data['time_h'] = $time_h;
+            }
+            
+            #data
+            $data['id_project'] = $values['id_project'];
+            $data['code_project'] = $values['code_project'];
+            $data['id_tenant'] = $values['id_tenant'];
+            $data['id_user'] = $values['id_user'];
+            $data['code_user'] = $values['code_user'];
+            $data['name_user'] = $values['name_user'];
+            $data['id_customer'] = $values['id_customer'];
+            $data['label_customer'] = $values['label_customer'];
+            $data['label_project'] = $values['label_project'];
+            $data['date_ini'] = $values['date_ini'];
+            $data['date_end'] = $values['date_end'];
+            $data['time_total'] = $values['time_total'];
+            $data['desc_project'] = $values['desc_project'];
+            $data['status_project'] = $values['status_project'];
+        }
 
-        $data['titulo'] = "TRABAJO #".$id_project;
+        $data['titulo'] = "TRABAJO #";
         $data['pdo'] = $pdo;
 
         $this->view->show("projects_view.php", $data);
@@ -137,7 +157,7 @@ class ProjectsController extends ControllerBase
         $currentDateTime = new DateTime($now);
 
         $data['current_date'] = $currentDateTime->format("Y-m-d");
-        $data['current_time'] = $currentDateTime->format("H:i");
+        $data['current_time'] = $currentDateTime->format("H:i:s");
 
         $this->view->show("projects_new.php", $data);
     }
@@ -207,10 +227,10 @@ class ProjectsController extends ControllerBase
         
         if(isset($_POST['id_project']))
             $frm_id_project = $_POST['id_project'];
-        
+
         if($frm_id_project != null && $session->id_project == $frm_id_project){
             $session->id_project = null;
-            
+
             #fecha actual
             $now = date("Y-m-d H:i:s");
             $currentDateTime = new DateTime($now);
@@ -224,12 +244,12 @@ class ProjectsController extends ControllerBase
             $values = $result->fetch(PDO::FETCH_ASSOC);
 
             $init_date = $values['date_ini'];
-            $total_time = Utils::diffDates($stop_date, $init_date, 'H', false);
+            $total_time = Utils::diffDates($stop_date, $init_date, 'S', false);
 
             $result = $model->updateProject($session->id_tenant, $frm_id_project, $values['code_project']
                     , $session->id_user, $values['id_customer'], $values['label_project'], $values['date_ini']
-                    , $stop_date, $values['desc_project'], 2);
-            
+                    , $stop_date, $total_time, $values['desc_project'], 2);
+
             if($result != null){
                 $error = $result->errorInfo();
                 $numr = $result->rowCount();
@@ -253,6 +273,8 @@ class ProjectsController extends ControllerBase
             header("Location: ".$this->root."?controller=Projects&action=projectsDt&error_flag=10&message='Ha ocurrido un error grave!");
         }
     }
+
+    
     
     
     
