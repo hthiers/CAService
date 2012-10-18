@@ -155,7 +155,11 @@ class ProjectsController extends ControllerBase
         #fecha actual
         $now = date("Y-m-d H:i:s");
         $currentDateTime = new DateTime($now);
+        $timezone = new DateTimeZone($session->timezone);
+        $currentDateTime = $currentDateTime->setTimezone($timezone);
 
+        
+        
         $data['current_date'] = $currentDateTime->format("Y-m-d");
         $data['current_time'] = $currentDateTime->format("H:i:s");
 

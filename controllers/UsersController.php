@@ -34,6 +34,7 @@ class UsersController extends ControllerBase
                 $session->id_profile = $values['id_profile'];
                 $session->code_user = $values['code_user'];
                 $session->name_user = $values['name_user'];
+                $session->timezone = $this->timezone;
 
                 header("Location: ".$this->root."?controller=Projects&action=projectsDt");
             }
