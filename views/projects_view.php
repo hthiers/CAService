@@ -109,6 +109,8 @@ require('templates/menu.tpl.php'); #banner & menu
             print("tenant: ".$session->id_tenant.", user: ".$session->id_user."<br/>");
             print($titulo); print('<br />');
             print_r($pdo); print('<br />');
+            print(strtotime($currentTime));print('<br />');
+            print(strtotime($date_ini));print('<br />');
             print('</div>');
         }
         ?>
@@ -132,7 +134,7 @@ require('templates/menu.tpl.php'); #banner & menu
 
         <div id="dt_filtres">
 
-            <?php if($date_end == null): ?>
+            <?php if($date_end == null && strtotime($currentTime) > strtotime($date_ini)): ?>
             <form id="formModule" name="formModule" method="post" action="?controller=Projects&action=projectsStop">
             <?php else: ?>
             <form>
@@ -166,13 +168,26 @@ require('templates/menu.tpl.php'); #banner & menu
                         <td class="middle">Fecha inicio</td>
                         <td class="middle"><input readonly="readonly" class="input_box" name="fecha_ini" type="text" value="<?php echo $date_ini; ?>" /></td>
                     </tr>
-                    <?php if($date_end == null): ?>
+                    <?php if($date_end == null && strtotime($currentTime) > strtotime($date_ini)): ?>
                     <tr>
                         <td colspan="2" style="text-align: center;">Control de tiempo 
                             <br /><br />
                             <input id="btn_play" class="time_control" type="button" value="INICIO" />
                             <input id="btn_pause" class="time_control" type="button" value="PAUSA" />
                             <input id="btn_stop" class="time_control" type="button" value="TERMINAR" />
+                            <!--
+                            <br />
+                            <input type="text" class="time_status" value="tiempo..." />
+                            -->
+                        </td>
+                    </tr>
+                    <?php elseif($date_end == null && strtotime($currentTime) < strtotime($date_ini)):?>
+                    <tr>
+                        <td colspan="2" style="text-align: center;">Control de tiempo 
+                            <br /><br />
+                            <input id="btn_play" class="time_control" type="button" value="INICIO" />
+                            <input id="btn_pause" class="time_control" type="button" value="PAUSA" disabled="disabled" />
+                            <input id="btn_stop" class="time_control" type="button" value="TERMINAR" disabled="disabled" />
                             <!--
                             <br />
                             <input type="text" class="time_status" value="tiempo..." />

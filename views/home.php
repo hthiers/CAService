@@ -36,8 +36,7 @@ $(document).ready(function(){
             
             <h2 class="menuinicio">Inicio de sesión</h2>
             <p class="submenu">
-                Este demo no necesita iniciar una sesi&oacute;n.
-                Para entrar haga clic en "Acceder".
+                Demostraci&oacute;n versi&oacute;n 0.2.
             </p>
             
             <div style="margin-top: 10px;">

@@ -80,6 +80,12 @@ class ProjectsController extends ControllerBase
                 $data['time_h'] = $time_h;
             }
             
+            #current time
+            $now = date("Y-m-d H:i:s");
+            $currentDateTime = new DateTime($now);
+            $timezone = new DateTimeZone($session->timezone);
+            $data['currentTime'] = $currentDateTime->setTimezone($timezone)->format("Y-m-d H:i:s");
+            
             #data
             $data['id_project'] = $values['id_project'];
             $data['code_project'] = $values['code_project'];
