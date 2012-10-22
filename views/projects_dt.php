@@ -16,58 +16,79 @@ if($session->id_tenant != null && $session->id_user != null):
     }
 </style>
 <script type="text/javascript" language="javascript" src="views/lib/jquery.dataTables.min.js"></script>
-<script type="text/javascript" charset="utf-8">
-//$.fn.dataTableExt.afnFiltering.push(
-//    function( oSettings, aData, iDataIndex ) {
-//        var iCliente = $('#cboCliente option:selected').val();
-//        var iEstado = $('#cboEstado option:selected').val();
-//        var iVersion = aData[3] == "-" ? 0 : aData[3]*1;
-//        
-//        if ( iCliente == "" && iEstado == "" )
-//        {
-//            return true;
-//        }
-//        else if ( iCliente == "" && aData[4] == iEstado )
-//        {
-//            return true;
-//        }
-//        else if ( iCliente == aData[0] && "" == iEstado )
-//        {
-//            return true;
-//        }
-////        else if ( iCliente < iVersion && iVersion < iEstado )
-////        {
-////            return true;
-////        }
-//        return false;
-//    }
-//);
-    
+<script type="text/javascript">
 $(document).ready(function() {
-    oTable = $('#example').dataTable({
-            "sDom": '<"top"lpf>rt<"clear">',
-            "oLanguage": {
-                "sInfo": "_TOTAL_ registros",
-                "sInfoEmpty": "0 registros",
-                "sInfoFiltered": "(de _MAX_ registros)",
-                "sLengthMenu": "_MENU_ por p&aacute;gina",
-                "sZeroRecords": "No hay registros",
-                "sInfo": "_START_ a _END_ de _TOTAL_ registros",
-                "sInfoEmpty": "Mostrando 0 registros",
-                "sSearch": "Buscar",
-                "oPaginate": {
-                    "sFirst": "Primera",
-                    "sNext": "Siguiente",
-                    "sPrevious": "Anterior",
-                    "sLast": "&Uacute;ltima"
-                }
+    var oTable = $('#example').dataTable({
+        //Initial server side params
+        "bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": <?php echo "'?controller=projects&action=ajaxProjectsDt'";?>,
+        "fnServerData": function ( sSource, aoData, fnDrawCallback ){
+            $.ajax({
+                "dataType": 'json', 
+                "type": "GET", 
+                "url": sSource, 
+                "data": aoData, 
+                "success": fnDrawCallback
+            });
+        },
+        
+        "sDom": '<"top"lpf>rt<"clear">',
+        
+        "oLanguage": {
+            "sInfo": "_TOTAL_ registros",
+            "sInfoEmpty": "0 registros",
+            "sInfoFiltered": "(de _MAX_ registros)",
+            "sLengthMenu": "_MENU_ por p&aacute;gina",
+            "sZeroRecords": "No hay registros",
+            "sInfo": "_START_ a _END_ de _TOTAL_ registros",
+            "sInfoEmpty": "Mostrando 0 registros",
+            "sSearch": "Buscar",
+            "oPaginate": {
+                "sFirst": "Primera",
+                "sNext": "Siguiente",
+                "sPrevious": "Anterior",
+                "sLast": "&Uacute;ltima"
+            }
+        },
+        
+        "aoColumnDefs": [
+            { "mDataProp": null, "aTargets": [-1] },
+            { "bVisible": false, "aTargets": [6,7,8,9,10,11,12,13] },
+            {
+                "fnRender": function ( oObj ) {
+                    return '<button id=\"button\" class=\"input\" name=\"id_project\" onclick=\"submitToForm()\" value="'+oObj.aData[6]+'">VER</button>';
+                },
+                "aTargets": [-1]
             },
-            "sPaginationType": "full_numbers",
-            "aaSorting": [[0, "asc"]]
+        ],
+        
+        "sPaginationType": "full_numbers",
+        "aaSorting": [[0, "asc"]]
     });
     
     $('#cboCliente').change(function() { oTable.fnDraw(); } );
     $('#cboEstado').change(function() { oTable.fnDraw(); } );
+    
+    // form submition handling
+    $('#dt_form').submit( function() {
+        var sData = oTable.$('input').serialize();
+        var actionType = $('#action_type').val();
+        var urlAction = "";
+        
+        if(actionType == 'edit_form'){
+            urlAction = "<?php echo "?controller=".$controller."&amp;action=".$action;?>";
+            $('#action_type').val("");
+            
+            return true;
+        }
+    });
+    
+    function submitToForm(){
+        $('#action_type').val("view");
+
+        return true;
+    }
 });
 </script>
 
@@ -167,50 +188,42 @@ require('templates/menu.tpl.php'); #banner & menu
         </div>
         <!-- END CUSTOM FILTROS -->
 
-        <table class="display" id="example">
-        <thead>
-            <tr class="headers">
-                <th>CLIENTE</th>
-                <th>RESPONSABLE</th>
-                <th>ETIQUETA</th>
-                <th>INICIO</th>
-                <th>FIN</th>
-                <th>TIEMPO</th>
-                <th>OPCIONES</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            while($item = $listado->fetch(PDO::FETCH_ASSOC))
-            {
-            ?>
-            <tr>
-                <td><?php echo $item['name_customer'];?></td>
-                <td><?php echo $item['name_user'];?></td>
-                <td><?php echo $item['label_project'];?></td>
-                <td><?php echo $item['date_ini'];?></td>
-                <td><?php echo $item['date_end'];?></td>
-                <td>
-                    <?php 
-                    if($item['time_total'] == null): 
-                        echo "";
-                    else: 
-                        echo round((float)$item['time_total']/3600, 2);?>
-                        <span id="spnTime">hrs</span>
-                    <?php endif; ?>
-                </td>
-                <td>
-                    <form method="post"  action="?controller=projects&amp;action=projectsView">
-                        <input name="id_project" type="hidden" value="<?php echo $item['id_project']; ?>" />
-                        <input class="input" type="submit" value="VER" />
-                    </form>
-                </td>
-            </tr>
-            <?php
-            }
-            ?>
-        </tbody>
-        </table>
+        <!-- DATATABLE -->
+        <div id="dynamic">
+            <form id="dt_form" method="POST" action="<?php echo "?controller=".$controller."&amp;action=".$action;?>">
+                <table class="display" id="example">
+                    <thead>
+                        <tr class="headers">
+                            <th>CLIENTE</th>
+                            <th>RESPONSABLE</th>
+                            <th>ETIQUETA</th>
+                            <th>INICIO</th>
+                            <th>FIN</th>
+                            <th>TIEMPO</th>
+                            <th>ID PROJECT</th>
+                            <th>CODE PROJECT</th>
+                            <th>ID TENANT</th>
+                            <th>ID USER</th>
+                            <th>CODE USER</th>
+                            <th>ID CUSTOMER</th>
+                            <th>DESC PROJECT</th>
+                            <th>STATUS PROJECT</th>
+                            <th>OPCIONES</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="11" class="dataTables_empty">Loading data from server</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table>
+                    <tr>
+                        <td><input id="action_type" type="hidden" name="action_type" value="" /></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
 
         <div class="spacer"></div>
 

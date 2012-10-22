@@ -44,13 +44,273 @@ class ProjectsController extends ControllerBase
         $data['titulo'] = "LISTA DE TRABAJOS";
 
         $data['controller'] = "projects";
-//        $data['action'] = "trabajosVer";
+        $data['action'] = "projectsView";
 //        $data['action_b'] = "trabajosDt";
 
         //Posible error
         $data['error_flag'] = $this->errorMessage->getError($error_flag, $message);
 
         $this->view->show("projects_dt.php", $data);
+    }
+    
+    public function ajaxProjectsDt()
+    {
+        $session = FR_Session::singleton();
+        require_once 'models/ProjectsModel.php';
+        $model = new ProjectsModel();
+
+        /*
+        * Building dynamic query
+        */
+        #$sTable = $model->getTableName();
+        $sTable = "cas_project";
+
+        $aColumns = array('e.label_customer'
+                    , 'c.name_user'
+                    , 'a.label_project'
+                    , 'a.date_ini'
+                    , 'a.date_end'
+                    , 'a.time_total'
+                    , 'a.id_project'
+                    , 'a.code_project'
+                    , 'a.id_tenant'
+                    , 'c.id_user'
+                    , 'c.code_user'
+                    , 'e.id_customer'
+                    , 'a.desc_project'
+                    , 'a.status_project');
+
+        $sIndexColumn = "code_project";
+        $aTotalColumns = count($aColumns);
+
+        /******************** Paging */
+        if ( isset( $_GET['iDisplayStart'] ) && $_GET['iDisplayLength'] != '-1' )
+            $sLimit = "LIMIT ".$_GET['iDisplayStart'].", ".$_GET['iDisplayLength'];
+
+        /******************** Ordering */
+        $sOrder = "";
+        if ( isset( $_GET['iSortCol_0'] ) )
+        {
+                $sOrder = "ORDER BY  ";
+                for ( $i=0 ; $i<intval( $_GET['iSortingCols'] ) ; $i++ )
+                {
+                        if ( $_GET[ 'bSortable_'.intval($_GET['iSortCol_'.$i]) ] == "true" )
+                        {
+                                $sOrder .= "".$aColumns[ intval( $_GET['iSortCol_'.$i] ) ]." ".
+                                        $_GET['sSortDir_'.$i].", ";
+                        }
+                }
+
+                $sOrder = substr_replace( $sOrder, "", -2 );
+                if ( $sOrder == "ORDER BY" )
+                {
+                        $sOrder = "";
+                }
+        }
+
+        /******************** Filtering */
+        $sWhere = "";
+
+        if ( isset($_GET['sSearch']) && $_GET['sSearch'] != "" )
+        {
+            $sWhere = "WHERE (";
+            for ( $i=0 ; $i<count($aColumns) ; $i++ )
+            {
+                $sWhere .= "".$aColumns[$i]." LIKE '%".$_GET['sSearch']."%' OR ";
+            }
+
+            $sWhere = substr_replace( $sWhere, "", -3 );
+            $sWhere .= ')';
+        }
+
+        /********************* Individual column filtering */
+        for ( $i=0 ; $i<count($aColumns) ; $i++ )
+        {
+            if ( isset($_GET['bSearchable_'.$i]) && $_GET['bSearchable_'.$i] == "true" && $_GET['sSearch_'.$i] != '' )
+            {
+                if ( $sWhere == "" )
+                {
+                    $sWhere = "WHERE ";
+                }
+                else
+                {
+                    $sWhere .= " AND ";
+                }
+
+                $sWhere .= "".$aColumns[$i]." LIKE '%".$_GET['sSearch_'.$i]."%' ";
+            }
+        }
+
+        /******************** Custom Filtering */
+        if( isset($_GET['filBrand']) && $_GET['filBrand'] != "")
+        {
+            if ( $sWhere == "" )
+            {
+                    $sWhere = "WHERE ";
+            }
+            else
+            {
+                    $sWhere .= " AND ";
+            }
+
+            $sWhere .= " A.COD_BRAND LIKE '%".$_GET['filBrand']."%' ";
+        }
+        if( isset($_GET['filBu']) && $_GET['filBu'] != "")
+        {
+            if ( $sWhere == "" )
+            {
+                    $sWhere = "WHERE ";
+            }
+            else
+            {
+                    $sWhere .= " AND ";
+            }
+
+            $sWhere .= " A.COD_BU LIKE '%".$_GET['filBu']."%' ";
+        }
+        if( isset($_GET['filCategory']) && $_GET['filCategory'] != "")
+        {
+            if ( $sWhere == "" )
+            {
+                    $sWhere = "WHERE ";
+            }
+            else
+            {
+                    $sWhere .= " AND ";
+            }
+
+            $sWhere .= " A.COD_CATEGORY LIKE '%".$_GET['filCategory']."%' ";
+        }
+        if( isset($_GET['filGbu']) && $_GET['filGbu'] != "")
+        {
+            if ( $sWhere == "" )
+            {
+                    $sWhere = "WHERE ";
+            }
+            else
+            {
+                    $sWhere .= " AND ";
+            }
+
+            $sWhere .= " A.COD_GBU LIKE '%".$_GET['filGbu']."%' ";
+        }
+        if( isset($_GET['filSegment']) && $_GET['filSegment'] != "")
+        {
+            if ( $sWhere == "" )
+            {
+                    $sWhere = "WHERE ";
+            }
+            else
+            {
+                    $sWhere .= " AND ";
+            }
+
+            $sWhere .= " A.COD_SEGMENT LIKE '%".$_GET['filSegment']."%' ";
+        }
+        if( isset($_GET['filEstado']) && $_GET['filEstado'] != "")
+        {
+            if ( $sWhere == "" )
+            {
+                    $sWhere = "WHERE ";
+            }
+            else
+            {
+                    $sWhere .= " AND ";
+            }
+
+            $sWhere .= " G.NAME_ESTADO = '".$_GET['filEstado']."' ";
+        }
+        if( isset($_GET['filPremium']) && $_GET['filPremium'] == '1')
+        {
+            if ( $sWhere == "" )
+            {
+                    $sWhere = "WHERE ";
+            }
+            else
+            {
+                    $sWhere .= " AND ";
+            }
+
+            $sWhere .= " A.COD_MODEL IN (SELECT HH.COD_MODEL 
+                            FROM t_product_has_t_product_atribute HH 
+                            WHERE HH.COD_ATRIBUTE = 1) ";
+        }
+        if( isset($_GET['filAtribute']) && $_GET['filAtribute'] != '')
+        {
+            if ( $sWhere == "" )
+            {
+                    $sWhere = "WHERE ";
+            }
+            else
+            {
+                    $sWhere .= " AND ";
+            }
+
+            $sWhere .= " A.COD_MODEL IN (SELECT HI.COD_MODEL 
+                            FROM t_product_has_t_product_atribute HI 
+                            WHERE HI.COD_ATRIBUTE = '".$_GET['filAtribute']."') ";
+        }
+
+        /********************** Create Query */
+        $sql = "
+            SELECT SQL_CALC_FOUND_ROWS ".str_replace(" , ", " ", implode(", ", $aColumns))."
+            FROM $sTable a
+            LEFT OUTER JOIN cas_project_has_cas_user b
+            ON a.id_project = b.cas_project_id_project
+            LEFT OUTER JOIN cas_user c
+            ON (b.cas_user_id_user = c.id_user
+                AND
+                c.id_tenant = $session->id_tenant)
+            LEFT OUTER JOIN cas_project_has_cas_customer d
+            ON a.id_project = d.cas_project_id_project
+            LEFT OUTER JOIN cas_customer e
+            ON d.cas_customer_id_customer = e.id_customer
+            $sWhere
+            $sOrder
+            $sLimit";
+
+        #print($sql);
+
+        $result_data = $model->goCustomQuery($sql);
+
+        $found_rows = $model->goCustomQuery("SELECT FOUND_ROWS()");
+
+        $total_rows = $model->goCustomQuery("SELECT COUNT(`".$sIndexColumn."`) FROM $sTable");
+
+        /*
+        * Output
+        */
+        $iTotal = $total_rows->fetch(PDO::FETCH_NUM);
+        $iTotal = $iTotal[0];
+
+        $iFilteredTotal = $found_rows->fetch(PDO::FETCH_NUM);
+        $iFilteredTotal = $iFilteredTotal[0];
+
+        $output = array(
+            "sEcho" => intval($_GET['sEcho']),
+            "iTotalRecords" => $iTotal,
+            "iTotalDisplayRecords" => $iFilteredTotal,
+            "aaData" => array()
+        );
+
+        $k = 1;
+        while($aRow = $result_data->fetch(PDO::FETCH_NUM))
+        {
+            $row = array();
+
+            for($i=0;$i<$aTotalColumns;$i++)
+            {
+                // FORCE UTF8
+                #$row[] = utf8_encode($aRow[ $i ]);
+                $row[] = $aRow[$i];
+            }
+
+            $output['aaData'][] = $row;
+
+            $k++;
+        }
+
+        echo json_encode($output);
     }
 
     /**
