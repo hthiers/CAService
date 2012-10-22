@@ -23,10 +23,12 @@ class ProjectsController extends ControllerBase
         //Incluye el modelo que corresponde
         require_once 'models/ProjectsModel.php';
         require_once 'models/UsersModel.php';
+        require_once 'models/CustomersModel.php';
 
         //Creamos una instancia de nuestro "modelo"
         $projectsModel = new ProjectsModel();
         $userModel = new UsersModel();
+        $customersModel = new CustomersModel();
 
         //Le pedimos al modelo todos los items
         $pdo = $projectsModel->getAllProjectsByTenant($session->id_tenant);
@@ -36,7 +38,15 @@ class ProjectsController extends ControllerBase
 //        if($row = $permisos->fetch(PDO::FETCH_ASSOC)){
 //            $data['permiso_editar'] = $row['EDITAR'];
 //        }
-//
+
+        # customers
+        $pdoCustomers = $customersModel->getAllCustomersByTenant($session->id_tenant);
+        $data['pdoCustomers'] = $pdoCustomers;
+        
+        # dates
+        $arrayDates = Utils::getMonths();
+        $data['arrayDates'] = $arrayDates;
+        
         //Pasamos a la vista toda la información que se desea representar
         $data['listado'] = $pdo;
 
@@ -142,7 +152,7 @@ class ProjectsController extends ControllerBase
         }
 
         /******************** Custom Filtering */
-        if( isset($_GET['filBrand']) && $_GET['filBrand'] != "")
+        if( isset($_GET['filCliente']) && $_GET['filCliente'] != "")
         {
             if ( $sWhere == "" )
             {
@@ -153,9 +163,9 @@ class ProjectsController extends ControllerBase
                     $sWhere .= " AND ";
             }
 
-            $sWhere .= " A.COD_BRAND LIKE '%".$_GET['filBrand']."%' ";
+            $sWhere .= " e.id_customer = '".$_GET['filCliente']."' ";
         }
-        if( isset($_GET['filBu']) && $_GET['filBu'] != "")
+        if( isset($_GET['filMes']) && $_GET['filMes'] != "")
         {
             if ( $sWhere == "" )
             {
@@ -166,46 +176,7 @@ class ProjectsController extends ControllerBase
                     $sWhere .= " AND ";
             }
 
-            $sWhere .= " A.COD_BU LIKE '%".$_GET['filBu']."%' ";
-        }
-        if( isset($_GET['filCategory']) && $_GET['filCategory'] != "")
-        {
-            if ( $sWhere == "" )
-            {
-                    $sWhere = "WHERE ";
-            }
-            else
-            {
-                    $sWhere .= " AND ";
-            }
-
-            $sWhere .= " A.COD_CATEGORY LIKE '%".$_GET['filCategory']."%' ";
-        }
-        if( isset($_GET['filGbu']) && $_GET['filGbu'] != "")
-        {
-            if ( $sWhere == "" )
-            {
-                    $sWhere = "WHERE ";
-            }
-            else
-            {
-                    $sWhere .= " AND ";
-            }
-
-            $sWhere .= " A.COD_GBU LIKE '%".$_GET['filGbu']."%' ";
-        }
-        if( isset($_GET['filSegment']) && $_GET['filSegment'] != "")
-        {
-            if ( $sWhere == "" )
-            {
-                    $sWhere = "WHERE ";
-            }
-            else
-            {
-                    $sWhere .= " AND ";
-            }
-
-            $sWhere .= " A.COD_SEGMENT LIKE '%".$_GET['filSegment']."%' ";
+            $sWhere .= " MONTH(a.date_ini) = '".$_GET['filMes']."' ";
         }
         if( isset($_GET['filEstado']) && $_GET['filEstado'] != "")
         {
@@ -218,37 +189,7 @@ class ProjectsController extends ControllerBase
                     $sWhere .= " AND ";
             }
 
-            $sWhere .= " G.NAME_ESTADO = '".$_GET['filEstado']."' ";
-        }
-        if( isset($_GET['filPremium']) && $_GET['filPremium'] == '1')
-        {
-            if ( $sWhere == "" )
-            {
-                    $sWhere = "WHERE ";
-            }
-            else
-            {
-                    $sWhere .= " AND ";
-            }
-
-            $sWhere .= " A.COD_MODEL IN (SELECT HH.COD_MODEL 
-                            FROM t_product_has_t_product_atribute HH 
-                            WHERE HH.COD_ATRIBUTE = 1) ";
-        }
-        if( isset($_GET['filAtribute']) && $_GET['filAtribute'] != '')
-        {
-            if ( $sWhere == "" )
-            {
-                    $sWhere = "WHERE ";
-            }
-            else
-            {
-                    $sWhere .= " AND ";
-            }
-
-            $sWhere .= " A.COD_MODEL IN (SELECT HI.COD_MODEL 
-                            FROM t_product_has_t_product_atribute HI 
-                            WHERE HI.COD_ATRIBUTE = '".$_GET['filAtribute']."') ";
+            $sWhere .= " a.status_project = '".$_GET['filEstado']."' ";
         }
 
         /********************** Create Query */

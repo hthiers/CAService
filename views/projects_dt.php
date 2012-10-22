@@ -52,6 +52,15 @@ $(document).ready(function() {
             }
         },
         
+        //Custom filters params
+        "fnServerParams": function ( aoData ){
+            aoData.push(
+                { "name": "filCliente", "value": $('#cboCliente').val() },
+                { "name": "filMes", "value": $('#cboMes').val() },
+                { "name": "filEstado", "value": $('#cboEstado').val() }
+            );
+        },
+        
         "aoColumnDefs": [
             { "mDataProp": null, "aTargets": [-1] },
             { "bVisible": false, "aTargets": [6,7,8,9,10,11,12,13] },
@@ -68,6 +77,7 @@ $(document).ready(function() {
     });
     
     $('#cboCliente').change(function() { oTable.fnDraw(); } );
+    $('#cboMes').change(function() { oTable.fnDraw(); } );
     $('#cboEstado').change(function() { oTable.fnDraw(); } );
     
     // form submition handling
@@ -111,6 +121,7 @@ require('templates/menu.tpl.php'); #banner & menu
             print_r($titulo); print('<br />');
             print_r($listado); print('<br />');
             print(htmlspecialchars($error_flag, ENT_QUOTES)); print('<br />');
+            print_r($arrayDates);print('<br />');
             #print_r($permiso_editar); print('<br />');
             print('</div>');
         }
@@ -151,32 +162,30 @@ require('templates/menu.tpl.php'); #banner & menu
                 <td>
                     <?php
                     echo "<select name='cboCliente' id='cboCliente'>\n";
-                    echo "<option selected value=''>Todos</option>";
-                        echo "<option value='Cliente A'>Cliente A</option>\n";
-                        echo "<option value='Cliente B'>Cliente B</option>\n";
-                        echo "<option value='Cliente C'>Cliente C</option>\n";
-                        echo "<option value='Cliente D'>Cliente D</option>\n";
+                    echo "<option selected value=''>TODOS</option>";
+                    while($row = $pdoCustomers->fetch(PDO::FETCH_ASSOC))
+                    {
+                        echo "<option value='$row[id_customer]'>$row[label_customer]</option>\n";
+                    }
                     echo "</select>\n";
                     ?>
                 </td>
                 <td>
                     <?php
                     echo "<select name='cboMes' id='cboMes'>\n";
-                        echo "<option value='07'>Julio</option>\n";
-                        echo "<option value='08'>Agosto</option>\n";
-                        echo "<option selected value='09'>Septiembre</option>\n";
-                        echo "<option value='10'>Octubre</option>\n";
-                        echo "<option value='11'>Noviembre</option>\n";
-                        echo "<option value='12'>Diciembre</option>\n";
+                    echo "<option selected value=''>TODOS</option>";
+                    foreach ($arrayDates as $key => $value) {
+                        echo "<option value='".$key."'>".$value."</option>\n";
+                    }
                     echo "</select>\n";
                     ?>
                 </td>
                 <td>
                     <?php
                     echo "<select name='cboEstado' id='cboEstado'>\n";
-                        echo "<option selected='selected' value=''>Todos</option>\n";
-                        echo "<option value='Activo'>Activos</option>\n";
-                        echo "<option value='Finalizado'>Finalizados</option>\n";
+                        echo "<option selected='selected' value=''>TODOS</option>\n";
+                        echo "<option value='1'>Activo</option>\n";
+                        echo "<option value='2'>Finalizado</option>\n";
                     echo "</select>\n";
                     ?>
                 </td>
