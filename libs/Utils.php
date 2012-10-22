@@ -55,6 +55,11 @@ class Utils
         return $resultado;
     }
     
+    /**
+     * Get months or month of year by number of month (null for all)
+     * @param int $num_month
+     * @return string array
+     */
     public static function getMonths($num_month = null){
         $monthsArray = array(
             1 => 'Enero'

@@ -191,6 +191,20 @@ class ProjectsController extends ControllerBase
 
             $sWhere .= " a.status_project = '".$_GET['filEstado']."' ";
         }
+        
+        # TENANT
+        if ( $sWhere == "" )
+        {
+                $sWhere = "WHERE a.id_tenant = ".$session->id_tenant;
+        }
+        else
+        {
+                $sWhere .= " AND a.id_tenant = ".$session->id_tenant;
+        }
+        
+        # PATCH
+        unset($aColumns[5]);    // replace column by group
+        $aColumns[5] = "IFNULL(a.time_total/3600, '') AS time_total";
 
         /********************** Create Query */
         $sql = "
