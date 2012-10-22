@@ -203,8 +203,8 @@ class ProjectsController extends ControllerBase
         }
         
         # PATCH
-        unset($aColumns[5]);    // replace column by group
-        $aColumns[5] = "IFNULL(a.time_total/3600, '') AS time_total";
+//        unset($aColumns[5]);    // replace column by group
+//        $aColumns[5] = "IFNULL(a.time_total/3600, '') AS time_total";
 
         /********************** Create Query */
         $sql = "
