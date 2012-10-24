@@ -18,6 +18,12 @@ if($session->id_tenant != null && $session->id_user != null):
 <script type="text/javascript" language="javascript" src="views/lib/jquery.dataTables.min.js"></script>
 <script type="text/javascript" language="javascript" src="views/lib/utils.js"></script>
 <script type="text/javascript">
+function submitToForm(){
+    $('#action_type').val("view");
+
+    return true;
+}
+    
 $(document).ready(function() {
     var oTable = $('#example').dataTable({
         //Initial server side params
@@ -108,12 +114,6 @@ $(document).ready(function() {
             return true;
         }
     });
-    
-    function submitToForm(){
-        $('#action_type').val("view");
-
-        return true;
-    }
 });
 </script>
 
