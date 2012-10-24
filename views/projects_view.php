@@ -60,6 +60,7 @@ if($session->id_tenant != null && $session->id_user != null):
     }
 </style>
 <script type="text/javascript" language="javascript" src="views/lib/jquery.dataTables.min.js"></script>
+<script type="text/javascript" language="javascript" src="views/lib/utils.js"></script>
 <script type="text/javascript">
     $(document).ready(function(){
         $('.input_box').attr('disabled', 'disabled');
@@ -78,6 +79,12 @@ if($session->id_tenant != null && $session->id_user != null):
             //window.location.replace("<?php echo $rootPath;?>?controller=Projects&action=projectsDt"); 
             $('#formModule').submit();
         });
+        
+        var total_db = <?php echo $time_total; ?>;
+        var tiempo_array = secondsToTime(total_db);
+        var tiempo_string = tiempo_array['h']+':'+tiempo_array['m']+':'+tiempo_array['s'];
+        
+        $("#inptTiempoTotal").val(tiempo_string);
     });
 
     function iniTrabajo(){
@@ -202,7 +209,7 @@ require('templates/menu.tpl.php'); #banner & menu
                     <tr>
                         <td class="middle">Tiempo total</td>
                         <td class="middle">
-                            <input readonly="readonly" class="input_box" name="tiempo_total" type="text" value="<?php echo $time_h; ?>" /> horas
+                            <input id="inptTiempoTotal" readonly="readonly" class="input_box" name="tiempo_total" type="text" value="" />
                             
                             <input type="hidden" id="time_total_s" name="time_total_s" value="<?php echo $time_s; ?>" />
                             <input type="hidden" id="time_total_m" name="time_total_m" value="<?php echo $time_m; ?>" />
