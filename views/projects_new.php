@@ -63,7 +63,7 @@ if($session->id_tenant != null && $session->id_user != null):
     }
 </style>
 <script type="text/javascript" language="javascript" src="views/lib/jquery.dataTables.min.js"></script>
-<script type="text/javascript" charset="utf-8">
+<script type="text/javascript">
     var windowSizeArray = [ "width=200,height=200","width=300,height=400,scrollbars=yes" ];
     
     $(document).ready(function(){
@@ -221,7 +221,9 @@ if($session->id_tenant != null && $session->id_user != null):
 </head>
 <body id="dt_example" class="ex_highlight_row">
 
-    <div id="dialog-form" title="Nuevo Cliente">
+    <?php require('templates/dialogs.tpl.php'); #session & header ?>
+    
+<!--    <div id="dialog-form" title="Nuevo Cliente">
         <form>
             <fieldset style="padding:0; border:0; margin-top:25px;">
             <label for="name">Nombre</label>
@@ -230,11 +232,9 @@ if($session->id_tenant != null && $session->id_user != null):
             <input style="margin-bottom:12px; width:95%; padding: .4em;" type="text" name="email" id="email" value="" class="text ui-widget-content ui-corner-all" />
         </fieldset>
         </form>
-    </div>
+    </div>-->
     
-<?php
-require('templates/menu.tpl.php'); #banner & menu
-?>
+<?php require('templates/menu.tpl.php'); #banner & menu ?>
     <!-- CENTRAL -->
     <div id="central">
     <div id="contenido">
