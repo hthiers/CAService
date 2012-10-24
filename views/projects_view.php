@@ -88,6 +88,16 @@ if($session->id_tenant != null && $session->id_user != null):
 
             $("#inptTiempoTotal").val(tiempo_string);
         }
+        
+        var total_progress = <?php if($total_progress == null): echo 0; else: echo $total_progress; endif; ?>;
+        
+        if(total_progress > 0){
+            var tiempo_array = secondsToTime(total_progress);
+            var tiempo_string = tiempo_array['h']+':'+tiempo_array['m']+':'+tiempo_array['s'];
+
+            customClock(tiempo_string);
+            //$("#inptTiempoProgress").val(tiempo_string);
+        }
     });
 
     function iniTrabajo(){
@@ -121,6 +131,7 @@ require('templates/menu.tpl.php'); #banner & menu
             print_r($pdo); print('<br />');
             print(strtotime($currentTime));print('<br />');
             print(strtotime($date_ini));print('<br />');
+            print($total_progress);print('<br />');
             print('</div>');
         }
         ?>
@@ -179,6 +190,12 @@ require('templates/menu.tpl.php'); #banner & menu
                         <td class="middle"><input readonly="readonly" class="input_box" name="fecha_ini" type="text" value="<?php echo $date_ini; ?>" /></td>
                     </tr>
                     <?php if($date_end == null && strtotime($currentTime) > strtotime($date_ini)): ?>
+                    <tr>
+                        <td class="middle">Tiempo transcurrido</td>
+                        <td class="middle">
+                            <input id="progress_clock" readonly="readonly" class="input_box" name="tiempo_progress" type="text" value="" />
+                        </td>
+                    </tr>
                     <tr>
                         <td colspan="2" style="text-align: center;">Control de tiempo 
                             <br /><br />

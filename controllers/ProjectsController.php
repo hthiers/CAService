@@ -281,9 +281,9 @@ class ProjectsController extends ControllerBase
         require_once 'models/ProjectsModel.php';
         $model = new ProjectsModel();
 
-        $pdo = $model->getProjectById($id_project, $session->id_tenant);
+        $pdoProject = $model->getProjectById($id_project, $session->id_tenant);
         
-        $values = $pdo->fetch(PDO::FETCH_ASSOC);
+        $values = $pdoProject->fetch(PDO::FETCH_ASSOC);
         if($values != null && $values != false){
             #time
             if($values['time_total'] != null){
@@ -299,7 +299,12 @@ class ProjectsController extends ControllerBase
             $now = date("Y-m-d H:i:s");
             $currentDateTime = new DateTime($now);
             $timezone = new DateTimeZone($session->timezone);
-            $data['currentTime'] = $currentDateTime->setTimezone($timezone)->format("Y-m-d H:i:s");
+            $current_date = $currentDateTime->setTimezone($timezone)->format("Y-m-d H:i:s");
+            $data['currentTime'] = $current_date;
+            
+            #current progress
+            $total_progress = Utils::diffDates($current_date, $values['date_ini'], 'S', false);
+            $data['total_progress'] = $total_progress;
             
             #data
             $data['id_project'] = $values['id_project'];
@@ -319,7 +324,7 @@ class ProjectsController extends ControllerBase
         }
 
         $data['titulo'] = "TRABAJO #";
-        $data['pdo'] = $pdo;
+        $data['pdo'] = $pdoProject;
 
         $this->view->show("projects_view.php", $data);
     }
