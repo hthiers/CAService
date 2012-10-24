@@ -80,11 +80,14 @@ if($session->id_tenant != null && $session->id_user != null):
             $('#formModule').submit();
         });
         
-        var total_db = <?php echo $time_total; ?>;
-        var tiempo_array = secondsToTime(total_db);
-        var tiempo_string = tiempo_array['h']+':'+tiempo_array['m']+':'+tiempo_array['s'];
+        var total_db = <?php if($time_total == null): echo 0; else: echo $time_total; endif; ?>;
         
-        $("#inptTiempoTotal").val(tiempo_string);
+        if(total_db > 0){
+            var tiempo_array = secondsToTime(total_db);
+            var tiempo_string = tiempo_array['h']+':'+tiempo_array['m']+':'+tiempo_array['s'];
+
+            $("#inptTiempoTotal").val(tiempo_string);
+        }
     });
 
     function iniTrabajo(){
