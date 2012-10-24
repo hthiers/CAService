@@ -7,8 +7,12 @@ class Utils
     function __construct() 
     {
     }
-
-    //Avoid SQL Injection
+    
+    /**
+     * Avoid SQL Injection
+     * @param string $string
+     * @return string 
+     */
     public static function cleanQuery($string)
     {
         if(get_magic_quotes_gpc())  // prevents duplicate backslashes
@@ -53,6 +57,20 @@ class Utils
         if($redondear) $resultado = round($resultado);
 
         return $resultado;
+    }
+    
+    /**
+     * Get hh:mm format time from seconds
+     * @param int $seconds
+     * @return string time
+     */
+    public static function formatTime($seconds){
+        $hours = floor($seconds / 3600);
+        $mins = floor(($seconds - ($hours*3600)) / 60);
+        
+        $time = $hours.":".$mins;
+        
+        return $time;
     }
     
     /**

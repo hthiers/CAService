@@ -16,6 +16,7 @@ if($session->id_tenant != null && $session->id_user != null):
     }
 </style>
 <script type="text/javascript" language="javascript" src="views/lib/jquery.dataTables.min.js"></script>
+<script type="text/javascript" language="javascript" src="views/lib/utils.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
     var oTable = $('#example').dataTable({
@@ -69,6 +70,20 @@ $(document).ready(function() {
                     return '<button id=\"button\" class=\"input\" name=\"id_project\" onclick=\"submitToForm()\" value="'+oObj.aData[6]+'">VER</button>';
                 },
                 "aTargets": [-1]
+            },
+            {
+                "fnRender": function ( oObj ) {
+                    if(oObj.aData[5] != null){
+                        var seconds = oObj.aData[5];
+                        var total = secondsToTime(seconds);
+
+                        return total['h']+':'+total['m']+':'+total['s'];
+                    }
+                    else{
+                        return '';
+                    }
+                },
+                "aTargets": [5]
             },
         ],
         
