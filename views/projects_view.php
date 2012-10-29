@@ -141,10 +141,12 @@ require('templates/menu.tpl.php'); #banner & menu
         
         <p class="titulos-form"><?php echo $titulo.$code_project; ?></p>
 
+        <!--
         <p style="font-size: 12px; color: #999;">
             Nota: Esta pantalla permitir&iacute;a revisar un trabajo existente que seg&uacute;n su estado activo o finalizado, podr&iacute;a ser
             pausado o terminado. En este caso aparece un trabajo activo con los campos bloqueados y los botones de pausa y termino disponibles.
         </p>
+        -->
 
         <?php 
 //        if (isset($error_flag)){

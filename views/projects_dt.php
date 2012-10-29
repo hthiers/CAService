@@ -145,17 +145,19 @@ require('templates/menu.tpl.php'); #banner & menu
 
         <p class="titulos-form"><?php echo $titulo; ?></p>
 
+        <!--
         <p style="font-size: 12px; color: #999;">
             Nota: Esta pantalla permitir&iacute;a gestionar todos los registros existentes en el sistema, en principio, solo para el usuario en sesi&oacute;n. 
             Una barra azul en la cabecera de la p&aacute;gina muestra diferentes opciones de men&uacute;. En este caso solo funcionan como v&iacute;nculos 
             el item de "TRABAJOS" y "NUEVO TRABAJO".
             <br />
-            Sobre la tabla de abajo se encuentran los filtros de información en la tabla.
+            Sobre la tabla de abajo se encuentran los filtros de informaciÃ³n en la tabla.
             Un bot&oacute;n de exportar permitir&iacute;a crear un documento Excel con todos los trabajos en vista.
             Una columna de opciones permitir&iacute;a ejecutar ciertas acciones sobre un trabajo, en este caso se encuentra un v&iacute;nculo "ver"
             para abrir un registro.
             Haciendo clic en las cabeceras de la tabla es posible cambiar el orden por columna.
         </p>
+        -->
         
         <?php 
         if (isset($error_flag)){
