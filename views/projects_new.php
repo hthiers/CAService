@@ -222,19 +222,8 @@ if($session->id_tenant != null && $session->id_user != null):
 <body id="dt_example" class="ex_highlight_row">
 
     <?php require('templates/dialogs.tpl.php'); #session & header ?>
+    <?php require('templates/menu.tpl.php'); #banner & menu ?>
     
-<!--    <div id="dialog-form" title="Nuevo Cliente">
-        <form>
-            <fieldset style="padding:0; border:0; margin-top:25px;">
-            <label for="name">Nombre</label>
-            <input style="margin-bottom:12px; width:95%; padding: .4em;" type="text" name="name" id="name" class="text ui-widget-content ui-corner-all" />
-            <label for="email">Encargado</label>
-            <input style="margin-bottom:12px; width:95%; padding: .4em;" type="text" name="email" id="email" value="" class="text ui-widget-content ui-corner-all" />
-        </fieldset>
-        </form>
-    </div>-->
-    
-<?php require('templates/menu.tpl.php'); #banner & menu ?>
     <!-- CENTRAL -->
     <div id="central">
     <div id="contenido">
@@ -260,13 +249,16 @@ if($session->id_tenant != null && $session->id_user != null):
 
         <p class="titulos-form"><?php echo $titulo; ?></p>
 
-        <p style="font-size: 12px; color: #999;">Nota: Esta pantalla permitir&iacute;a crear un
+        <!--
+        <p style="font-size: 12px; color: #999;">
+            Nota: Esta pantalla permitir&iacute;a crear un
             nuevo registro de trabajo que tras hacer clic en el boton "INICIO" bajo el control de tiempo, guardar&iacute;a la fecha y la hora en
             que fue creado. Se puede notar que tras presionar el boton de inicio se bloquean los campos anteriores.
             El bot&oacute;n de "PAUSA" permite ignorar el tiempo durante el cual el registro permanece en pausa. Para terminar
             el trabajo habr&iacute;a que presionar el boton "TERMINAR" de color rojo, registrando el momento en que finalizó la tarea.
             El campo "responsable" corresponde al usuario en sesi&oacute;n sin posibilidad de alterar este valor.
         </p>
+        -->
         
         <?php 
         if (isset($error_flag)){

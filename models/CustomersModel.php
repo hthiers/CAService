@@ -5,8 +5,12 @@ class CustomersModel extends ModelBase
 	* CUSTOMERS
 	*******************************************************************************/
 
-	//GET ALL CLIENTES
-	public function getAllCustomersByTenant($id_tenant)
+	/**
+         * Get all customers by tenant
+         * @param int $id_tenant
+         * @return pdo
+         */
+	public function getAllCustomers($id_tenant)
 	{
                 $consulta = $this->db->prepare("
                         select 
@@ -24,6 +28,102 @@ class CustomersModel extends ModelBase
 		//devolvemos la coleccion para que la vista la presente.
 		return $consulta;
 	}
+        
+        /**
+         * Get all customers by tenant + user
+         * @param int $id_tenant
+         * @param int $id_project
+         * @return pdo
+         */
+	public function getAllCustomersByProject($id_tenant, $id_project)
+	{
+                $consulta = $this->db->prepare("
+                        SELECT b.* 
+                        FROM cas_project_has_cas_customer a
+                        INNER JOIN cas_customer b ON a.cas_customer_id_customer = b.id_customer
+                        inner join cas_tenant b
+                        on a.id_tenant = b.id_tenant
+                        where b.id_tenant = $id_tenant
+                          and a.cas_project_id_project = $id_project");
+
+		$consulta->execute();
+		
+		//devolvemos la coleccion para que la vista la presente.
+		return $consulta;
+	}
+        
+        /**
+         * Get cliente por código de cliente
+         * @param int $id_tenant
+         * @param varchar $code_customer
+         * @return PDO 
+         */
+        public function getCustomerByCode($id_tenant, $code_customer)
+        {
+            $consulta = $this->db->prepare("
+				SELECT id_customer 
+                                    , code_customer
+                                    , id_tenant
+                                    , label_customer
+                                FROM t_cliente a
+                                WHERE code_customer = '$code_customer'
+                                  and id_tenant = $id_tenant");
+            
+            $consulta->execute();
+
+            return $consulta;
+        }
+        
+        /**
+         * Get cliente por ID de cliente
+         * @param int $id_tenant
+         * @param varchar $id_customer
+         * @return PDO 
+         */
+        public function getCustomerByID($id_tenant, $id_customer)
+        {
+            $consulta = $this->db->prepare("
+				SELECT id_customer 
+                                    , code_customer
+                                    , id_tenant
+                                    , label_customer
+                                FROM t_cliente a
+                                WHERE id_customer = '$id_customer'
+                                  and id_tenant = $id_tenant");
+            
+            $consulta->execute();
+
+            return $consulta;
+        }
+        
+        /**
+         * Add new customer
+         * @param int $id_customer
+         * @param varchar $code_customer
+         * @param int $id_tenant
+         * @param varchar $label_customer
+         * @return pdo
+         */
+        public function addNewCustomer($id_customer, $code_customer, $id_tenant, $label_customer)
+	{
+            $consulta = $this->db->prepare("
+                    INSERT INTO cas_customer 
+                            (id_customer
+                            , code_customer
+                            , id_tenant
+                            , label_customer) 
+                    VALUES 
+                            ($id_customer
+                            ,'$code_customer'
+                            ,$id_tenant
+                            ,'$label_customer')");
+
+            $consulta->execute();
+
+            return $consulta;
+	}
+        
+        
         
         
         /*************************

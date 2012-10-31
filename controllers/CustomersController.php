@@ -6,7 +6,7 @@ class ClientesController extends ControllerBase
 	*******************************************************************************/
         
         //FORM
-        public function clientesDt($error_flag = 0, $message = "")
+        public function customersDt($error_flag = 0, $message = "")
 	{
 		//Incluye el modelo que corresponde
 		require_once 'models/ClientesModel.php';
@@ -52,7 +52,7 @@ class ClientesController extends ControllerBase
          * AJAX
          * @return json
          */
-        public function ajaxClientesDt()
+        public function ajaxCustomersDt()
         {
             //Incluye el modelo que corresponde
             require_once 'models/ClientesModel.php';
