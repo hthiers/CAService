@@ -375,7 +375,7 @@ class ProjectsController extends ControllerBase
         else
             $data['name_user'] = "ERROR";
 
-        $pdoCustomer = $modelCustomer->getAllCustomersByTenant($session->id_tenant);
+        $pdoCustomer = $modelCustomer->getAllCustomers($session->id_tenant);
         $data['pdoCustomer'] = $pdoCustomer;
 
         #fecha actual

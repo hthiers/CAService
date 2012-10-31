@@ -211,8 +211,7 @@ if($session->id_tenant != null && $session->id_user != null):
                 }
         });
 
-        $( "#create-user" )
-            .click(function() {
+        $( "#create-user" ).click(function() {
                 $( "#dialog-form" ).dialog( "open" );
             });
     });
