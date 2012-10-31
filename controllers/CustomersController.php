@@ -1,10 +1,39 @@
 <?php
-class ClientesController extends ControllerBase
+class CustomersController extends ControllerBase
 {
-	/*******************************************************************************
-	* CLIENTES
-	*******************************************************************************/
+    /*******************************************************************************
+    * CLIENTES
+    *******************************************************************************/
         
+    public function customersAdd()
+    {        
+        $session = FR_Session::singleton();
+
+        $code = $this->utils->cleanQuery($_POST['code']);
+        $name = $this->utils->cleanQuery($_POST['name']);
+        $buyerclass = $this->utils->cleanQuery($_POST['buyerclass']);
+        $channel = $this->utils->cleanQuery($_POST['channel']);
+        $type = $this->utils->cleanQuery($_POST['type']);
+
+        //Incluye el modelo que corresponde
+        require_once 'models/CustomersModel.php';
+
+        //Creamos una instancia de nuestro "modelo"
+        $model = new CustomersModel();
+
+        //Le pedimos al modelo todos los items
+        $result = $model->addNewCliente($code, $name, $buyerclass, $channel, $type);
+
+        if($result->rowCount() > 0)
+        {
+            $this->clientesDt(1);
+        }
+        else
+        {
+            $this->clientesDt(2);
+        }
+    }
+    
         //FORM
         public function customersDt($error_flag = 0, $message = "")
 	{
