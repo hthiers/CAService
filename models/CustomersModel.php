@@ -113,7 +113,7 @@ class CustomersModel extends ModelBase
                             , id_tenant
                             , label_customer) 
                     VALUES 
-                            ($id_customer
+                            (NULL
                             ,'$code_customer'
                             ,$id_tenant
                             ,'$label_customer')");

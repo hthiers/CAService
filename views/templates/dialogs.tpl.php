@@ -12,14 +12,14 @@
 
 <!-- New Customer -->
 <div id="dialog-form" title="Nuevo Cliente">
-    <form action="?controller=customers&amp;action=addNewCustomer" method="POST">
+    <form action="?controller=customers&amp;action=customersAdd" method="POST">
         <fieldset style="padding:0; border:0; margin-top:25px;">
-            <label for="name">Nombre</label>
+            <label for="name">Nombre Organización</label>
             <input style="margin-bottom:12px; width:95%; padding: .4em;" type="text" name="name" id="name" class="text ui-widget-content ui-corner-all" />
-            <label for="email">Responsable</label>
+            <label for="email">Contacto</label>
             <input style="margin-bottom:12px; width:95%; padding: .4em;" type="text" name="email" id="email" value="" class="text ui-widget-content ui-corner-all" />
             
-            <input type="submit" value="Guardar" />
+            <input type="submit" value="GUARDAR" style="font-family: Verdana; font-size: 15px; padding: 2px;" />
         </fieldset>
     </form>
 </div>

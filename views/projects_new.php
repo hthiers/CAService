@@ -88,6 +88,22 @@ if($session->id_tenant != null && $session->id_user != null):
             event.preventDefault();
         });
         
+        // ajax para nuevo cliente
+        var request = $.ajax({
+            url: "script.php",
+            type: "POST",
+            data: {id : menuId},
+            dataType: "html"
+        });
+
+        request.done(function(msg) {
+            $("#log").html( msg );
+        });
+
+        request.fail(function(jqXHR, textStatus) {
+            alert( "Request failed: " + textStatus );
+        });
+        
         $("#btn_play").click(function (event){
             iniTrabajo();
         });

@@ -40,7 +40,7 @@ class ProjectsController extends ControllerBase
 //        }
 
         # customers
-        $pdoCustomers = $customersModel->getAllCustomersByTenant($session->id_tenant);
+        $pdoCustomers = $customersModel->getAllCustomers($session->id_tenant);
         $data['pdoCustomers'] = $pdoCustomers;
         
         # dates
