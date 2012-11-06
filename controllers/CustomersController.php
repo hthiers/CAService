@@ -44,20 +44,22 @@ class CustomersController extends ControllerBase
     
     public function ajaxCustomersAdd()
     {   
-        print_r($_POST);
-        
         $session = FR_Session::singleton();
 
-        $code = $this->utils->cleanQuery($_POST['code']);
         $label_customer = $this->utils->cleanQuery($_POST['name']);
-        $code_customer = rand(1, 100);
-        $code_customer = "c".$code_customer;
+        $contact_customer = $this->utils->cleanQuery($_POST['contact']);
+        #$code_customer = rand(1, 100);
+        #$code_customer = "c".$code_customer;
         
         //Incluye el modelo que corresponde
         require_once 'models/CustomersModel.php';
 
         //Creamos una instancia de nuestro "modelo"
         $model = new CustomersModel();
+        
+        $result = $model->getLastCustomer($session->id_tenant);
+        $values = $result->fetch(PDO::FETCH_ASSOC);
+        $code_customer = $values['code_customer'];
 
         //Le pedimos al modelo todos los items
         $result = $model->addNewCustomer(null, $code_customer, $session->id_tenant, $label_customer);
@@ -65,19 +67,23 @@ class CustomersController extends ControllerBase
         $error = $result->errorInfo();
         $rows_n = $result->rowCount();
         
-        return $error;
-//        if($error[0] == 00000 && $rows_n > 0){
-//            #$this->projectsDt(1);
-//            header("Location: ".$this->root."?controller=Customers&action=customersDt&error_flag=1");
-//        }
-//        elseif($error[0] == 00000 && $rows_n < 1){
-//            #$this->projectsDt(10, "Ha ocurrido un error grave!");
-//            header("Location: ".$this->root."?controller=Customers&action=customersDt&error_flag=10&message='Ha ocurrido un error grave'");
-//        }
-//        else{
-//            #$this->projectsDt(10, "Ha ocurrido un error: ".$error[2]);
-//            header("Location: ".$this->root."?controller=Customers&action=customersDt&error_flag=10&message='Ha ocurrido un error: ".$error[2]."'");
-//        }
+        if($error[0] == 00000 && $rows_n > 0){
+            $new_customer[0] = $code_customer;
+            $new_customer[1] = $label_customer;
+            
+            #$this->projectsDt(1);
+            print json_encode($new_customer);
+        }
+        elseif($error[0] == 00000 && $rows_n < 1){
+            #$this->projectsDt(10, "Ha ocurrido un error grave!");
+            print "No se ha podido agregar el cliente";
+        }
+        else{
+            #$this->projectsDt(10, "Ha ocurrido un error: ".$error[2]);
+            print "Ha ocurrido un error grave: ".$error[2];
+        }
+        
+        return true;
     }
     
     //FORM

@@ -88,22 +88,6 @@ if($session->id_tenant != null && $session->id_user != null):
             event.preventDefault();
         });
         
-        // ajax para nuevo cliente
-        var request = $.ajax({
-            url: "script.php",
-            type: "POST",
-            data: {id : menuId},
-            dataType: "html"
-        });
-
-        request.done(function(msg) {
-            $("#log").html( msg );
-        });
-
-        request.fail(function(jqXHR, textStatus) {
-            alert( "Request failed: " + textStatus );
-        });
-        
         $("#btn_play").click(function (event){
             iniTrabajo();
         });
@@ -117,6 +101,42 @@ if($session->id_tenant != null && $session->id_user != null):
            window.location.replace("<?php echo $rootPath;?>?controller=projects&action=projectsDt");
         });
         $('#btn_stop').attr('disabled', 'disabled');
+        
+        $(".dlgSbmCstr").click(function(){
+            //var element = $(this);
+            //var Id = element.attr("id");
+            var name = $("#dlgSbm_name").val();
+            var contact = $("#dlgSbm_contact").val();
+            var dataString = 'name='+ name + '&contact=' + contact;
+            if(name=='')
+            {
+                alert("Please Enter Some Text");
+            }
+            else
+            {
+                //$("#flash").show();
+                //$("#flash").fadeIn(400).html('<img src="ajax-loader.gif" align="absmiddle"> loading.....');
+                $.ajax({
+                    type: "POST",
+                    url: "?controller=customers&action=ajaxCustomersAdd",
+                    data: dataString,
+                    cache: false,
+                    dataType: "json",
+                    success: function(response){
+                        $.each(response, function(key, val) {
+                            $("#cbocustomers").append('<option value="'+key+'" selected="selected">'+val+'</option>');
+                        });
+                        
+                        //$("#flash").hide();
+                        alert("Cliente agregado");
+                        
+                        $("#dialog-form").dialog("close");
+                    }
+                });
+            }
+
+            return false;
+	});
     });
     
     $(function() {
@@ -202,7 +222,7 @@ if($session->id_tenant != null && $session->id_user != null):
 
         $( "#create-user" ).click(function() {
                 $( "#dialog-form" ).dialog( "open" );
-            });
+        });
     });
 </script>
 

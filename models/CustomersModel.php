@@ -123,6 +123,28 @@ class CustomersModel extends ModelBase
             return $consulta;
 	}
         
+        /**
+         * Get last customer (by tenant)
+         * @param int $id_tenant
+         * @return pdo 
+         */
+        public function getLastCustomer($id_tenant)
+	{
+            $consulta = $this->db->prepare("
+                        SELECT id_customer 
+                            , code_customer
+                            , id_tenant
+                            , label_customer
+                        FROM t_cliente a
+                        WHERE id_tenant = $id_tenant
+                        ORDER BY id_customer DESC
+                        LIMIT 1");
+
+            $consulta->execute();
+
+            return $consulta;
+	}
+        
         
         
         
