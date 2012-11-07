@@ -135,7 +135,7 @@ class CustomersModel extends ModelBase
                             , code_customer
                             , id_tenant
                             , label_customer
-                        FROM t_cliente a
+                        FROM cas_customer a
                         WHERE id_tenant = $id_tenant
                         ORDER BY id_customer DESC
                         LIMIT 1");

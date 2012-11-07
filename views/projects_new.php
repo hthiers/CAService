@@ -123,12 +123,10 @@ if($session->id_tenant != null && $session->id_user != null):
                     cache: false,
                     dataType: "json",
                     success: function(response){
-                        $.each(response, function(key, val) {
-                            $("#cbocustomers").append('<option value="'+key+'" selected="selected">'+val+'</option>');
-                        });
+                        $("#cbocustomers").append('<option value="'+response[0]+'" selected="selected">'+response[1]+'</option>');
                         
                         //$("#flash").hide();
-                        alert("Cliente agregado");
+                        alert("Cliente agregado!");
                         
                         $("#dialog-form").dialog("close");
                     }

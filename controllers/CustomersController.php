@@ -60,7 +60,8 @@ class CustomersController extends ControllerBase
         $result = $model->getLastCustomer($session->id_tenant);
         $values = $result->fetch(PDO::FETCH_ASSOC);
         $code_customer = $values['code_customer'];
-
+        $code_customer = (int)$code_customer + 1;
+        
         //Le pedimos al modelo todos los items
         $result = $model->addNewCustomer(null, $code_customer, $session->id_tenant, $label_customer);
 
@@ -68,7 +69,12 @@ class CustomersController extends ControllerBase
         $rows_n = $result->rowCount();
         
         if($error[0] == 00000 && $rows_n > 0){
-            $new_customer[0] = $code_customer;
+            $result = $model->getLastCustomer($session->id_tenant);
+            $values = $result->fetch(PDO::FETCH_ASSOC);
+            
+            $id_customer = $values['id_customer'];
+            
+            $new_customer[0] = $id_customer;
             $new_customer[1] = $label_customer;
             
             #$this->projectsDt(1);
@@ -76,11 +82,13 @@ class CustomersController extends ControllerBase
         }
         elseif($error[0] == 00000 && $rows_n < 1){
             #$this->projectsDt(10, "Ha ocurrido un error grave!");
-            print "No se ha podido agregar el cliente";
+            #print "No se ha podido agregar el cliente";
+            return null;
         }
         else{
             #$this->projectsDt(10, "Ha ocurrido un error: ".$error[2]);
-            print "Ha ocurrido un error grave: ".$error[2];
+            #print "Ha ocurrido un error grave: ".$error[2];
+            return null;
         }
         
         return true;
