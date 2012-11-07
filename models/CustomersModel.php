@@ -453,7 +453,7 @@ class CustomersModel extends ModelBase
          */
         public function getTableName()
         {
-            $tableName = "t_cliente";
+            $tableName = "cas_customer";
             
             return $tableName;
         }

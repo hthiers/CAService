@@ -51,7 +51,7 @@ class ProjectsController extends ControllerBase
         $data['listado'] = $pdo;
 
         //Titulo pagina
-        $data['titulo'] = "LISTA DE TRABAJOS";
+        $data['titulo'] = "Lista de Trabajos";
 
         $data['controller'] = "projects";
         $data['action'] = "projectsView";
@@ -323,7 +323,7 @@ class ProjectsController extends ControllerBase
             $data['status_project'] = $values['status_project'];
         }
 
-        $data['titulo'] = "TRABAJO #";
+        $data['titulo'] = "Trabajo #";
         $data['pdo'] = $pdoProject;
 
         $this->view->show("projects_view.php", $data);
@@ -364,7 +364,7 @@ class ProjectsController extends ControllerBase
         }
 
         $data['new_code'] = $new_code;
-        $data['titulo'] = "NUEVO TRABAJO #".$new_code;
+        $data['titulo'] = "Nuevo Trabajo #".$new_code;
 
         $pdoUser = $modelUser->getUserAccountByID($session->id_user);
         $value = null;

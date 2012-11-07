@@ -64,6 +64,7 @@ if($session->id_tenant != null && $session->id_user != null):
 </style>
 <script type="text/javascript" language="javascript" src="views/lib/jquery.dataTables.min.js"></script>
 <script type="text/javascript">
+    // JQDialog window
     var windowSizeArray = [ "width=200,height=200","width=300,height=400,scrollbars=yes" ];
     
     $(document).ready(function(){
@@ -77,7 +78,24 @@ if($session->id_tenant != null && $session->id_user != null):
         $("#hora_ini").val(outStr);
         $("#hdnPicker").val(displayDate);
         
-        // pop-ups en caso de ser necesario
+        // Btn play
+        $("#btn_play").click(function (event){
+            iniTrabajo();
+        });
+        
+        // Btn pause
+        $('#btn_pause').attr('disabled', 'disabled');
+        $("#btn_pause").click(function (event){
+            pausaTrabajo();
+        });
+        
+        // Btn submit stop
+        $("#btn_stop").click(function (event){
+           window.location.replace("<?php echo $rootPath;?>?controller=projects&action=projectsDt");
+        });
+        $('#btn_stop').attr('disabled', 'disabled');
+        
+        // JQDialog popup event
         $('#pop_newcliente').click(function (event){
             var url = $(this).attr("href");
             var windowName = "popUp";//$(this).attr("name");
@@ -88,23 +106,8 @@ if($session->id_tenant != null && $session->id_user != null):
             event.preventDefault();
         });
         
-        $("#btn_play").click(function (event){
-            iniTrabajo();
-        });
-        $('#btn_pause').attr('disabled', 'disabled');
-        
-        $("#btn_pause").click(function (event){
-            pausaTrabajo();
-        });
-        
-        $("#btn_stop").click(function (event){
-           window.location.replace("<?php echo $rootPath;?>?controller=projects&action=projectsDt");
-        });
-        $('#btn_stop').attr('disabled', 'disabled');
-        
+        // JQDialog Submit - Add new customer
         $(".dlgSbmCstr").click(function(){
-            //var element = $(this);
-            //var Id = element.attr("id");
             var name = $("#dlgSbm_name").val();
             var contact = $("#dlgSbm_contact").val();
             var dataString = 'name='+ name + '&contact=' + contact;
@@ -121,15 +124,14 @@ if($session->id_tenant != null && $session->id_user != null):
                     url: "?controller=customers&action=ajaxCustomersAdd",
                     data: dataString,
                     cache: false,
-                    dataType: "json",
-                    success: function(response){
-                        $("#cbocustomers").append('<option value="'+response[0]+'" selected="selected">'+response[1]+'</option>');
-                        
-                        //$("#flash").hide();
-                        alert("Cliente agregado!");
-                        
-                        $("#dialog-form").dialog("close");
-                    }
+                    dataType: "json"
+                }).done(function(response){
+                    $("#cbocustomers").append('<option value="'+response[0]+'" selected="selected">'+response[1]+'</option>');       
+                    //$("#flash").hide();
+                    alert("Cliente agregado!");
+                    $("#dialog-form").dialog("close");
+                }).fail(function(){
+                    alert("Ha ocurrido un error!");
                 });
             }
 
@@ -137,6 +139,7 @@ if($session->id_tenant != null && $session->id_user != null):
 	});
     });
     
+    // JQDatepicker
     $(function() {
         $.datepicker.regional['es'] = {
             monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
@@ -154,6 +157,7 @@ if($session->id_tenant != null && $session->id_user != null):
         });
     });
     
+    // Func submit new project
     function iniTrabajo(){
         $('.input_box').attr('readonly', true);
         $('#datepicker').datepicker().datepicker('disable');
@@ -167,11 +171,13 @@ if($session->id_tenant != null && $session->id_user != null):
         $('#formModule').submit();
     }
     
+    // Func pause project (count paused time to discount after)
     function pausaTrabajo(){
         $('#btn_play').removeAttr('disabled');
         $('#btn_pause').attr('disabled', 'disabled');
     }
     
+    // JQDialog new customer
     $(function() {
         // a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
         $( "#dialog:ui-dialog" ).dialog( "destroy" );
@@ -294,7 +300,6 @@ if($session->id_tenant != null && $session->id_user != null):
                                 echo "</select>\n";
                                 ?>
                                 &nbsp;
-                                <!--<button id="create-user">Nuevo</button>-->
                                 <a id="create-user" href="#">Nuevo</a>
                             </td>
                         </tr>

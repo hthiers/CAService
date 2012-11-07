@@ -123,7 +123,7 @@ class CustomersController extends ControllerBase
             }
 
             //Titulo pagina
-            $data['titulo'] = "clientes";
+            $data['titulo'] = "Clientes";
 
             //Controller
             $data['controller'] = "clientes";
@@ -135,33 +135,30 @@ class CustomersController extends ControllerBase
             //Finalmente presentamos nuestra plantilla
             $this->view->show("clientes_dt.php", $data);
     }
-        
+
     /**
-        * Get clientes for ajax dynamic query
-        * AJAX
-        * @return json
-        */
+    * Get customers for ajax dynamic query
+    * AJAX
+    * @return json
+    */
     public function ajaxCustomersDt()
     {
         //Incluye el modelo que corresponde
-        require_once 'models/ClientesModel.php';
+        require_once 'models/CustomersModel.php';
 
         //Creamos una instancia de nuestro "modelo"
-        $model = new ClientesModel();
+        $model = new CustomersModel();
 
         /*
         * Build up dynamic query
         */
         $sTable = $model->getTableName();
 
-        $aColumns = array('A.COD_CLIENTE'
-                    , 'A.NOM_CLIENTE'
-                    , 'B.BUYER_CLASS_NAME'
-                    , 'C.CHANNEL_NAME'
-                    , 'A.TIPO'
-                    , 'A.ESTADO'
-        );
-        $sIndexColumn = "COD_CLIENTE";
+        $aColumns = array('a.id_customer'
+                    , 'a.code_customer'
+                    , 'b.id_tenant'
+                    , 'a.label_customer');
+        $sIndexColumn = "id_customer";
 
         /******************** Paging */
         if ( isset( $_GET['iDisplayStart'] ) && $_GET['iDisplayLength'] != '-1' )
@@ -171,21 +168,21 @@ class CustomersController extends ControllerBase
         $sOrder = "";
         if ( isset( $_GET['iSortCol_0'] ) )
         {
-                $sOrder = "ORDER BY  ";
-                for ( $i=0 ; $i<intval( $_GET['iSortingCols'] ) ; $i++ )
-                {
-                        if ( $_GET[ 'bSortable_'.intval($_GET['iSortCol_'.$i]) ] == "true" )
-                        {
-                                $sOrder .= "".$aColumns[ intval( $_GET['iSortCol_'.$i] ) ]." ".
-                                        mysql_real_escape_string( $_GET['sSortDir_'.$i] ) .", ";
-                        }
-                }
+            $sOrder = "ORDER BY  ";
+            for ( $i=0 ; $i<intval( $_GET['iSortingCols'] ) ; $i++ )
+            {
+                    if ( $_GET[ 'bSortable_'.intval($_GET['iSortCol_'.$i]) ] == "true" )
+                    {
+                            $sOrder .= "".$aColumns[ intval( $_GET['iSortCol_'.$i] ) ]." ".
+                                    mysql_real_escape_string( $_GET['sSortDir_'.$i] ) .", ";
+                    }
+            }
 
-                $sOrder = substr_replace( $sOrder, "", -2 );
-                if ( $sOrder == "ORDER BY" )
-                {
-                        $sOrder = "";
-                }
+            $sOrder = substr_replace( $sOrder, "", -2 );
+            if ( $sOrder == "ORDER BY" )
+            {
+                    $sOrder = "";
+            }
         }
 
         /******************** Filtering */
@@ -222,32 +219,29 @@ class CustomersController extends ControllerBase
         }
 
         /******************** Custom Filtering */
-        if( isset($_GET['filTipo']) && $_GET['filTipo'] != "")
-        {
-            if ( $sWhere == "" )
-            {
-                    $sWhere = "WHERE ";
-            }
-            else
-            {
-                    $sWhere .= " AND ";
-            }
-
-            $sWhere .= " A.TIPO LIKE '%".mysql_real_escape_string($_GET['filTipo'])."%' ";
-        }
+//        if( isset($_GET['filResponsable']) && $_GET['filResponsable'] != "")
+//        {
+//            if ( $sWhere == "" )
+//            {
+//                    $sWhere = "WHERE ";
+//            }
+//            else
+//            {
+//                    $sWhere .= " AND ";
+//            }
+//
+//            $sWhere .= " A.TIPO LIKE '%".mysql_real_escape_string($_GET['filTipo'])."%' ";
+//        }
 
         /********************** Create Query */
         $sql = "
             SELECT SQL_CALC_FOUND_ROWS ".str_replace(" , ", " ", implode(", ", $aColumns))."
-            FROM $sTable A
-            INNER JOIN T_BUYER_CLASS B
-            ON A.COD_BUYER_CLASS = B.COD_BUYER_CLASS
-            INNER JOIN T_CHANNEL C
-            ON A.COD_CHANNEL = C.COD_CHANNEL
+            FROM $sTable a
+            INNER JOIN cas_tenant b
+            ON a.id_tenant = b.id_tenant
             $sWhere
             $sOrder
-            $sLimit
-            ";
+            $sLimit";
 
         $result_data = $model->goCustomQuery($sql);
 
