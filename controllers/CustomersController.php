@@ -97,43 +97,41 @@ class CustomersController extends ControllerBase
     //FORM
     public function customersDt($error_flag = 0, $message = "")
     {
-            //Incluye el modelo que corresponde
-            require_once 'models/ClientesModel.php';
+        $session = FR_Session::singleton();
+        
+        //Incluye el modelo que corresponde
+        require_once 'models/CustomersModel.php';
 
-            //Creamos una instancia de nuestro "modelo"
-            $model = new ClientesModel();
+        //Creamos una instancia de nuestro "modelo"
+        $model = new CustomersModel();
 
-            //Le pedimos al modelo todos los items
-            $listado = $model->getAllClientes();
-            $lista_tipos = $model->getAllTiposCliente();
+        //Le pedimos al modelo todos los items
+        $listado = $model->getAllCustomers($session->id_tenant);
 
-            //Pasamos a la vista toda la información que se desea representar
-            $data['listado'] = $listado;
-            $data['lista_tipos'] = $lista_tipos;
+        //Pasamos a la vista toda la información que se desea representar
+        $data['listado'] = $listado;
 
-            // Obtener permisos de edición
-            require_once 'models/UsersModel.php';
-            $userModel = new UsersModel();
+        // Obtener permisos de edición
+//        require_once 'models/UsersModel.php';
+//        $userModel = new UsersModel();
 
-            $session = FR_Session::singleton();
+//        $permisos = $userModel->getUserModulePrivilegeByModule($session->id, 2);
+//        if($row = $permisos->fetch(PDO::FETCH_ASSOC)){
+//            $data['permiso_editar'] = $row['EDITAR'];
+//        }
 
-            $permisos = $userModel->getUserModulePrivilegeByModule($session->id, 2);
-            if($row = $permisos->fetch(PDO::FETCH_ASSOC)){
-                $data['permiso_editar'] = $row['EDITAR'];
-            }
+        //Titulo pagina
+        $data['titulo'] = "Clientes";
 
-            //Titulo pagina
-            $data['titulo'] = "Clientes";
+        //Controller
+        $data['controller'] = "customers";
+        $data['action'] = "customersEditForm";
 
-            //Controller
-            $data['controller'] = "clientes";
-            $data['action'] = "clientesEditForm";
+        //Posible error
+        $data['error_flag'] = $this->errorMessage->getError($error_flag,$message);
 
-            //Posible error
-            $data['error_flag'] = $this->errorMessage->getError($error_flag,$message);
-
-            //Finalmente presentamos nuestra plantilla
-            $this->view->show("clientes_dt.php", $data);
+        //Finalmente presentamos nuestra plantilla
+        $this->view->show("customers_dt.php", $data);
     }
 
     /**
