@@ -155,9 +155,9 @@ table.display {
 	 */
 }
 table.display th, td {
-	border: 1px solid #ffffff;
-	padding: 5px;
-	text-align: left;
+    /*border: 1px solid #ffffff;*/
+    padding: 5px;
+    text-align: left;
 }
 
 /* options column */
@@ -166,11 +166,11 @@ td.td_options {
 }
 
 table.display thead th {
-	cursor: pointer;
-	* cursor: hand;
-        text-align: center;
-        padding-right: 18px;
-        text-shadow: 0px 1px 0px #000000;
+    cursor: pointer;
+    * cursor: hand;
+    text-align: center;
+    padding-right: 18px;
+    /*text-shadow: 0px 1px 0px #000000;*/
 }
 
 table.display tfoot th {
