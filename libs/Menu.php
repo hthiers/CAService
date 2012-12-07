@@ -92,7 +92,7 @@ class Menu extends ModelBase
                 $menuFullString.= '</li>';
                 $menuFullString.= '<li><a class="menu_sup" href="?controller=customers&amp;action=customersDt">CLIENTES</a>';
                 $menuFullString.= '</li>';
-                $menuFullString.= '<li><a class="menu_sup" href="#">NUEVO CLIENTE</a>';
+                $menuFullString.= '<li><a class="menu_sup" href="?controller=customers&amp;action=customersAddForm">NUEVO CLIENTE</a>';
                 $menuFullString.= '</li>';
             $menuFullString.= '</ul>';
             

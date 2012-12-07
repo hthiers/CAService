@@ -168,6 +168,8 @@ require('templates/menu.tpl.php'); #banner & menu
             if(strlen($error_flag) > 0)
                 echo $error_flag;
         }
+        else
+            echo "aaaa";
         ?>
 
         <!-- CUSTOM FILTROS -->

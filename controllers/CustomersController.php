@@ -5,99 +5,16 @@ class CustomersController extends ControllerBase
     * CLIENTES
     *******************************************************************************/
         
-    public function customersAdd()
-    {   
-        print_r($_POST);
-        
-        $session = FR_Session::singleton();
-
-        $code = $this->utils->cleanQuery($_POST['code']);
-        $label_customer = $this->utils->cleanQuery($_POST['name']);
-        $code_customer = rand(1, 100);
-        $code_customer = "c".$code_customer;
-        
-        //Incluye el modelo que corresponde
-        require_once 'models/CustomersModel.php';
-
-        //Creamos una instancia de nuestro "modelo"
-        $model = new CustomersModel();
-
-        //Le pedimos al modelo todos los items
-        $result = $model->addNewCustomer(null, $code_customer, $session->id_tenant, $label_customer);
-
-        $error = $result->errorInfo();
-        $rows_n = $result->rowCount();
-        
-        if($error[0] == 00000 && $rows_n > 0){
-            #$this->projectsDt(1);
-            header("Location: ".$this->root."?controller=Customers&action=customersDt&error_flag=1");
-        }
-        elseif($error[0] == 00000 && $rows_n < 1){
-            #$this->projectsDt(10, "Ha ocurrido un error grave!");
-            header("Location: ".$this->root."?controller=Customers&action=customersDt&error_flag=10&message='Ha ocurrido un error grave'");
-        }
-        else{
-            #$this->projectsDt(10, "Ha ocurrido un error: ".$error[2]);
-            header("Location: ".$this->root."?controller=Customers&action=customersDt&error_flag=10&message='Ha ocurrido un error: ".$error[2]."'");
-        }
-    }
-    
-    public function ajaxCustomersAdd()
-    {   
-        $session = FR_Session::singleton();
-
-        $label_customer = $this->utils->cleanQuery($_POST['name']);
-        $contact_customer = $this->utils->cleanQuery($_POST['contact']);
-        #$code_customer = rand(1, 100);
-        #$code_customer = "c".$code_customer;
-        
-        //Incluye el modelo que corresponde
-        require_once 'models/CustomersModel.php';
-
-        //Creamos una instancia de nuestro "modelo"
-        $model = new CustomersModel();
-        
-        $result = $model->getLastCustomer($session->id_tenant);
-        $values = $result->fetch(PDO::FETCH_ASSOC);
-        $code_customer = $values['code_customer'];
-        $code_customer = (int)$code_customer + 1;
-        
-        //Le pedimos al modelo todos los items
-        $result = $model->addNewCustomer(null, $code_customer, $session->id_tenant, $label_customer);
-
-        $error = $result->errorInfo();
-        $rows_n = $result->rowCount();
-        
-        if($error[0] == 00000 && $rows_n > 0){
-            $result = $model->getLastCustomer($session->id_tenant);
-            $values = $result->fetch(PDO::FETCH_ASSOC);
-            
-            $id_customer = $values['id_customer'];
-            
-            $new_customer[0] = $id_customer;
-            $new_customer[1] = $label_customer;
-            
-            #$this->projectsDt(1);
-            print json_encode($new_customer);
-        }
-        elseif($error[0] == 00000 && $rows_n < 1){
-            #$this->projectsDt(10, "Ha ocurrido un error grave!");
-            #print "No se ha podido agregar el cliente";
-            return null;
-        }
-        else{
-            #$this->projectsDt(10, "Ha ocurrido un error: ".$error[2]);
-            #print "Ha ocurrido un error grave: ".$error[2];
-            return null;
-        }
-        
-        return true;
-    }
-    
-    //FORM
+    //DT
     public function customersDt($error_flag = 0, $message = "")
     {
         $session = FR_Session::singleton();
+        
+        #support global messages
+        if(isset($_GET['error_flag']))
+            $error_flag = $_GET['error_flag'];
+        if(isset($_GET['message']))
+            $message = $_GET['message'];
         
         //Incluye el modelo que corresponde
         require_once 'models/CustomersModel.php';
@@ -281,36 +198,134 @@ class CustomersController extends ControllerBase
 
         echo json_encode( $output );
     }
-
-    //SHOW
-    public function clientesAddForm($error_flag = 0)
+    
+    //NEW
+    public function customersAddForm($error_flag = 0)
     {
-            //Import models
-            require_once 'models/ClientesModel.php';
+        //Import models
+        require_once 'models/CustomersModel.php';
 
-            //Models objects
-            $model = new ClientesModel();
+        //Models objects
+//        $model = new ClientesModel();
+//
+//        //lista tipos
+//        $data['lista_tipos'] = $model->getAllTiposCliente();
+//        $data['lista_channels'] = $model->getAllChannels();
+//        $data['lista_buyerclass'] = $model->getAllBuyerClass();
+//
+//        //codigo manual
+//        $data['new_code'] = "";
+//
+        //Finalmente presentamos nuestra plantilla
+        $data['titulo'] = "Nuevo Cliente";
+//
+//        $data['controller'] = "clientes";
+//        $data['action'] = "clientesAdd";
+//        $data['action_b'] = "clientesDt";
+//
+//        //Posible error
+//        $data['error_flag'] = $this->errorMessage->getError($error_flag);
 
-            //lista tipos
-            $data['lista_tipos'] = $model->getAllTiposCliente();
-            $data['lista_channels'] = $model->getAllChannels();
-            $data['lista_buyerclass'] = $model->getAllBuyerClass();
-
-            //codigo manual
-            $data['new_code'] = "";
-
-            //Finalmente presentamos nuestra plantilla
-            $data['titulo'] = "CLIENTES > NUEVO";
-
-            $data['controller'] = "clientes";
-            $data['action'] = "clientesAdd";
-            $data['action_b'] = "clientesDt";
-
-            //Posible error
-            $data['error_flag'] = $this->errorMessage->getError($error_flag);
-
-            $this->view->show("clientes_new.php", $data);
+        $this->view->show("customers_new.php", $data);
     }
+    
+    public function customersAdd()
+    {   
+        $session = FR_Session::singleton();
+
+        $label_customer = $this->utils->cleanQuery($_POST['customer_name']);
+        $detail_customer = $this->utils->cleanQuery($_POST['customer_detail']);
+        #$code_customer = rand(1, 100);
+        #$code_customer = "c".$code_customer;
+        
+        //Incluye el modelo que corresponde
+        require_once 'models/CustomersModel.php';
+
+        //Creamos una instancia de nuestro "modelo"
+        $model = new CustomersModel();
+        
+        $result = $model->getLastCustomer($session->id_tenant);
+        $values = $result->fetch(PDO::FETCH_ASSOC);
+        $code_customer = $values['code_customer'];
+        $code_customer = (int)$code_customer + 1;
+        
+        //Le pedimos al modelo todos los items
+        $result = $model->addNewCustomer(null, $code_customer, $session->id_tenant, $label_customer, $detail_customer);
+
+        $error = $result->errorInfo();
+        $rows_n = $result->rowCount();
+        
+        if($error[0] == 00000 && $rows_n > 0){
+            #$this->projectsDt(1);
+            header("Location: ".$this->root."?controller=Customers&action=customersDt&error_flag=1");
+        }
+        elseif($error[0] == 00000 && $rows_n < 1){
+            #$this->projectsDt(10, "Ha ocurrido un error grave!");
+            header("Location: ".$this->root."?controller=Customers&action=customersDt&error_flag=10&message='Ha ocurrido un error grave'");
+        }
+        else{
+            #$this->projectsDt(10, "Ha ocurrido un error: ".$error[2]);
+            header("Location: ".$this->root."?controller=Customers&action=customersDt&error_flag=10&message='Ha ocurrido un error: ".$error[2]."'");
+        }
+    }
+    
+    public function ajaxCustomersAdd()
+    {   
+        $session = FR_Session::singleton();
+
+        $label_customer = $this->utils->cleanQuery($_POST['name']);
+        $detail_customer = $this->utils->cleanQuery($_POST['contact']);
+        #$code_customer = rand(1, 100);
+        #$code_customer = "c".$code_customer;
+        
+        //Incluye el modelo que corresponde
+        require_once 'models/CustomersModel.php';
+
+        //Creamos una instancia de nuestro "modelo"
+        $model = new CustomersModel();
+        
+        $result = $model->getLastCustomer($session->id_tenant);
+        $values = $result->fetch(PDO::FETCH_ASSOC);
+        $code_customer = $values['code_customer'];
+        $code_customer = (int)$code_customer + 1;
+        
+        //Le pedimos al modelo todos los items
+        $result = $model->addNewCustomer(null, $code_customer, $session->id_tenant, $label_customer, $detail_customer);
+
+        $error = $result->errorInfo();
+        $rows_n = $result->rowCount();
+        
+        if($error[0] == 00000 && $rows_n > 0){
+            $result = $model->getLastCustomer($session->id_tenant);
+            $values = $result->fetch(PDO::FETCH_ASSOC);
+            
+            $id_customer = $values['id_customer'];
+            
+            $new_customer[0] = $id_customer;
+            $new_customer[1] = $label_customer;
+            
+            #$this->projectsDt(1);
+            print json_encode($new_customer);
+        }
+        elseif($error[0] == 00000 && $rows_n < 1){
+            #$this->projectsDt(10, "Ha ocurrido un error grave!");
+            #print "No se ha podido agregar el cliente";
+            return null;
+        }
+        else{
+            #$this->projectsDt(10, "Ha ocurrido un error: ".$error[2]);
+            #print "Ha ocurrido un error grave: ".$error[2];
+            return null;
+        }
+        
+        return true;
+    }
+
+    
+    
+    /*************************
+    * OLD STUFF
+    *************************/
 
     //PROCESS
     public function clientesAdd()
