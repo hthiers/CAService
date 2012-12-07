@@ -155,7 +155,8 @@ class CustomersController extends ControllerBase
         $aColumns = array('a.id_customer'
                     , 'a.code_customer'
                     , 'b.id_tenant'
-                    , 'a.label_customer');
+                    , 'a.label_customer'
+                    , 'a.detail_customer');
         $sIndexColumn = "id_customer";
 
         /******************** Paging */

@@ -18,6 +18,7 @@ class CustomersModel extends ModelBase
                             , a.code_customer
                             , b.id_tenant
                             , a.label_customer
+                            , a.detail_customer
                         from cas_customer a
                         inner join cas_tenant b
                         on a.id_tenant = b.id_tenant
@@ -28,7 +29,7 @@ class CustomersModel extends ModelBase
 		//devolvemos la coleccion para que la vista la presente.
 		return $consulta;
 	}
-        
+
         /**
          * Get all customers by tenant + user
          * @param int $id_tenant
@@ -65,6 +66,7 @@ class CustomersModel extends ModelBase
                                     , code_customer
                                     , id_tenant
                                     , label_customer
+                                    , detail_customer
                                 FROM t_cliente a
                                 WHERE code_customer = '$code_customer'
                                   and id_tenant = $id_tenant");
@@ -87,6 +89,7 @@ class CustomersModel extends ModelBase
                                     , code_customer
                                     , id_tenant
                                     , label_customer
+                                    , detail_customer
                                 FROM t_cliente a
                                 WHERE id_customer = '$id_customer'
                                   and id_tenant = $id_tenant");
@@ -104,19 +107,21 @@ class CustomersModel extends ModelBase
          * @param varchar $label_customer
          * @return pdo
          */
-        public function addNewCustomer($id_customer, $code_customer, $id_tenant, $label_customer)
+        public function addNewCustomer($id_customer, $code_customer, $id_tenant, $label_customer, $detail_customer = null)
 	{
             $consulta = $this->db->prepare("
                     INSERT INTO cas_customer 
                             (id_customer
                             , code_customer
                             , id_tenant
-                            , label_customer) 
+                            , label_customer
+                            , detail_customer) 
                     VALUES 
                             (NULL
                             ,'$code_customer'
                             ,$id_tenant
-                            ,'$label_customer')");
+                            ,'$label_customer'
+                            ,'$detail_customer')");
 
             $consulta->execute();
 
@@ -135,6 +140,7 @@ class CustomersModel extends ModelBase
                             , code_customer
                             , id_tenant
                             , label_customer
+                            , detail_customer
                         FROM cas_customer a
                         WHERE id_tenant = $id_tenant
                         ORDER BY id_customer DESC

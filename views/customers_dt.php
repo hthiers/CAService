@@ -12,7 +12,7 @@ if($session->id_tenant != null && $session->id_user != null):
 <style type="text/css" title="currentStyle">
     @import "views/css/datatable.css";
     table.dataTable, table.filtres {
-        width: 100%;
+        width: 800px;
     }
 </style>
 <script type="text/javascript" language="javascript" src="views/lib/jquery.dataTables.min.js"></script>
@@ -69,17 +69,17 @@ $(document).ready(function() {
 //        },
         
         "aoColumnDefs": [
-            { "mDataProp": null, "aTargets": [-1,-2,-3,-4] },
+            { "mDataProp": null, "aTargets": [-1] },
             { "bVisible": false, "aTargets": [0,2] },
             {
                 "fnRender": function ( oObj ) {
                     //var string = '<button id=\"button\" class=\"input\" name=\"id_project\" onclick=\"submitToForm()\" value="'+oObj.aData[0]+'">EDITAR</button>';
                     var string = '<button id=\"button\" class=\"input\" name=\"id_project\" onclick=\"submitToForm()\" value="'+oObj.aData[0]+'">EDITAR</button>';
-                    string += '&nbsp; <button id=\"button\" class=\"input\" name=\"id_project\" onclick=\"submitToForm()\" value="'+oObj.aData[0]+'">REVISAR</button>';
+                    //string += '&nbsp; <button id=\"button\" class=\"input\" name=\"id_project\" onclick=\"submitToForm()\" value="'+oObj.aData[0]+'">REVISAR</button>';
                     
                     return string;
                 },
-                "aTargets": [7]
+                "aTargets": [5]
             }
 //            {
 //                "fnRender": function ( oObj ) {
@@ -183,9 +183,10 @@ require('templates/menu.tpl.php'); #banner & menu
                             <th>NUMERO</th>
                             <th>TENANT</th>
                             <th>NOMBRE</th>
-                            <th>CONTACTO</th>
+                            <th>DATOS</th>
+<!--                            <th>CONTACTO</th>
                             <th>TELEFONO</th>
-                            <th>CORREO</th>
+                            <th>CORREO</th>-->
                             <th>OPCIONES</th>
                         </tr>
                     </thead>
