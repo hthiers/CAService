@@ -97,6 +97,9 @@ if($session->id_tenant != null && $session->id_user != null):
 
             customClock(tiempo_string);
             //$("#inptTiempoProgress").val(tiempo_string);
+            
+//            console.log(total_progress);
+//            console.log(tiempo_string);
         }
     });
 
@@ -129,8 +132,9 @@ require('templates/menu.tpl.php'); #banner & menu
             print("tenant: ".$session->id_tenant.", user: ".$session->id_user."<br/>");
             print($titulo); print('<br />');
             print_r($pdo); print('<br />');
-            print(strtotime($currentTime));print('<br />');
+            
             print(strtotime($date_ini));print('<br />');
+            print(strtotime($currentTime));print('<br />');
             print($total_progress);print('<br />');
             print('</div>');
         }
