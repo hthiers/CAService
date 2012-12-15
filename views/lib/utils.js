@@ -44,11 +44,15 @@ function secondsToTime(secs)
 /**
  * Get time clock by custom init params
  * #progress_clock ID element needed!
+ * 
+ * Modified to show total hours using Array values instead of Date.
  */
 customClock = (function() {
 
   var timeDiff;
   var timeout;
+  var timeHours = 0;
+  var timeArray = new Array;
 
   function addZ(n) {
     return (n < 10? '0' : '') + n;
@@ -58,6 +62,12 @@ customClock = (function() {
     return addZ(d.getHours()) + ':' +
            addZ(d.getMinutes()) + ':' +
            addZ(d.getSeconds());
+  }
+  
+  function formatTimeFromArray(d) {
+    return addZ(d[0]) + ':' +
+           addZ(d[1]) + ':' +
+           addZ(d[2]);
   }
 
   return function (s) {
@@ -73,20 +83,17 @@ customClock = (function() {
       s = s.split(':');
       then = new Date(now);
       then.setHours(+s[0], +s[1], +s[2], 0);
-      
-      console.log(then.getHours());
-      console.log(now.getHours());
-      
       timeDiff = now - then;
-      
-      console.log(timeDiff);
+      timeHours = s[0];
     }
 
-//    now = new Date(now - timeDiff);
-    now = new Date(now);
-//    console.log(now.getHours());
+    now = new Date(now - timeDiff);
+    timeArray[0] = timeHours;
+    timeArray[1] = now.getMinutes();
+    timeArray[2] = now.getSeconds();
 
-    $('#progress_clock').val(formatTime(now)); 
+//    $('#progress_clock').val(formatTime(now)); 
+    $('#progress_clock').val(formatTimeFromArray(timeArray)); 
     timeout = setTimeout(customClock, lag);
   }
 }());
