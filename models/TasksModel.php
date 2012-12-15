@@ -27,7 +27,7 @@ class TasksModel extends ModelBase
                     , a.desc_task
                 FROM  cas_task a
                 INNER JOIN cas_project_has_cas_task b
-                ON a.id_project = b.cas_project_id_project
+                ON a.id_task = b.cas_task_id_task
                 WHERE a.id_tenant = $id_tenant
                 ORDER BY a.label_task");
 
