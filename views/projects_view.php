@@ -161,93 +161,131 @@ require('templates/menu.tpl.php'); #banner & menu
 
         <div id="dt_filtres">
 
-            <?php if($date_end == null && strtotime($currentTime) > strtotime($date_ini)): ?>
-            <form id="formModule" name="formModule" method="post" action="?controller=Projects&action=projectsStop">
-            <?php else: ?>
-            <form>
-            <?php endif; ?>
-                <table class="table_left">
+            <div>
+                <?php if($date_end == null && strtotime($currentTime) > strtotime($date_ini)): ?>
+                <form id="formModule" name="formModule" method="post" action="?controller=Projects&action=projectsStop">
+                <?php else: ?>
+                <form>
+                <?php endif; ?>
+                    <table class="table_left">
+                        <tr>
+                            <td class="middle">Responsable</td>
+                            <td class="middle"><input readonly="readonly" class="input_box" name="resp" type="text" value="<?php echo $name_user; ?>" /></td>
+                        </tr>
+                        <tr>
+                            <td class="middle">Cliente</td>
+                            <td class="middle"><input readonly="readonly" class="input_box" name="cliente" type="text" value="<?php echo $label_customer; ?>" /></td>
+                        </tr>
+                        <tr>
+                            <td class="middle">Etiqueta</td>
+                            <td class="middle">
+                                <input type="text" class="input_box" readonly="readonly" name="etiqueta" value="<?php echo $label_project; ?>" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Descripci&oacute;n</td>
+                            <td>
+                                <textarea readonly="readonly" class="input_box" name="descripcion">
+                                    <?php echo $desc_project; ?>
+                                </textarea>
+                            </td>
+                        </tr>
+                    </table>
+                    <table class="table_right">
+                        <tr>
+                            <td class="middle">Fecha inicio</td>
+                            <td class="middle"><input readonly="readonly" class="input_box" name="fecha_ini" type="text" value="<?php echo $date_ini; ?>" /></td>
+                        </tr>
+                        <?php if($date_end == null && strtotime($currentTime) > strtotime($date_ini)): ?>
+                        <tr>
+                            <td class="middle">Tiempo transcurrido</td>
+                            <td class="middle">
+                                <input id="progress_clock" readonly="readonly" class="input_box" name="tiempo_progress" type="text" value="" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="text-align: center;">Control de tiempo 
+                                <br /><br />
+                                <input id="btn_play" class="time_control" type="button" value="INICIO" />
+                                <input id="btn_pause" class="time_control" type="button" value="PAUSA" />
+                                <input id="btn_stop" class="time_control" type="button" value="TERMINAR" />
+                                <!--
+                                <br />
+                                <input type="text" class="time_status" value="tiempo..." />
+                                -->
+                            </td>
+                        </tr>
+                        <?php elseif($date_end == null && strtotime($currentTime) < strtotime($date_ini)):?>
+                        <tr>
+                            <td colspan="2" style="text-align: center;">Control de tiempo 
+                                <br /><br />
+                                <input id="btn_play" class="time_control" type="button" value="INICIO" />
+                                <input id="btn_pause" class="time_control" type="button" value="PAUSA" disabled="disabled" />
+                                <input id="btn_stop" class="time_control" type="button" value="TERMINAR" disabled="disabled" />
+                                <!--
+                                <br />
+                                <input type="text" class="time_status" value="tiempo..." />
+                                -->
+                            </td>
+                        </tr>
+                        <?php else: ?>
+                        <tr>
+                            <td class="middle">Fecha fin</td>
+                            <td class="middle"><input readonly="readonly" class="input_box" name="fecha_fin" type="text" value="<?php echo $date_end; ?>" /></td>
+                        </tr>
+                        <tr>
+                            <td class="middle">Tiempo total</td>
+                            <td class="middle">
+                                <input id="inptTiempoTotal" readonly="readonly" class="input_box" name="tiempo_total" type="text" value="" />
+
+                                <input type="hidden" id="time_total_s" name="time_total_s" value="<?php echo $time_s; ?>" />
+                                <input type="hidden" id="time_total_m" name="time_total_m" value="<?php echo $time_m; ?>" />
+                                <input type="hidden" id="time_total_h" name="time_total_h" value="<?php echo $time_h; ?>" />
+                            </td>
+                        </tr>
+                        <?php endif; ?>
+                    </table>
+                    <div style="clear: both;">
+                        <input type="hidden" name="id_project" value="<?php echo $id_project; ?>" />
+                    </div>
+                </form>
+            </div>
+            <div style="margin-top:10px">
+                <table style="float:none;width:100%;border-top:1px solid #ccc;">
                     <tr>
-                        <td class="middle">Responsable</td>
-                        <td class="middle"><input readonly="readonly" class="input_box" name="resp" type="text" value="<?php echo $name_user; ?>" /></td>
+                        <td colspan="5" style="text-align: center;">Lista de tareas asignadas</td>
                     </tr>
                     <tr>
-                        <td class="middle">Cliente</td>
-                        <td class="middle"><input readonly="readonly" class="input_box" name="cliente" type="text" value="<?php echo $label_customer; ?>" /></td>
+                        <td colspan="5">&nbsp;</td>
                     </tr>
                     <tr>
-                        <td class="middle">Etiqueta</td>
-                        <td class="middle">
-                            <input type="text" class="input_box" readonly="readonly" name="etiqueta" value="<?php echo $label_project; ?>" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Descripci&oacute;n</td>
-                        <td>
-                            <textarea readonly="readonly" class="input_box" name="descripcion">
-                                <?php echo $desc_project; ?>
-                            </textarea>
-                        </td>
-                    </tr>
-                </table>
-                <table class="table_right">
-                    <tr>
-                        <td class="middle">Fecha inicio</td>
-                        <td class="middle"><input readonly="readonly" class="input_box" name="fecha_ini" type="text" value="<?php echo $date_ini; ?>" /></td>
-                    </tr>
-                    <?php if($date_end == null && strtotime($currentTime) > strtotime($date_ini)): ?>
-                    <tr>
-                        <td class="middle">Tiempo transcurrido</td>
-                        <td class="middle">
-                            <input id="progress_clock" readonly="readonly" class="input_box" name="tiempo_progress" type="text" value="" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2" style="text-align: center;">Control de tiempo 
-                            <br /><br />
-                            <input id="btn_play" class="time_control" type="button" value="INICIO" />
-                            <input id="btn_pause" class="time_control" type="button" value="PAUSA" />
-                            <input id="btn_stop" class="time_control" type="button" value="TERMINAR" />
-                            <!--
-                            <br />
-                            <input type="text" class="time_status" value="tiempo..." />
-                            -->
-                        </td>
-                    </tr>
-                    <?php elseif($date_end == null && strtotime($currentTime) < strtotime($date_ini)):?>
-                    <tr>
-                        <td colspan="2" style="text-align: center;">Control de tiempo 
-                            <br /><br />
-                            <input id="btn_play" class="time_control" type="button" value="INICIO" />
-                            <input id="btn_pause" class="time_control" type="button" value="PAUSA" disabled="disabled" />
-                            <input id="btn_stop" class="time_control" type="button" value="TERMINAR" disabled="disabled" />
-                            <!--
-                            <br />
-                            <input type="text" class="time_status" value="tiempo..." />
-                            -->
-                        </td>
-                    </tr>
-                    <?php else: ?>
-                    <tr>
-                        <td class="middle">Fecha fin</td>
-                        <td class="middle"><input readonly="readonly" class="input_box" name="fecha_fin" type="text" value="<?php echo $date_end; ?>" /></td>
-                    </tr>
-                    <tr>
-                        <td class="middle">Tiempo total</td>
-                        <td class="middle">
-                            <input id="inptTiempoTotal" readonly="readonly" class="input_box" name="tiempo_total" type="text" value="" />
+                        <?php 
+                        if($tasksList != null && $tasksList->rowCount() > 0){
+                            echo "
+                            <tr>
+                                <td>Etiqueta</td>
+                                <td>Descripci&oacute;n</td>
+                                <td>Fecha inicio</td>
+                                <td>Fecha fin</td>
+                                <td>Tiempo total</td>
+                            </tr>";
                             
-                            <input type="hidden" id="time_total_s" name="time_total_s" value="<?php echo $time_s; ?>" />
-                            <input type="hidden" id="time_total_m" name="time_total_m" value="<?php echo $time_m; ?>" />
-                            <input type="hidden" id="time_total_h" name="time_total_h" value="<?php echo $time_h; ?>" />
-                        </td>
+                            while($item = $tasksList->fetch(PDO::FETCH_ASSOC)){
+                                echo "<td>".$item['label_task']."</td>\n";
+                                echo "<td>".$item['desc_task']."</td>\n";
+                                echo "<td>".$item['date_ini']."</td>\n";
+                                echo "<td>".$item['date_end']."</td>\n";
+                                echo "<td>".$item['time_total']."</td>\n";
+                            }
+                        }
+                        elseif($tasksList->rowCount() < 1)
+                            echo "<td colspan='5' style='text-align:center;'>No hay tareas asignadas a este proyecto.</td>";
+                        else
+                            echo "<td colspan='5'>Ha ocurrido un error!</td>";
+                        ?>
                     </tr>
-                    <?php endif; ?>
                 </table>
-                <div style="clear: both;">
-                    <input type="hidden" name="id_project" value="<?php echo $id_project; ?>" />
-                </div>
-            </form>
+            </div>
             <?php
             #else:
             #    echo "<h4>Ha ocurrido un error grave</h4>";

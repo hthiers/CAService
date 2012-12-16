@@ -72,7 +72,7 @@ body{
     background-color:#476085;
 }
 #central{
-    background-color:#FFFFFF;
+    /*background-color:#FFFFFF;*/
     width:960px; 
     height:auto; 
     padding-bottom:50px;
@@ -86,7 +86,7 @@ body{
 #contenido{
     text-align:left;
     margin:auto;
-    background-color:#FFFFFF;
+    /*background-color:#FFFFFF;*/
     /*width:1000px; */
     height:auto;
 }

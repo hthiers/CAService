@@ -134,7 +134,7 @@
  */
 table.display {
 	margin: 2px auto;
-	font-size: 11px;
+	font-size: 12px;
 	/*
 	margin: 0 auto;
 	clear: both;
@@ -324,8 +324,9 @@ td.group {
 }
 
 td.details {
-	background-color: #d1cfd0;
-	border: 2px solid #A19B9E;
+	background-color: #ffffff;
+	border: 1px solid #A19B9E;
+        border-top: none;
 }
 
 
@@ -520,7 +521,7 @@ tr.even.gradeU td.sorting_3 {
 
 
 /*
- * Row highlighting example
+ * Row highlighting
  */
 .ex_highlight #example tbody tr.even:hover, #example tbody tr.even td.highlighted {
 	background-color: #ECFFB3;
@@ -531,11 +532,11 @@ tr.even.gradeU td.sorting_3 {
 }
 
 .ex_highlight_row #example tr.even:hover {
-	background-color: #ECFFB3;
+	background-color: #feffd5; /* second row, unsorted cells */
 }
 
 .ex_highlight_row #example tr.even:hover td.sorting_1 {
-	background-color: #DDFF75;
+	background-color: #fdffb3; /* second row, sorted cell */
 }
 
 .ex_highlight_row #example tr.even:hover td.sorting_2 {
@@ -547,11 +548,11 @@ tr.even.gradeU td.sorting_3 {
 }
 
 .ex_highlight_row #example tr.odd:hover {
-	background-color: #E6FF99;
+	background-color: #feffd5; /* first row, unsorted cells */
 }
 
 .ex_highlight_row #example tr.odd:hover td.sorting_1 {
-	background-color: #D6FF5C;
+	background-color: #fdffb3; /* first row, sorted cell */
 }
 
 .ex_highlight_row #example tr.odd:hover td.sorting_2 {

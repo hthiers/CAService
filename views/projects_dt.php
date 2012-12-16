@@ -29,7 +29,7 @@ $(document).ready(function() {
         //Initial server side params
         "bProcessing": true,
         "bServerSide": true,
-        "sAjaxSource": <?php echo "'?controller=projects&action=ajaxProjectsDt'";?>,
+        "sAjaxSource": '?controller=projects&action=ajaxProjectsDt',
         "fnServerData": function ( sSource, aoData, fnDrawCallback ){
             $.ajax({
                 "dataType": 'json', 
@@ -114,7 +114,82 @@ $(document).ready(function() {
             return true;
         }
     });
+    
+    /* 
+    * Filas de detalles para Dt Tables.
+    * Add event listener for opening and closing details
+    * Note that the indicator for showing which row is open is not controlled by DataTables,
+    * rather it is done here
+    */
+    $('#example tbody td').live('click', function (){
+        var nTr = $(this).parents('tr')[0];
+        var kids = $(this).children();
+        
+        // ignore custom columns with action objects (children elements)
+        if(kids.length == 0){
+            if ( oTable.fnIsOpen(nTr) )
+            {
+                /* This row is already open - close it */
+                oTable.fnClose( nTr );
+            }
+            else
+            {
+                /* Open this row */
+                //oTable.fnOpen( nTr, fnFormatDetails(oTable, nTr), 'details' );
+                var sID = fnFormatDetails(oTable, nTr);
+                var newRow = oTable.fnOpen( nTr, "Cargando...", "details");
+                
+                $.ajax({
+                    dataType: "json",
+                    type: "GET",
+                    url: "?controller=tasks&action=ajaxTasksList",
+                    data: {id_project: sID}
+                })
+                .done(function(data){
+                    var newHtml = '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;width:100%;">';
+                    var newHeader = '<thead><th style="color:#000;cursor:default;font-weight:bold;">Tarea</th>';
+                    newHeader += '<th style="color:#000;cursor:default;font-weight:bold">Inicio</th>';
+                    newHeader += '<th style="color:#000;cursor:default;font-weight:bold">Fin</th>';
+                    newHeader += '<th style="color:#000;cursor:default;font-weight:bold">Tiempo Total</th>';
+                    newHeader += '</thead>';
+                    
+                    if(data != null){
+                        $.each(data, function(i,item){
+                            console.log(item);
+                            newHtml += newHeader;
+                            newHtml += '<tbody>';
+                            newHtml += '<tr>';
+                            newHtml += '<td>'+item['label_task']+'</td>';
+                            newHtml += '<td style="text-align:center;">'+item['date_ini']+'</td>';
+                            newHtml += '<td style="text-align:center;">'+item['date_end']+'</td>';
+                            newHtml += '<td style="text-align:center;">'+item['time_total']+'</td>';
+                            newHtml += '</tr>';
+                        });
+                    }
+                    else{
+                        newHtml += '<tbody>';
+                        newHtml += '<tr><td colspan="4" style="text-align:center;">Sin tareas asignadas</td></tr>';
+                    }
+                        
+                    newHtml += '</tbody></table>';
+                    
+                    $('td', newRow).html(newHtml);
+                })
+                .fail(function(){
+                    alert("Ha ocurrido un error!");
+                });
+            }
+        }
+    });
 });
+
+/*
+* Getting needed value from dt row
+ */
+function fnFormatDetails (oTable, nTr){
+    var aData = oTable.fnGetData( nTr );
+    return aData[6];
+}
 </script>
 
 </head>

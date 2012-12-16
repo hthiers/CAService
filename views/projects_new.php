@@ -117,6 +117,7 @@ if($session->id_tenant != null && $session->id_user != null):
             }
             else
             {
+                console.log(name);
                 //$("#flash").show();
                 //$("#flash").fadeIn(400).html('<img src="ajax-loader.gif" align="absmiddle"> loading.....');
                 $.ajax({
@@ -126,9 +127,18 @@ if($session->id_tenant != null && $session->id_user != null):
                     cache: false,
                     dataType: "json"
                 }).done(function(response){
-                    $("#cbocustomers").append('<option value="'+response[0]+'" selected="selected">'+response[1]+'</option>');       
-                    //$("#flash").hide();
-                    alert("Cliente agregado!");
+                    if(response != null){
+                        if(response[0] != 0){
+                            $("#cbocustomers").append('<option value="'+response[0]+'" selected="selected">'+response[1]+'</option>');       
+                            //$("#flash").hide();
+                            alert("Cliente agregado!");
+                        }
+                        else
+                            alert("Error: "+response[1]);
+                    }
+                    else{
+                        alert("Ha ocurrido un error!");
+                    }
                     $("#dialog-form").dialog("close");
                 }).fail(function(){
                     alert("Ha ocurrido un error!");

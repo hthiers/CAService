@@ -38,6 +38,22 @@
 </div>
 <!-- END Project view -->
 
+<!-- New Task -->
+<div id="dialog-form" title="Nueva Tarea">
+    <form action="?controller=tasks&amp;action=tasksAdd" method="POST">
+        <fieldset style="padding:0; border:0; margin-top:25px;">
+            <label for="name">Nombre Organización</label>
+            <input style="margin-bottom:12px; width:95%; padding: .4em;" type="text" name="dlgSbm_name" id="dlgSbm_name" class="text ui-widget-content ui-corner-all" />
+            <label for="email">Contacto</label>
+            <input style="margin-bottom:12px; width:95%; padding: .4em;" type="text" name="dlgSbm_contact" id="dlgSbm_contact" class="text ui-widget-content ui-corner-all" />
+            
+            <input class="dlgSbmCstr" type="submit" value="GUARDAR" style="font-family: Verdana; font-size: 15px; padding: 2px;" />
+        </fieldset>
+    </form>
+</div>
+<!-- END New Customer -->
+
+
 <!-- KEEP DIALOGS CLOSED -->
 <script type="text/javascript" language="javascript">
     $("#dialog-confirm").dialog({ autoOpen: false});

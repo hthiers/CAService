@@ -17,18 +17,20 @@ class TasksModel extends ModelBase
         $consulta = $this->db->prepare("
                 SELECT 
                     a.id_task
-                    , b.id_project
+                    , b.cas_project_id_project
                     , a.code_task
                     , a.id_tenant
                     , a.label_task
-                    , a.date_ini
-                    , a.date_end
-                    , a.time_total
-                    , a.desc_task
+                    , IFNULL(a.date_ini, 'n/a') as date_ini
+                    , IFNULL(a.date_end, 'n/a') as date_end
+                    , IFNULL(a.time_total, 'n/a') as time_total
+                    , IFNULL(a.desc_task, 'n/a') as desc_task
+                    , a.status_task
                 FROM  cas_task a
                 INNER JOIN cas_project_has_cas_task b
                 ON a.id_task = b.cas_task_id_task
                 WHERE a.id_tenant = $id_tenant
+                  AND b.cas_project_id_project = $id_project
                 ORDER BY a.label_task");
 
         $consulta->execute();
@@ -55,6 +57,7 @@ class TasksModel extends ModelBase
                     , a.date_end
                     , a.time_total
                     , a.desc_task
+                    , a.status_task
                 FROM  cas_task a
                 WHERE a.id_tenant = $id_tenant
                 ORDER BY a.label_task");
@@ -83,6 +86,7 @@ class TasksModel extends ModelBase
                     , a.date_end
                     , a.time_total
                     , a.desc_task
+                    , a.status_task
                 FROM  cas_task a
                 WHERE a.id_tenant = $id_tenant
                   AND a.id_task = $id_task
@@ -112,6 +116,7 @@ class TasksModel extends ModelBase
                     , a.date_end
                     , a.time_total
                     , a.desc_task
+                    , a.status_task
                 FROM  cas_task a
                 INNER JOIN cas_tenant b
                 ON a.id_tenant = b.id_tenant
@@ -142,6 +147,7 @@ class TasksModel extends ModelBase
                     , a.date_end
                     , a.time_total
                     , a.desc_task
+                    , a.status_task
                 FROM  cas_task A
                 INNER JOIN cas_tenant B
                 ON A.id_tenant = B.id_tenant
@@ -217,7 +223,7 @@ class TasksModel extends ModelBase
             , $hora_ini, $fecha, $descripcion, $estado = 1)
     {
         $consulta = $this->db->prepare("INSERT INTO cas_task 
-                    (id_task, code_task, id_tenant, label_task, date_ini, desc_task) 
+                    (id_task, code_task, id_tenant, label_task, date_ini, desc_task, status_task) 
                         VALUES 
                     (NULL, '$new_code', $id_tenant, '$etiqueta', '$fecha. .$hora_ini', '$descripcion', $estado)");
 
@@ -239,7 +245,7 @@ class TasksModel extends ModelBase
      * @return PDO
      */
     public function updateTask($id_tenant, $id_task, $code_task, $etiqueta
-            , $init_date, $stop_date, $total_time, $desc)
+            , $init_date, $stop_date, $total_time, $desc, $status)
     {
         $consulta = $this->db->prepare("UPDATE cas_task 
                     SET
@@ -249,6 +255,7 @@ class TasksModel extends ModelBase
                     , date_end = '$stop_date'
                     , time_total = '$total_time'
                     , desc_task = '$desc'
+                    , status_task = '$status'
                     WHERE id_tenant = $id_tenant
                       AND id_task = $id_task");
 
