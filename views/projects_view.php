@@ -101,6 +101,59 @@ if($session->id_tenant != null && $session->id_user != null):
 //            console.log(total_progress);
 //            console.log(tiempo_string);
         }
+        
+        // JQDialog open link
+        $( "#link-dialog" ).click(function() {
+            $( "#dialog-projectTask" ).dialog( "open" );
+        });
+        
+        // JQDialog Submit - Add new task to project
+        $(".dlgSbmCstr").click(function(){
+            var label = $("#dlgSbm_name_task").val();
+            var desc = $("#dlgSbm_desc_task").val();
+            var id_project = <?php echo $id_project;?>;
+            var dataString = 'label='+label+'&desc='+desc+'&id_project='+id_project;
+            if(label=='')
+            {
+                console.log(dataString);
+                alert("Debe ingresar un nombre");
+            }
+            else
+            {
+                console.log(dataString);
+                //$("#flash").show();
+                //$("#flash").fadeIn(400).html('<img src="ajax-loader.gif" align="absmiddle"> loading.....');
+                $.ajax({
+                    type: "POST",
+                    url: "?controller=projects&action=ajaxProjectsAddTask",
+                    data: dataString,
+                    cache: false,
+                    dataType: "json"
+                }).done(function(response){
+                    if(response != null){
+                        if(response[0] != 0){
+                            console.log('resp:'+response[0]+', '+response[1]);
+                            console.log(response);
+                            window.location.replace("?controller=projects&action=projectsView&id_project=<?php echo $id_project;?>");
+//                            location.reload();
+//                            $("#cbocustomers").append('<option value="'+response[0]+'" selected="selected">'+response[1]+'</option>');
+                            //$("#flash").hide();
+//                            alert("Tarea agregada!");
+                        }
+                        else
+                            alert("Error: "+response[1]);
+                    }
+                    else{
+                        alert("Ha ocurrido un error!");
+                    }
+                    $("#dialog-form").dialog("close");
+                }).fail(function(){
+                    alert("Ha ocurrido un error!");
+                });
+            }
+
+            return false;
+	});
     });
 
     function iniTrabajo(){
@@ -117,9 +170,9 @@ if($session->id_tenant != null && $session->id_user != null):
 </head>
 <body id="dt_example" class="ex_highlight_row">
 
-<?php
-require('templates/menu.tpl.php'); #banner & menu
-?>
+    <?php require('templates/dialogs.tpl.php'); #session & header ?>
+    <?php require('templates/menu.tpl.php'); #banner & menu ?>
+    
     <!-- CENTRAL -->
     <div id="central">
     <div id="contenido">
@@ -250,32 +303,49 @@ require('templates/menu.tpl.php'); #banner & menu
                     </div>
                 </form>
             </div>
-            <div style="margin-top:10px">
+            <div id="project-tasks-box" style="margin-top:10px">
                 <table style="float:none;width:100%;border-top:1px solid #ccc;">
                     <tr>
-                        <td colspan="5" style="text-align: center;">Lista de tareas asignadas</td>
+                        <td colspan="6" style="text-align: center;">Lista de tareas asignadas</td>
                     </tr>
+                    <?php if($status_project == 1):?>
                     <tr>
-                        <td colspan="5">&nbsp;</td>
+                        <td colspan="6" style="text-align: center;"><a id="link-dialog" href="#">Nueva</a></td>
+                    </tr>
+                    <?php endif;?>
+                    <tr>
+                        <td colspan="6">&nbsp;</td>
                     </tr>
                     <tr>
                         <?php 
                         if($tasksList != null && $tasksList->rowCount() > 0){
                             echo "
                             <tr>
-                                <td>Etiqueta</td>
-                                <td>Descripci&oacute;n</td>
-                                <td>Fecha inicio</td>
-                                <td>Fecha fin</td>
-                                <td>Tiempo total</td>
+                                <td style='font-weight:bold;'>Etiqueta</td>
+                                <td style='font-weight:bold;'>Descripci&oacute;n</td>
+                                <td style='font-weight:bold;'>Fecha inicio</td>
+                                <td style='font-weight:bold;'>Fecha fin</td>
+                                <td style='font-weight:bold;'>Tiempo total</td>
+                                <td>&nbsp;</td>
                             </tr>";
                             
                             while($item = $tasksList->fetch(PDO::FETCH_ASSOC)){
+                                echo "<tr>";
                                 echo "<td>".$item['label_task']."</td>\n";
                                 echo "<td>".$item['desc_task']."</td>\n";
                                 echo "<td>".$item['date_ini']."</td>\n";
                                 echo "<td>".$item['date_end']."</td>\n";
-                                echo "<td>".$item['time_total']."</td>\n";
+                                echo "<td>".Utils::formatTime($item['time_total'])."</td>\n";
+                                
+                                $actionLink = "";
+                                $actionUrl = "";
+                                if($item['status_task'] == 1){
+                                    $actionLink = "terminar";
+                                    $actionUrl = "?controller=tasks&amp;action=tasksStop&amp;task=".$item['id_task']."&amp;project=".$id_project;
+                                }
+                                
+                                echo "<td style='text-align:left;'><a href='".$actionUrl."'>".$actionLink."</a></td>\n";
+                                echo "</tr>";
                             }
                         }
                         elseif($tasksList->rowCount() < 1)

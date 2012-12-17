@@ -154,9 +154,10 @@ $(document).ready(function() {
                     newHeader += '</thead>';
                     
                     if(data != null){
+                        newHtml += newHeader;
+                        
                         $.each(data, function(i,item){
                             console.log(item);
-                            newHtml += newHeader;
                             newHtml += '<tbody>';
                             newHtml += '<tr>';
                             newHtml += '<td>'+item['label_task']+'</td>';

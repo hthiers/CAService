@@ -209,23 +209,26 @@ class TasksModel extends ModelBase
     }
 
     /**
-     * Add a new task
+     * Add new task
      * @param type $id_tenant
      * @param type $new_code
      * @param type $etiqueta
-     * @param type $hora_ini
-     * @param type $fecha
+     * @param type $date_ini
+     * @param type $date_end
+     * @param type $time_total
      * @param type $descripcion
      * @param type $estado
      * @return PDO
      */
     public function addNewTask($id_tenant, $new_code, $etiqueta
-            , $hora_ini, $fecha, $descripcion, $estado = 1)
+            , $date_ini, $date_end = null, $time_total = null, $descripcion, $estado = 1)
     {
         $consulta = $this->db->prepare("INSERT INTO cas_task 
-                    (id_task, code_task, id_tenant, label_task, date_ini, desc_task, status_task) 
+                    (id_task, code_task, id_tenant, label_task
+                    , date_ini, date_end, time_total, desc_task, status_task) 
                         VALUES 
-                    (NULL, '$new_code', $id_tenant, '$etiqueta', '$fecha. .$hora_ini', '$descripcion', $estado)");
+                    (NULL, '$new_code', $id_tenant, '$etiqueta'
+                        , '$date_ini', NULL, NULL, '$descripcion', $estado)");
 
         $consulta->execute();
 
@@ -289,7 +292,20 @@ class TasksModel extends ModelBase
 //        }
 
 
+    /**
+     * Get PDO object from custom sql query
+     * NOTA: Esta función permite seguir el patrón de modelo.
+     * @param string $sql
+     * @return PDO
+     */
+    public function goCustomQuery($sql)
+    {
+        $consulta = $this->db->prepare($sql);
 
+        $consulta->execute();
+
+        return $consulta;
+    }
 
 
     /********************************
@@ -585,21 +601,6 @@ class TasksModel extends ModelBase
 //
 //        //Save log
 //        $logModel->addNewEvent($session->usuario, $sql, 'MICROSEGMENTS');
-//
-//        return $consulta;
-//    }
-//
-//    /**
-//     * Get PDO object from custom sql query
-//     * NOTA: Esta función permite seguir el patrón de modelo.
-//     * @param string $sql
-//     * @return PDO
-//     */
-//    public function goCustomQuery($sql)
-//    {
-//        $consulta = $this->db->prepare($sql);
-//
-//        $consulta->execute();
 //
 //        return $consulta;
 //    }

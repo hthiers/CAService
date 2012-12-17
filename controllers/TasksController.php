@@ -446,7 +446,6 @@ class TasksController extends ControllerBase
 
         $label = $_POST['label'];
         $desc = $_POST['desc'];
-        $id_project = $_POST['id_project'];
         $status = 1; // 1 by default
         
         #$code_customer = rand(1, 100);
@@ -471,13 +470,13 @@ class TasksController extends ControllerBase
         $rows_n = $result->rowCount();
         
         if($error[0] == 00000 && $rows_n > 0){
-            $result = $model->getLastCustomer($session->id_tenant);
+            $result = $model->getLastTask($session->id_tenant);
             $values = $result->fetch(PDO::FETCH_ASSOC);
             
-            $id_customer = $values['id_customer'];
+            $id_task = $values['id_task'];
             
-            $new_customer[0] = $id_customer;
-            $new_customer[1] = $label_customer;
+            $new_task[0] = $id_task;
+            $new_task[1] = $label_task;
         }
         elseif($error[0] == 00000 && $rows_n < 1){
             $new_customer[0] = "0";
@@ -488,24 +487,28 @@ class TasksController extends ControllerBase
             $new_customer[1] = $error[2];
         }
 
-        print json_encode($new_customer);
+        print json_encode($new_task);
         
         return true;
     }
-    
+
     /*
-     * Stop project action
+     * Stop task progress
      */
     public function tasksStop()
     {
         $session = FR_Session::singleton();
-        $frm_id_project = null;
+//        $frm_id_project = null;
+        $id_task = null;
+        $id_task = $_GET['task'];
+        $id_project = $_GET['project'];
         
-        if(isset($_POST['id_project']))
-            $frm_id_project = $_POST['id_project'];
+//        if(isset($_POST['id_project']))
+//            $frm_id_project = $_POST['id_project'];
 
-        if($frm_id_project != null && $session->id_project == $frm_id_project){
-            $session->id_project = null;
+//        if($frm_id_project != null && $session->id_project == $frm_id_project){
+        if($id_task != null){
+//            $session->id_project = null;
 
             #fecha actual
             $now = date("Y-m-d H:i:s");
@@ -514,19 +517,21 @@ class TasksController extends ControllerBase
             $currentDateTime = $currentDateTime->setTimezone($timezone);
             $stop_date = $currentDateTime->format("Y-m-d H:i:s");
 
-            require_once 'models/ProjectsModel.php';
-            $model = new ProjectsModel();
+            require_once 'models/TasksModel.php';
+            $model = new TasksModel();
 
             #get times diff
-            $result = $model->getProjectById($frm_id_project, $session->id_tenant);
+            $result = $model->getTaskById($session->id_tenant, $id_task);
             $values = $result->fetch(PDO::FETCH_ASSOC);
 
             $init_date = $values['date_ini'];
             $total_time = Utils::diffDates($stop_date, $init_date, 'S', false);
 
-            $result = $model->updateProject($session->id_tenant, $frm_id_project, $values['code_project']
-                    , $session->id_user, $values['id_customer'], $values['label_project'], $values['date_ini']
-                    , $stop_date, $total_time, $values['desc_project'], 2);
+            $result = $model->updateTask($session->id_tenant, $id_task, $values['code_task']
+                    , $values['label_task'], $values['date_ini'], $stop_date, $total_time, $values['desc_task'], 2);
+//            $result = $model->updateProject($session->id_tenant, $frm_id_project, $values['code_project']
+//                    , $session->id_user, $values['id_customer'], $values['label_project'], $values['date_ini']
+//                    , $stop_date, $total_time, $values['desc_project'], 2);
 
             if($result != null){
                 $error = $result->errorInfo();
@@ -534,7 +539,7 @@ class TasksController extends ControllerBase
 
                 if($error[0] == 00000 && $numr > 0){
                     #$this->projectsDt(1);
-                    header("Location: ".$this->root."?controller=Projects&action=projectsDt&error_flag=1");
+                    header("Location: ".$this->root."?controller=projects&action=projectsView&id_project=".$id_project);
                 }
                 else{
                     #$this->projectsDt(10, "Ha ocurrido un error o no se lograron aplicar cambios: ".$error[2]);
@@ -551,8 +556,6 @@ class TasksController extends ControllerBase
             header("Location: ".$this->root."?controller=Projects&action=projectsDt&error_flag=10&message='Ha ocurrido un error grave!");
         }
     }
-
-    
     
     
     

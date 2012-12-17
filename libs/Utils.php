@@ -68,6 +68,11 @@ class Utils
         $hours = floor($seconds / 3600);
         $mins = floor(($seconds - ($hours*3600)) / 60);
         
+        if($hours < 10)
+            $hours = "0".$hours;
+        if($mins < 10)
+            $mins = "0".$mins;
+        
         $time = $hours.":".$mins;
         
         return $time;

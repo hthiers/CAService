@@ -65,7 +65,7 @@ customClock = (function() {
   }
   
   function formatTimeFromArray(d) {
-    return addZ(d[0]) + ':' +
+    return d[0] + ':' +
            addZ(d[1]) + ':' +
            addZ(d[2]);
   }

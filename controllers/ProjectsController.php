@@ -224,14 +224,14 @@ class ProjectsController extends ControllerBase
             $sOrder
             $sLimit";
 
-        #print($sql);
+//        print($sql);
 
         $result_data = $model->goCustomQuery($sql);
 
         $found_rows = $model->goCustomQuery("SELECT FOUND_ROWS()");
 
         $total_rows = $model->goCustomQuery("SELECT COUNT(`".$sIndexColumn."`) FROM $sTable");
-
+        
         /*
         * Output
         */
@@ -275,7 +275,7 @@ class ProjectsController extends ControllerBase
     {
         $session = FR_Session::singleton();
 
-        $id_project = $_POST['id_project'];
+        $id_project = $_REQUEST['id_project'];
         $session->id_project = $id_project;
 
         require_once 'models/ProjectsModel.php';
@@ -512,7 +512,81 @@ class ProjectsController extends ControllerBase
         }
     }
 
-    
+    public function ajaxProjectsAddTask()
+    {   
+        $session = FR_Session::singleton();
+
+        $label = $_POST['label'];
+        $desc = $_POST['desc'];
+        $id_project = $_POST['id_project'];
+        $status = 1; // 1 by default
+        
+        #$code_customer = rand(1, 100);
+        #$code_customer = "c".$code_customer;
+        
+        //Incluye el modelo que corresponde
+        require_once 'models/TasksModel.php';
+        require_once 'models/ProjectsModel.php';
+
+        //Creamos una instancia de nuestro "modelo"
+        $model = new TasksModel();
+//        
+        $result = $model->getLastTask($session->id_tenant);
+        $values = $result->fetch(PDO::FETCH_ASSOC);
+        $code = $values['code_task'];
+        $code = (int)$code + 1;
+        $new_task[] = null;
+        
+        #current time
+        $now = date("Y-m-d H:i:s");
+        $currentDateTime = new DateTime($now);
+        $timezone = new DateTimeZone($session->timezone);
+        $current_date = $currentDateTime->setTimezone($timezone)->format("Y-m-d H:i:s");
+        
+        $result = $model->addNewTask($session->id_tenant, $code, $label, $current_date, null, null, $desc);
+        $pdoNewTask = $result;
+        
+        $error = $result->errorInfo();
+        $rows_n = $result->rowCount();
+        
+        if($error[0] == 00000 && $rows_n > 0){
+            $result = $model->getLastTask($session->id_tenant);
+            $values = $result->fetch(PDO::FETCH_ASSOC);
+            
+            $id_task = $values['id_task'];
+            
+            /*
+             * Add task to project
+             */
+            $modelProject = new ProjectsModel();
+            $result = $modelProject->addTaskToProject($id_project, $id_task);
+            
+            $error = $result->errorInfo();
+            $rows_n = $result->rowCount();
+            
+            if($error[0] == 00000 && $rows_n > 0){
+                $new_task[0] = $id_task;
+                $new_task[1] = $label_task;
+                $new_task[2] = $pdoNewTask;
+            }
+            else{
+                $new_task[0] = "0";
+                $new_task[1] = "Ha habido un error!: "+$error[0]+$error[2];
+            }
+        }
+        elseif($error[0] == 00000 && $rows_n < 1){
+            $new_task[0] = "0";
+            $new_task[1] = "No se ha podido ingresar el registro";
+        }
+        else{
+            $new_task[0] = "0";
+            $new_task[1] = $error[2];
+        }
+
+        print json_encode($new_task);
+        
+        return true;
+    }
     
     
     

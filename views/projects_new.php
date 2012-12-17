@@ -96,15 +96,15 @@ if($session->id_tenant != null && $session->id_user != null):
         $('#btn_stop').attr('disabled', 'disabled');
         
         // JQDialog popup event
-        $('#pop_newcliente').click(function (event){
-            var url = $(this).attr("href");
-            var windowName = "popUp";//$(this).attr("name");
-            var windowSize = windowSizeArray;
-
-            window.open(url, windowName, windowSize);
-
-            event.preventDefault();
-        });
+//        $('#pop_newcliente').click(function (event){
+//            var url = $(this).attr("href");
+//            var windowName = "popUp";//$(this).attr("name");
+//            var windowSize = windowSizeArray;
+//
+//            window.open(url, windowName, windowSize);
+//
+//            event.preventDefault();
+//        });
         
         // JQDialog Submit - Add new customer
         $(".dlgSbmCstr").click(function(){
