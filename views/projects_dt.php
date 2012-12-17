@@ -249,7 +249,7 @@ require('templates/menu.tpl.php'); #banner & menu
                 <th>Cliente</th>
                 <th>Mes</th>
                 <th>Estado</th>
-                <th>Exportar</th>
+<!--                <th>Exportar</th>-->
             </tr>
             <tr>
                 <td>
@@ -282,9 +282,9 @@ require('templates/menu.tpl.php'); #banner & menu
                     echo "</select>\n";
                     ?>
                 </td>
-                <td>
-                    <?php echo "<a title='excel' id='exp_excel' href='#'><img alt='excel' src='views/img/excel07.png' /></a>"; ?>
-                </td>
+<!--                <td>
+                    <?php #echo "<a title='excel' id='exp_excel' href='#'><img alt='excel' src='views/img/excel07.png' /></a>"; ?>
+                </td>-->
             </tr>
         </table>
         </div>
