@@ -15,7 +15,7 @@ function roundNumber(num, dec) {
 }
 
 /**
- * Format seconds to hh:mm:ss
+ * Format seconds to array
  */
 function secondsToTime(secs)
 {
@@ -39,6 +39,31 @@ function secondsToTime(secs)
     };
 
     return obj;
+}
+
+/**
+ * Format seconds to hh:mm
+ */
+function formatTime(seconds)
+{
+    var time;
+
+    // avoid dummi values
+    if(seconds != 'n/a'){
+        var hours = Math.floor(seconds / 3600);
+        var mins = Math.floor((seconds - (hours*3600)) / 60);
+
+        if(hours < 10)
+            hours = "0"+hours;
+        if(mins < 10)
+            mins = "0"+mins;
+
+        time = hours+":"+mins;
+    }
+    else
+        time = 'n/a';
+
+    return time;
 }
 
 /**

@@ -163,7 +163,7 @@ $(document).ready(function() {
                             newHtml += '<td>'+item['label_task']+'</td>';
                             newHtml += '<td style="text-align:center;">'+item['date_ini']+'</td>';
                             newHtml += '<td style="text-align:center;">'+item['date_end']+'</td>';
-                            newHtml += '<td style="text-align:center;">'+item['time_total']+'</td>';
+                            newHtml += '<td style="text-align:center;">'+formatTime(item['time_total'])+'</td>';
                             newHtml += '</tr>';
                         });
                     }
