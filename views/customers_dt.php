@@ -140,7 +140,7 @@ require('templates/menu.tpl.php'); #banner & menu
             print_r($titulo); print('<br />');
             print_r($listado); print('<br />');
             print(htmlspecialchars($error_flag, ENT_QUOTES)); print('<br />');
-            print_r($arrayDates);print('<br />');
+//            print_r($arrayDates);print('<br />');
             #print_r($permiso_editar); print('<br />');
             print('</div>');
         }
