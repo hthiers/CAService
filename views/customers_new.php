@@ -75,7 +75,7 @@ require('templates/menu.tpl.php'); #banner & menu
 
         <!-- FORM -->
         <div id="dt_filtres">
-        <form id="moduleForm" name="form1" method="post"  action="<?php echo $rootPath.'?controller=customers&amp;action=customersAdd';?>">
+        <form id="moduleForm" name="form1" method="post"  action="?controller=customers&amp;action=customersAdd">
           <table class="table_left">
             <tr>
                 <td>Nombre</td>
@@ -91,8 +91,8 @@ require('templates/menu.tpl.php'); #banner & menu
             </tr>
             <tr>
                 <td colspan="2" class="submit">
-                    <input name="Atras" type="reset" class="time_control" id="Atras"  onclick="window.location = '<?php #echo $rootPath.'?controller='.$controller.'&amp;action='.$action_b.'';?>'"  value="CANCELAR" />
-                    &nbsp;&nbsp;
+<!--                    <input name="Atras" type="reset" class="time_control" id="Atras"  onclick="window.location = '<?php #echo $rootPath.'?controller='.$controller.'&amp;action='.$action_b.'';?>'"  value="CANCELAR" />-->
+<!--                    &nbsp;&nbsp;-->
                     <input name="button" type="submit" class="time_control" id="button" value="GUARDAR" />
                 </td>
             </tr>
