@@ -123,7 +123,7 @@ if($session->id_tenant != null && $session->id_user != null):
                 $.ajax({
                     type: "POST",
                     url: "?controller=customers&action=ajaxCustomersAdd",
-                    data: dataString,
+                    data: {name:name, contact:contact},
                     cache: false,
                     dataType: "json"
                 }).done(function(response){
