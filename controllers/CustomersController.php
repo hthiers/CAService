@@ -319,7 +319,7 @@ class CustomersController extends ControllerBase
 
             return true;
         else:
-            print_r($_POST);
+            return false;
         endif;
     }
 

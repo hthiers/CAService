@@ -110,14 +110,13 @@ if($session->id_tenant != null && $session->id_user != null):
         $(".dlgSbmCstr").click(function(){
             var name = $("#dlgSbm_name").val();
             var contact = $("#dlgSbm_contact").val();
-            var dataString = 'name='+ name + '&contact=' + contact;
+            //var dataString = 'name='+ name + '&contact=' + contact;
             if(name=='')
             {
                 alert("Please Enter Some Text");
             }
             else
             {
-                console.log(name);
                 //$("#flash").show();
                 //$("#flash").fadeIn(400).html('<img src="ajax-loader.gif" align="absmiddle"> loading.....');
                 $.ajax({
