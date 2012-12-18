@@ -241,9 +241,7 @@ if($session->id_tenant != null && $session->id_user != null):
                         <tr>
                             <td>Descripci&oacute;n</td>
                             <td>
-                                <textarea readonly="readonly" class="input_box" name="descripcion">
-                                    <?php echo $desc_project; ?>
-                                </textarea>
+                                <textarea readonly="readonly" class="input_box" name="descripcion"><?php echo $desc_project;?></textarea>
                             </td>
                         </tr>
                     </table>
