@@ -233,8 +233,8 @@ class CustomersController extends ControllerBase
     {   
         $session = FR_Session::singleton();
 
-        $label_customer = $this->utils->cleanQuery($_POST['customer_name']);
-        $detail_customer = $this->utils->cleanQuery($_POST['customer_detail']);
+        $label_customer = $_POST['customer_name'];
+        $detail_customer = $_POST['customer_detail'];
         #$code_customer = rand(1, 100);
         #$code_customer = "c".$code_customer;
         
@@ -273,50 +273,54 @@ class CustomersController extends ControllerBase
     {   
         $session = FR_Session::singleton();
 
-        $label_customer = $this->utils->cleanQuery($_POST['name']);
-        $detail_customer = $this->utils->cleanQuery($_POST['contact']);
-        #$code_customer = rand(1, 100);
-        #$code_customer = "c".$code_customer;
-        
-        //Incluye el modelo que corresponde
-        require_once 'models/CustomersModel.php';
+        if(isset($_POST['name']) && $_POST['name'] != ""):
+            $label_customer = $_POST['name'];
+            $detail_customer = $_POST['contact'];
+            #$code_customer = rand(1, 100);
+            #$code_customer = "c".$code_customer;
 
-        //Creamos una instancia de nuestro "modelo"
-        $model = new CustomersModel();
-        
-        $result = $model->getLastCustomer($session->id_tenant);
-        $values = $result->fetch(PDO::FETCH_ASSOC);
-        $code_customer = $values['code_customer'];
-        $code_customer = (int)$code_customer + 1;
-        $new_customer[] = null;
-        
-        //Le pedimos al modelo todos los items
-        $result = $model->addNewCustomer(null, $code_customer, $session->id_tenant, $label_customer, $detail_customer);
+            //Incluye el modelo que corresponde
+            require_once 'models/CustomersModel.php';
 
-        $error = $result->errorInfo();
-        $rows_n = $result->rowCount();
-        
-        if($error[0] == 00000 && $rows_n > 0){
+            //Creamos una instancia de nuestro "modelo"
+            $model = new CustomersModel();
+
             $result = $model->getLastCustomer($session->id_tenant);
             $values = $result->fetch(PDO::FETCH_ASSOC);
-            
-            $id_customer = $values['id_customer'];
-            
-            $new_customer[0] = $id_customer;
-            $new_customer[1] = $label_customer;
-        }
-        elseif($error[0] == 00000 && $rows_n < 1){
-            $new_customer[0] = "0";
-            $new_customer[1] = "No se ha podido ingresar el registro";
-        }
-        else{
-            $new_customer[0] = "0";
-            $new_customer[1] = $error[2];
-        }
+            $code_customer = $values['code_customer'];
+            $code_customer = (int)$code_customer + 1;
+            $new_customer[] = null;
 
-        print json_encode($new_customer);
-        
-        return true;
+            //Le pedimos al modelo todos los items
+            $result = $model->addNewCustomer(null, $code_customer, $session->id_tenant, $label_customer, $detail_customer);
+
+            $error = $result->errorInfo();
+            $rows_n = $result->rowCount();
+
+            if($error[0] == 00000 && $rows_n > 0){
+                $result = $model->getLastCustomer($session->id_tenant);
+                $values = $result->fetch(PDO::FETCH_ASSOC);
+
+                $id_customer = $values['id_customer'];
+
+                $new_customer[0] = $id_customer;
+                $new_customer[1] = $label_customer;
+            }
+            elseif($error[0] == 00000 && $rows_n < 1){
+                $new_customer[0] = "0";
+                $new_customer[1] = "No se ha podido ingresar el registro";
+            }
+            else{
+                $new_customer[0] = "0";
+                $new_customer[1] = $error[2];
+            }
+
+            print json_encode($new_customer);
+
+            return true;
+        else:
+            print_r($_POST);
+        endif;
     }
 
     
