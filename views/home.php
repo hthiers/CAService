@@ -36,7 +36,7 @@ $(document).ready(function(){
             
             <h2 class="menuinicio">Inicio de sesión</h2>
             <p class="submenu">
-                Demostraci&oacute;n versi&oacute;n 0.2.
+                Versi&oacute;n Beta 0.3.
             </p>
             
             <div style="margin-top: 10px;">
