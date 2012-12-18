@@ -32,7 +32,7 @@ $(document).ready(function(){
     <div id="central">
         <div id="contenido">
             
-            <?php if(isset($error) && $error == 1) echo "<div id='errorbox_failure'>Usuario o contraseña inválido! - ERR#".$error_code."</div>"; ?>
+            <?php if(isset($error) && $error == 1) echo "<div id='errorbox_failure'>Usuario o contraseña inválido!</div>"; ?>
             
             <h2 class="menuinicio">Inicio de sesión</h2>
             <p class="submenu">

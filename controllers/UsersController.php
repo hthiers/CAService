@@ -39,7 +39,7 @@ class UsersController extends ControllerBase
                 header("Location: ".$this->root."?controller=Projects&action=projectsDt");
             }
             else
-                header("Location: ".$this->root."?controller=index&action=indexErrorLogin&errorCode=".$error[0]."");
+                header("Location: ".$this->root."?controller=index&action=indexErrorLogin");
 	}
 
 	public function logOut()

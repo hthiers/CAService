@@ -58,6 +58,8 @@ class CustomersController extends ControllerBase
     */
     public function ajaxCustomersDt()
     {
+        $session = FR_Session::singleton();
+        
         //Incluye el modelo que corresponde
         require_once 'models/CustomersModel.php';
 
@@ -154,7 +156,9 @@ class CustomersController extends ControllerBase
             SELECT SQL_CALC_FOUND_ROWS ".str_replace(" , ", " ", implode(", ", $aColumns))."
             FROM $sTable a
             INNER JOIN cas_tenant b
-            ON a.id_tenant = b.id_tenant
+            ON (a.id_tenant = b.id_tenant
+                AND 
+                b.id_tenant = $session->id_tenant)
             $sWhere
             $sOrder
             $sLimit";
