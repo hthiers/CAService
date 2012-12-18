@@ -566,17 +566,17 @@ class ProjectsController extends ControllerBase
             
             if($error[0] == 00000 && $rows_n > 0){
                 $new_task[0] = $id_task;
-                $new_task[1] = $label_task;
-                $new_task[2] = $pdoNewTask;
+                $new_task[1] = $label;
+//                $new_task[2] = $pdoNewTask;
             }
             else{
                 $new_task[0] = "0";
-                $new_task[1] = "Ha habido un error!: "+$error[0]+$error[2];
+                $new_task[1] = "Ha ocurrido un error al intentar agregar la tarea!: "+$error[0]+$error[2];
             }
         }
         elseif($error[0] == 00000 && $rows_n < 1){
             $new_task[0] = "0";
-            $new_task[1] = "No se ha podido ingresar el registro";
+            $new_task[1] = "Ha ocurrido un error grave!";
         }
         else{
             $new_task[0] = "0";

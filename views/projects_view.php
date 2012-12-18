@@ -76,7 +76,7 @@ if($session->id_tenant != null && $session->id_user != null):
         
         $("#btn_stop").click(function (event){
             //$("#formModule").attr("action", "?controller=Projects&action=projectsStop");
-            //window.location.replace("<?php echo $rootPath;?>?controller=Projects&action=projectsDt"); 
+            //window.location.replace("<?php #echo $rootPath;?>?controller=Projects&action=projectsDt"); 
             $('#formModule').submit();
         });
         
@@ -126,7 +126,7 @@ if($session->id_tenant != null && $session->id_user != null):
                 $.ajax({
                     type: "POST",
                     url: "?controller=projects&action=ajaxProjectsAddTask",
-                    data: dataString,
+                    data: {label:label, desc:desc, id_project:id_project},
                     cache: false,
                     dataType: "json"
                 }).done(function(response){
@@ -144,11 +144,14 @@ if($session->id_tenant != null && $session->id_user != null):
                             alert("Error: "+response[1]);
                     }
                     else{
-                        alert("Ha ocurrido un error!");
+                        console.log(response);
+                        alert("Ha ocurrido un error!..."+response);
+                        $("#dialog-form").dialog("close");
                     }
                     $("#dialog-form").dialog("close");
                 }).fail(function(){
                     alert("Ha ocurrido un error!");
+                    $("#dialog-form").dialog("close");
                 });
             }
 

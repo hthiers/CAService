@@ -65,17 +65,24 @@ class Utils
      * @return string time
      */
     public static function formatTime($seconds){
-        $hours = floor($seconds / 3600);
-        $mins = floor(($seconds - ($hours*3600)) / 60);
-        
-        if($hours < 10)
-            $hours = "0".$hours;
-        if($mins < 10)
-            $mins = "0".$mins;
-        
-        $time = $hours.":".$mins;
-        
-        return $time;
+        $time = "";
+        // avoid dummi values
+        if($seconds != "n/a"){
+            $hours = floor($seconds / 3600);
+            $mins = floor(($seconds - ($hours*3600)) / 60);
+
+            if($hours < 10)
+                $hours = "0".$hours;
+            if($mins < 10)
+                $mins = "0".$mins;
+
+            $time = $hours.":".$mins;
+        }
+        else
+            $time = "n/a";
+
+            return $time;
+           
     }
     
     /**

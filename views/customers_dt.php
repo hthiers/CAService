@@ -69,18 +69,18 @@ $(document).ready(function() {
 //        },
         
         "aoColumnDefs": [
-            { "mDataProp": null, "aTargets": [-1] },
+//            { "mDataProp": null, "aTargets": [-1] },
             { "bVisible": false, "aTargets": [0,2] },
-            {
-                "fnRender": function ( oObj ) {
-                    //var string = '<button id=\"button\" class=\"input\" name=\"id_project\" onclick=\"submitToForm()\" value="'+oObj.aData[0]+'">EDITAR</button>';
-                    var string = '<button id=\"button\" class=\"input\" name=\"id_project\" onclick=\"submitToForm()\" value="'+oObj.aData[0]+'">EDITAR</button>';
-                    //string += '&nbsp; <button id=\"button\" class=\"input\" name=\"id_project\" onclick=\"submitToForm()\" value="'+oObj.aData[0]+'">REVISAR</button>';
-                    
-                    return string;
-                },
-                "aTargets": [5]
-            }
+//            {
+//                "fnRender": function ( oObj ) {
+//                    //var string = '<button id=\"button\" class=\"input\" name=\"id_project\" onclick=\"submitToForm()\" value="'+oObj.aData[0]+'">EDITAR</button>';
+//                    //var string = '<button id=\"button\" class=\"input\" name=\"id_project\" onclick=\"submitToForm()\" value="'+oObj.aData[0]+'">EDITAR</button>';
+//                    //string += '&nbsp; <button id=\"button\" class=\"input\" name=\"id_project\" onclick=\"submitToForm()\" value="'+oObj.aData[0]+'">REVISAR</button>';
+//                    
+//                    return string;
+//                },
+//                "aTargets": [5]
+//            }
 //            {
 //                "fnRender": function ( oObj ) {
 //                    if(oObj.aData[5] != null){
@@ -189,7 +189,7 @@ require('templates/menu.tpl.php'); #banner & menu
 <!--                            <th>CONTACTO</th>
                             <th>TELEFONO</th>
                             <th>CORREO</th>-->
-                            <th>OPCIONES</th>
+<!--                            <th>OPCIONES</th>-->
                         </tr>
                     </thead>
                     <tbody>

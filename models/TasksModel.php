@@ -121,7 +121,7 @@ class TasksModel extends ModelBase
                 INNER JOIN cas_tenant b
                 ON a.id_tenant = b.id_tenant
                 WHERE b.id_tenant = $id_tenant
-                ORDER BY a.code_task DESC
+                ORDER BY a.id_task DESC
                 LIMIT 1");
 
         $consulta->execute();
