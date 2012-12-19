@@ -52,13 +52,16 @@ function formatTime(seconds)
     if(seconds != 'n/a'){
         var hours = Math.floor(seconds / 3600);
         var mins = Math.floor((seconds - (hours*3600)) / 60);
+        var secs = Math.floor((seconds - (hours*3600)) % 60);
 
         if(hours < 10)
             hours = "0"+hours;
         if(mins < 10)
             mins = "0"+mins;
+        if(secs < 10)
+            secs = "0"+secs;
 
-        time = hours+":"+mins;
+        time = hours+":"+mins+":"+secs;
     }
     else
         time = 'n/a';

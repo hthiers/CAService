@@ -529,9 +529,6 @@ class TasksController extends ControllerBase
 
             $result = $model->updateTask($session->id_tenant, $id_task, $values['code_task']
                     , $values['label_task'], $values['date_ini'], $stop_date, $total_time, $values['desc_task'], 2);
-//            $result = $model->updateProject($session->id_tenant, $frm_id_project, $values['code_project']
-//                    , $session->id_user, $values['id_customer'], $values['label_project'], $values['date_ini']
-//                    , $stop_date, $total_time, $values['desc_project'], 2);
 
             if($result != null){
                 $error = $result->errorInfo();

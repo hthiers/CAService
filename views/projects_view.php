@@ -112,15 +112,12 @@ if($session->id_tenant != null && $session->id_user != null):
             var label = $("#dlgSbm_name_task").val();
             var desc = $("#dlgSbm_desc_task").val();
             var id_project = <?php echo $id_project;?>;
-            var dataString = 'label='+label+'&desc='+desc+'&id_project='+id_project;
             if(label=='')
             {
-                console.log(dataString);
                 alert("Debe ingresar un nombre");
             }
             else
             {
-                console.log(dataString);
                 //$("#flash").show();
                 //$("#flash").fadeIn(400).html('<img src="ajax-loader.gif" align="absmiddle"> loading.....');
                 $.ajax({
@@ -132,8 +129,8 @@ if($session->id_tenant != null && $session->id_user != null):
                 }).done(function(response){
                     if(response != null){
                         if(response[0] != 0){
-                            console.log('resp:'+response[0]+', '+response[1]);
-                            console.log(response);
+//                            console.log('resp:'+response[0]+', '+response[1]);
+//                            console.log(response);
                             window.location.replace("?controller=projects&action=projectsView&id_project=<?php echo $id_project;?>");
 //                            location.reload();
 //                            $("#cbocustomers").append('<option value="'+response[0]+'" selected="selected">'+response[1]+'</option>');
@@ -144,7 +141,7 @@ if($session->id_tenant != null && $session->id_user != null):
                             alert("Error: "+response[1]);
                     }
                     else{
-                        console.log(response);
+//                        console.log(response);
                         alert("Ha ocurrido un error!..."+response);
                         $("#dialog-form").dialog("close");
                     }

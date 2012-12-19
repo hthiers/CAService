@@ -60,7 +60,7 @@ class Utils
     }
     
     /**
-     * Get hh:mm format time from seconds
+     * Get hh:mm:ss format time from seconds
      * @param int $seconds
      * @return string time
      */
@@ -70,19 +70,21 @@ class Utils
         if($seconds != "n/a"){
             $hours = floor($seconds / 3600);
             $mins = floor(($seconds - ($hours*3600)) / 60);
+            $secs = floor(($seconds - ($hours*3600)) % 60);
 
             if($hours < 10)
                 $hours = "0".$hours;
             if($mins < 10)
                 $mins = "0".$mins;
+            if($secs < 10)
+                $secs = "0".$secs;
 
-            $time = $hours.":".$mins;
+            $time = $hours.":".$mins.":".$secs;
         }
         else
             $time = "n/a";
 
-            return $time;
-           
+            return $time;           
     }
     
     /**
