@@ -62,109 +62,140 @@ if($session->id_tenant != null && $session->id_user != null):
 <script type="text/javascript" language="javascript" src="views/lib/jquery.dataTables.min.js"></script>
 <script type="text/javascript" language="javascript" src="views/lib/utils.js"></script>
 <script type="text/javascript">
-    $(document).ready(function(){
-        $('.input_box').attr('disabled', 'disabled');
-        $('#btn_play').attr('disabled', 'disabled');
-        
-        $("#btn_play").click(function (event){
-            iniTrabajo();
-        });
-        
-         $("#btn_pause").click(function (event){
-            pausaTrabajo();
-        });
-        
-        $("#btn_stop").click(function (event){
-            //$("#formModule").attr("action", "?controller=Projects&action=projectsStop");
-            //window.location.replace("<?php #echo $rootPath;?>?controller=Projects&action=projectsDt"); 
-            $('#formModule').submit();
-        });
-        
-        var total_db = <?php if($time_total == null): echo 0; else: echo $time_total; endif; ?>;
-        
-        if(total_db > 0){
-            var tiempo_array = secondsToTime(total_db);
-            var tiempo_string = tiempo_array['h']+':'+tiempo_array['m']+':'+tiempo_array['s'];
+$(document).ready(function(){
+    $('.input_box').attr('disabled', 'disabled');
+//    $('#btn_play').attr('disabled', 'disabled');
 
-            $("#inptTiempoTotal").val(tiempo_string);
-        }
-        
-        var total_progress = <?php if($total_progress == null): echo 0; else: echo $total_progress; endif; ?>;
-        
-        if(total_progress > 0){
-            var tiempo_array = secondsToTime(total_progress);
-            var tiempo_string = tiempo_array['h']+':'+tiempo_array['m']+':'+tiempo_array['s'];
-
-            customClock(tiempo_string);
-            //$("#inptTiempoProgress").val(tiempo_string);
-            
-//            console.log(total_progress);
-//            console.log(tiempo_string);
-        }
-        
-        // JQDialog open link
-        $( "#link-dialog" ).click(function() {
-            $( "#dialog-projectTask" ).dialog( "open" );
-        });
-        
-        // JQDialog Submit - Add new task to project
-        $(".dlgSbmCstr").click(function(){
-            var label = $("#dlgSbm_name_task").val();
-            var desc = $("#dlgSbm_desc_task").val();
-            var id_project = <?php echo $id_project;?>;
-            if(label=='')
-            {
-                alert("Debe ingresar un nombre");
-            }
-            else
-            {
-                //$("#flash").show();
-                //$("#flash").fadeIn(400).html('<img src="ajax-loader.gif" align="absmiddle"> loading.....');
-                $.ajax({
-                    type: "POST",
-                    url: "?controller=projects&action=ajaxProjectsAddTask",
-                    data: {label:label, desc:desc, id_project:id_project},
-                    cache: false,
-                    dataType: "json"
-                }).done(function(response){
-                    if(response != null){
-                        if(response[0] != 0){
-//                            console.log('resp:'+response[0]+', '+response[1]);
-//                            console.log(response);
-                            window.location.replace("?controller=projects&action=projectsView&id_project=<?php echo $id_project;?>");
-//                            location.reload();
-//                            $("#cbocustomers").append('<option value="'+response[0]+'" selected="selected">'+response[1]+'</option>');
-                            //$("#flash").hide();
-//                            alert("Tarea agregada!");
-                        }
-                        else
-                            alert("Error: "+response[1]);
-                    }
-                    else{
-//                        console.log(response);
-                        alert("Ha ocurrido un error!..."+response);
-                        $("#dialog-form").dialog("close");
-                    }
-                    $("#dialog-form").dialog("close");
-                }).fail(function(){
-                    alert("Ha ocurrido un error!");
-                    $("#dialog-form").dialog("close");
-                });
-            }
-
-            return false;
-	});
+    $("#btn_play").click(function (event){
+        iniTrabajo();
     });
 
-    function iniTrabajo(){
-        $('#btn_play').attr('disabled', 'disabled');
-        $('#btn_pause').removeAttr('disabled');
+     $("#btn_pause").click(function (event){
+        pausaTrabajo();
+    });
+
+    $("#btn_stop").click(function (event){
+        //$("#formModule").attr("action", "?controller=Projects&action=projectsStop");
+        //window.location.replace("<?php #echo $rootPath;?>?controller=Projects&action=projectsDt"); 
+        $('#formModule').submit();
+    });
+
+    var total_db = <?php if($time_total == null): echo 0; else: echo $time_total; endif; ?>;
+
+    if(total_db > 0){
+        var tiempo_array = secondsToTime(total_db);
+        var tiempo_string = tiempo_array['h']+':'+tiempo_array['m']+':'+tiempo_array['s'];
+
+        $("#inptTiempoTotal").val(tiempo_string);
     }
 
-    function pausaTrabajo(){
-        $('#btn_play').removeAttr('disabled');
-        $('#btn_pause').attr('disabled', 'disabled');
+    var total_progress = <?php if($total_progress == null): echo 0; else: echo $total_progress; endif; ?>;
+    var status = <?php echo $status_project; ?>;
+
+    // Set timer
+    if(total_progress > 0){
+        var tiempo_array = secondsToTime(total_progress);
+        var tiempo_string = tiempo_array['h']+':'+tiempo_array['m']+':'+tiempo_array['s'];
+        
+        if(status == 1)
+            customClock(tiempo_string);
+        else if(status == 3)
+            $('#progress_clock').val(tiempo_string);
     }
+
+    // JQDialog open link
+    $( "#link-dialog" ).click(function() {
+        $( "#dialog-projectTask" ).dialog( "open" );
+    });
+
+    // JQDialog Submit - Add new task to project
+    $(".dlgSbmCstr").click(function(){
+        var label = $("#dlgSbm_name_task").val();
+        var desc = $("#dlgSbm_desc_task").val();
+        var id_project = <?php echo $id_project;?>;
+        if(label=='')
+        {
+            alert("Debe ingresar un nombre");
+        }
+        else
+        {
+            //$("#flash").show();
+            //$("#flash").fadeIn(400).html('<img src="ajax-loader.gif" align="absmiddle"> loading.....');
+            $.ajax({
+                type: "POST",
+                url: "?controller=projects&action=ajaxProjectsAddTask",
+                data: {label:label, desc:desc, id_project:id_project},
+                cache: false,
+                dataType: "json"
+            }).done(function(response){
+                if(response != null){
+                    if(response[0] != 0){
+//                            console.log('resp:'+response[0]+', '+response[1]);
+//                            console.log(response);
+                        window.location.replace("?controller=projects&action=projectsView&id_project=<?php echo $id_project;?>");
+//                            location.reload();
+//                            $("#cbocustomers").append('<option value="'+response[0]+'" selected="selected">'+response[1]+'</option>');
+                        //$("#flash").hide();
+//                            alert("Tarea agregada!");
+                    }
+                    else
+                        alert("Error: "+response[1]);
+                }
+                else{
+//                        console.log(response);
+                    alert("Ha ocurrido un error!..."+response);
+                    $("#dialog-form").dialog("close");
+                }
+                $("#dialog-form").dialog("close");
+            }).fail(function(){
+                alert("Ha ocurrido un error!");
+                $("#dialog-form").dialog("close");
+            });
+        }
+
+        return false;
+    });
+});
+
+function iniTrabajo(){
+    $('#btn_play').attr('disabled', 'disabled');
+    $('#btn_pause').removeAttr('disabled');
+}
+
+function pausaTrabajo(){
+    var id_project = "<?php echo $id_project;?>";
+
+    $.ajax({
+        type: "POST",
+        url: "?controller=projects&action=projectsPause",
+        data: {id_project:id_project},
+        cache: false,
+        dataType: "json"
+    }).done(function(response){
+        if(response !== null){
+            console.log(response);
+            if(response[0] === "0"){
+//                window.location.replace("?controller=projects&action=projectsView&id_project=<?php #echo $id_project;?>");
+//                location.reload();
+//                $("#cbocustomers").append('<option value="'+response[0]+'" selected="selected">'+response[1]+'</option>');
+//                $("#flash").hide();
+                $('#btn_play').removeAttr('disabled');
+                $('#btn_pause').attr('disabled', 'disabled');
+
+                alert("paused!");
+            }
+            else{
+                alert("sql error");
+            }
+        }
+        else{
+            alert("response null");
+        }
+    }).fail(function(jqXHR, textStatus){
+        console.log(textStatus);
+        alert("ajax error: "+textStatus);
+    });
+}
 </script>
 
 </head>
@@ -247,7 +278,31 @@ if($session->id_tenant != null && $session->id_user != null):
                             <td class="middle">Fecha inicio</td>
                             <td class="middle"><input readonly="readonly" class="input_box" name="fecha_ini" type="text" value="<?php echo $date_ini; ?>" /></td>
                         </tr>
-                        <?php if($date_end == null && strtotime($currentTime) > strtotime($date_ini)): ?>
+                        <?php if($status_project == 1 && strtotime($currentTime) > strtotime($date_ini)): ?>
+                        <tr>
+                            <td class="middle">Tiempo transcurrido</td>
+                            <td class="middle">
+                                <input id="progress_clock" readonly="readonly" class="input_box" name="tiempo_progress" type="text" value="" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="text-align: center;">Control de tiempo 
+                                <br /><br />
+                                <input id="btn_play" class="time_control" type="button" value="INICIO" disabled="disabled" />
+                                <input id="btn_pause" class="time_control" type="button" value="PAUSA" />
+                                <input id="btn_stop" class="time_control" type="button" value="TERMINAR" />
+                            </td>
+                        </tr>
+                        <?php elseif($status_project == 1 && strtotime($currentTime) < strtotime($date_ini)):?>
+                        <tr>
+                            <td colspan="2" style="text-align: center;">Control de tiempo 
+                                <br /><br />
+                                <input id="btn_play" class="time_control" type="button" value="INICIO" />
+                                <input id="btn_pause" class="time_control" type="button" value="PAUSA" disabled="disabled" />
+                                <input id="btn_stop" class="time_control" type="button" value="TERMINAR" disabled="disabled" />
+                            </td>
+                        </tr>
+                        <?php elseif($status_project == 3 && strtotime($currentTime) > strtotime($date_ini)):?>
                         <tr>
                             <td class="middle">Tiempo transcurrido</td>
                             <td class="middle">
@@ -258,25 +313,8 @@ if($session->id_tenant != null && $session->id_user != null):
                             <td colspan="2" style="text-align: center;">Control de tiempo 
                                 <br /><br />
                                 <input id="btn_play" class="time_control" type="button" value="INICIO" />
-                                <input id="btn_pause" class="time_control" type="button" value="PAUSA" />
-                                <input id="btn_stop" class="time_control" type="button" value="TERMINAR" />
-                                <!--
-                                <br />
-                                <input type="text" class="time_status" value="tiempo..." />
-                                -->
-                            </td>
-                        </tr>
-                        <?php elseif($date_end == null && strtotime($currentTime) < strtotime($date_ini)):?>
-                        <tr>
-                            <td colspan="2" style="text-align: center;">Control de tiempo 
-                                <br /><br />
-                                <input id="btn_play" class="time_control" type="button" value="INICIO" />
                                 <input id="btn_pause" class="time_control" type="button" value="PAUSA" disabled="disabled" />
-                                <input id="btn_stop" class="time_control" type="button" value="TERMINAR" disabled="disabled" />
-                                <!--
-                                <br />
-                                <input type="text" class="time_status" value="tiempo..." />
-                                -->
+                                <input id="btn_stop" class="time_control" type="button" value="TERMINAR" />
                             </td>
                         </tr>
                         <?php else: ?>

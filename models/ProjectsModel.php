@@ -223,18 +223,41 @@ class ProjectsModel extends ModelBase
             return $consulta;
         }
         
-        public function updateProject($id_tenant, $id_project, $code_project, $id_user, $id_customer, $etiqueta
-                , $init_date, $stop_date, $total_time, $desc, $estado)
+        /**
+         * Update a project
+         * @param int $id_tenant
+         * @param int $id_project
+         * @param type $code_project
+         * @param type $etiqueta
+         * @param type $init_date
+         * @param type $stop_date
+         * @param type $total_time
+         * @param type $desc
+         * @param type $estado
+         * @param type $pause_date
+         * @param type $paused_time
+         * @return pdo
+         */
+        public function updateProject($id_tenant, $id_project, $code_project, $etiqueta
+                , $init_date, $stop_date, $total_time, $desc, $estado, $pause_date, $paused_time)
         {
+            // force null values
+            $stop_date = empty($stop_date) ? "NULL" : "'$stop_date'";
+            $total_time = empty($total_time) ? "NULL" : "'$total_time'";
+            $pause_date = empty($pause_date) ? "NULL" : "'$pause_date'";
+            $paused_time = empty($paused_time) ? "NULL" : "'$paused_time'";
+            
             $consulta = $this->db->prepare("UPDATE cas_project 
                         SET
                         code_project = '$code_project'
                         , label_project = '$etiqueta'
                         , date_ini = '$init_date'
-                        , date_end = '$stop_date'
-                        , time_total = '$total_time'
+                        , date_end = $stop_date
+                        , time_total = $total_time
                         , desc_project = '$desc'
                         , status_project = '$estado'
+                        , date_pause = $pause_date
+                        , time_paused = $paused_time
                         WHERE id_tenant = $id_tenant
                           AND id_project = $id_project");
             

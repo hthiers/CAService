@@ -536,7 +536,7 @@ class ProjectsController extends ControllerBase
     }
 
     public function ajaxProjectsAddTask()
-    {   
+    {
         $session = FR_Session::singleton();
 
         $label = $_POST['label'];
@@ -611,6 +611,72 @@ class ProjectsController extends ControllerBase
         return true;
     }
     
+    public function projectsPause()
+    {
+        $session = FR_Session::singleton();
+        $id_project = $_REQUEST['id_project'];
+        
+        require_once 'models/TasksModel.php';
+        require_once 'models/ProjectsModel.php';
+        
+        $model = new ProjectsModel();
+        $pdoProject = $model->getProjectById($id_project, $session->id_tenant);
+        $error = null;
+        $response = null;
+        
+        $values = $pdoProject->fetch(PDO::FETCH_ASSOC);
+        if($values != null && $values != false){
+            //time
+//            if($values['time_total'] != null){
+//                $time_s = round($values['time_total'], 2);
+//                $time_m = round((float)$time_s / 60, 2);
+//                $time_h = round((float)$time_m / 60, 2);
+//                $data['time_s'] = $time_s;
+//                $data['time_m'] = $time_m;
+//                $data['time_h'] = $time_h;
+//            }
+//            
+            // current time
+            $now = date("Y-m-d H:i:s");
+            $currentDateTime = new DateTime($now);
+            $timezone = new DateTimeZone($session->timezone);
+            $current_date = $currentDateTime->setTimezone($timezone)->format("Y-m-d H:i:s");
+
+            //current progress
+            $total_progress = Utils::diffDates($current_date, $values['date_ini'], 'S', false);
+            $data['total_progress'] = $total_progress;
+            
+            //paused status = 3
+            $status = 3;
+            
+            //pause project
+            $result = $model->updateProject($session->id_tenant, $id_project, $values['code_project']
+                    , $values['label_project'], $values['date_ini'], null
+                    , null, $values['desc_project'], $status, $current_date, null);
+            
+            if($result != null){
+                $error = $result->errorInfo();
+                if($error[0] == 00000){
+                    $response[0] = "0";
+                    $response[1] = "Exito!";
+                }
+                else {
+                    $response[0] = $error[0];
+                    $response[1] = $error[2];
+                }
+            }
+            else{
+                $response[0] = "1";
+                $response[1] = "Error grave al intentar actualizar el proyecto";
+            }
+        }
+        else{
+            $response[0] = "2";
+            $response[1] = "Error grave al intentar encontrar el proyecto pedido (ID no existe).";
+        }
+
+        print json_encode($response);
+    }
     
     
     

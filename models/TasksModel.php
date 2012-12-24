@@ -221,14 +221,18 @@ class TasksModel extends ModelBase
      * @return PDO
      */
     public function addNewTask($id_tenant, $new_code, $etiqueta
-            , $date_ini, $date_end = null, $time_total = null, $descripcion, $estado = 1)
+            , $date_ini, $date_end, $time_total, $descripcion, $estado = 1)
     {
+        // force null values
+        $date_end = empty($date_end) ? "NULL" : "'$date_end'";
+        $time_total = empty($time_total) ? "NULL" : "'$time_total'";
+        
         $consulta = $this->db->prepare("INSERT INTO cas_task 
                     (id_task, code_task, id_tenant, label_task
                     , date_ini, date_end, time_total, desc_task, status_task) 
                         VALUES 
                     (NULL, '$new_code', $id_tenant, '$etiqueta'
-                        , '$date_ini', NULL, NULL, '$descripcion', $estado)");
+                        , '$date_ini', $date_end, $time_total, '$descripcion', $estado)");
 
         $consulta->execute();
 
@@ -250,13 +254,17 @@ class TasksModel extends ModelBase
     public function updateTask($id_tenant, $id_task, $code_task, $etiqueta
             , $init_date, $stop_date, $total_time, $desc, $status)
     {
+        // force null values
+        $stop_date = empty($stop_date) ? "NULL" : "'$stop_date'";
+        $total_time = empty($total_time) ? "NULL" : "'$total_time'";
+        
         $consulta = $this->db->prepare("UPDATE cas_task 
                     SET
                     code_task = '$code_task'
                     , label_task = '$etiqueta'
                     , date_ini = '$init_date'
-                    , date_end = '$stop_date'
-                    , time_total = '$total_time'
+                    , date_end = $stop_date
+                    , time_total = $total_time
                     , desc_task = '$desc'
                     , status_task = '$status'
                     WHERE id_tenant = $id_tenant

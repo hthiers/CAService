@@ -26,7 +26,7 @@ $(document).ready(function() {
                     "sInfoEmpty": "0 records",
                     "sInfoFiltered": "(from _MAX_ total records)"
                 },
-                "aoColumnDefs": [{ 
+                "aoColumnDefs": [{
                         "bSortable": false, "aTargets": [3]
                         <?php if($permiso_editar == 0){ echo ',"bVisible": false, "aTargets": [3]';}?>
                 }],

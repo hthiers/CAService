@@ -341,7 +341,7 @@ if($session->id_tenant != null && $session->id_user != null):
                         <td colspan="2" style="text-align: center;">Control de tiempo 
                             <br /><br />
                             <input id="btn_play" class="time_control" type="button" value="INICIO" />
-                            <input id="btn_pause" class="time_control" type="button" value="PAUSA" />
+                            <!--<input id="btn_pause" class="time_control" type="button" value="PAUSA" />-->
                             <input id="btn_stop" class="time_control" type="button" value="TERMINAR" />
                             <!--
                             <br />

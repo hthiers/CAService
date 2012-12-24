@@ -42,7 +42,7 @@ function secondsToTime(secs)
 }
 
 /**
- * Format seconds to hh:mm
+ * Format seconds to hh:mm:00
  */
 function formatTime(seconds)
 {
