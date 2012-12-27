@@ -59,6 +59,25 @@ class Utils
         return $resultado;
     }
     
+    public static function sumDates($fecha_principal, $fecha_secundaria, $obtener = 'S', $redondear = false){
+        $f0 = strtotime($fecha_principal);
+        $f1 = strtotime($fecha_secundaria);
+        
+        $resultado = ($f0 + $f1);
+
+        switch ($obtener) {
+            default: break;
+            case "M"   :   $resultado = $resultado / 60;   break;
+            case "H"     :   $resultado = $resultado / 60 / 60;   break;
+            case "D"      :   $resultado = $resultado / 60 / 60 / 24;   break;
+            case "W"   :   $resultado = $resultado / 60 / 60 / 24 / 7;   break;
+        }
+        
+        if($redondear) $resultado = round($resultado);
+
+        return $resultado;
+    }
+    
     /**
      * Get hh:mm:ss format time from seconds
      * @param int $seconds

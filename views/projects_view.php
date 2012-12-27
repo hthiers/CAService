@@ -97,10 +97,14 @@ $(document).ready(function(){
         var tiempo_array = secondsToTime(total_progress);
         var tiempo_string = tiempo_array['h']+':'+tiempo_array['m']+':'+tiempo_array['s'];
         
-        if(status == 1)
+        if(status === 1)
             customClock(tiempo_string);
-        else if(status == 3)
-            $('#progress_clock').val(tiempo_string);
+        else if(status === 3){
+            var paused_seconds = <?php echo $paused_progress;?>;
+            var paused_array = secondsToTime(paused_seconds);
+            var paused_string = paused_array['h']+':'+paused_array['m']+':'+paused_array['s'];
+            $('#progress_clock').val(paused_string);
+        }
     }
 
     // JQDialog open link
@@ -160,6 +164,36 @@ $(document).ready(function(){
 function iniTrabajo(){
     $('#btn_play').attr('disabled', 'disabled');
     $('#btn_pause').removeAttr('disabled');
+    
+    var id_project = "<?php echo $id_project;?>";
+    
+    $.ajax({
+        type: "POST",
+        url: "?controller=projects&action=projectsContinue",
+        data: {id_project:id_project},
+        cache: false,
+        dataType: "json"
+    }).done(function(response){
+        if(response !== null){
+            console.log(response);
+            if(response[0] === "0"){
+                $('#btn_play').removeAttr('disabled');
+                $('#btn_pause').attr('disabled', 'disabled');
+
+                alert("Trabajo activado!");
+                window.location.replace("?controller=projects&action=projectsView&id_project=<?php echo $id_project;?>");
+            }
+            else{
+                alert("sql error");
+            }
+        }
+        else{
+            alert("response null");
+        }
+    }).fail(function(jqXHR, textStatus){
+        console.log(textStatus);
+        alert("ajax error: "+textStatus);
+    });
 }
 
 function pausaTrabajo(){
@@ -182,7 +216,8 @@ function pausaTrabajo(){
                 $('#btn_play').removeAttr('disabled');
                 $('#btn_pause').attr('disabled', 'disabled');
 
-                alert("paused!");
+                alert("Trabajo en pausa.");
+                window.location.replace("?controller=projects&action=projectsView&id_project=<?php echo $id_project;?>");
             }
             else{
                 alert("sql error");

@@ -68,6 +68,8 @@ class ProjectsModel extends ModelBase
                         , a.time_total
                         , a.desc_project
                         , a.status_project
+                        , a.date_pause
+                        , a.time_paused
                     FROM  cas_project a
                     LEFT OUTER JOIN cas_project_has_cas_user b
                     ON a.id_project = b.cas_project_id_project
