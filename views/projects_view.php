@@ -89,7 +89,7 @@ $(document).ready(function(){
         $("#inptTiempoTotal").val(tiempo_string);
     }
 
-    var total_progress = <?php if($total_progress == null): echo 0; else: echo $total_progress; endif; ?>;
+    var total_progress = <?php if($total_progress == null): echo 0; else: echo $total_progress; endif;?>;
     var status = <?php echo $status_project; ?>;
 
     // Set timer
@@ -97,10 +97,10 @@ $(document).ready(function(){
         var tiempo_array = secondsToTime(total_progress);
         var tiempo_string = tiempo_array['h']+':'+tiempo_array['m']+':'+tiempo_array['s'];
         
-        if(status === 1)
+        if(status == 1)
             customClock(tiempo_string);
-        else if(status === 3){
-            var paused_seconds = <?php echo $paused_progress;?>;
+        else if(status == 3){
+            var paused_seconds = <?php if($paused_date == null): echo 0; else: echo $paused_date; endif;?>;
             var paused_array = secondsToTime(paused_seconds);
             var paused_string = paused_array['h']+':'+paused_array['m']+':'+paused_array['s'];
             $('#progress_clock').val(paused_string);
@@ -180,7 +180,7 @@ function iniTrabajo(){
                 $('#btn_play').removeAttr('disabled');
                 $('#btn_pause').attr('disabled', 'disabled');
 
-                alert("Trabajo activado!");
+//                alert("Trabajo activado!");
                 window.location.replace("?controller=projects&action=projectsView&id_project=<?php echo $id_project;?>");
             }
             else{
@@ -216,7 +216,7 @@ function pausaTrabajo(){
                 $('#btn_play').removeAttr('disabled');
                 $('#btn_pause').attr('disabled', 'disabled');
 
-                alert("Trabajo en pausa.");
+//                alert("Trabajo en pausa.");
                 window.location.replace("?controller=projects&action=projectsView&id_project=<?php echo $id_project;?>");
             }
             else{

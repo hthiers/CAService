@@ -282,13 +282,15 @@ class ProjectsController extends ControllerBase
         require_once 'models/TasksModel.php';
         $model = new ProjectsModel();
         $modelTasks = new TasksModel();
+        $paused_progress = null;
+        $paused_date = null;
 
         $pdoProject = $model->getProjectById($id_project, $session->id_tenant);
         $pdoTasks = $modelTasks->getAllTasksByTenantProject($session->id_tenant, $id_project);
         
         $values = $pdoProject->fetch(PDO::FETCH_ASSOC);
         if($values != null && $values != false){
-            #time
+            //  time
             if($values['time_total'] != null){
                 $time_s = round($values['time_total'], 2);
                 $time_m = round((float)$time_s / 60, 2);
@@ -298,22 +300,30 @@ class ProjectsController extends ControllerBase
                 $data['time_h'] = $time_h;
             }
             
-            #current time
+            // current time
             $now = date("Y-m-d H:i:s");
             $currentDateTime = new DateTime($now);
             $timezone = new DateTimeZone($session->timezone);
             $current_date = $currentDateTime->setTimezone($timezone)->format("Y-m-d H:i:s");
             $data['currentTime'] = $current_date;
-            
-            #current progress
+
+            // current progress
             $total_progress = Utils::diffDates($current_date, $values['date_ini'], 'S', false);
+
+            if($values['date_pause'] != null){
+                // paused progress
+                $paused_progress = Utils::diffDates($current_date, $values['date_pause'], 'S', false);
+                
+                // date until pause
+                $paused_date = Utils::diffDates($values['date_pause'], $values['date_ini'], 'S', false);;
+                
+                // real progress (started - paused)
+                $total_progress = $total_progress - $paused_progress;
+            }
+            
+            // data
             $data['total_progress'] = $total_progress;
-            
-            #paused progress
-            $paused_progress = Utils::diffDates($values['date_pause'], $values['date_ini'], 'S', false);
-            $data['paused_progress'] = $paused_progress;
-            
-            #data
+            $data['paused_date'] = $paused_date;
             $data['id_project'] = $values['id_project'];
             $data['code_project'] = $values['code_project'];
             $data['id_tenant'] = $values['id_tenant'];
@@ -331,7 +341,7 @@ class ProjectsController extends ControllerBase
             $data['desc_project'] = $values['desc_project'];
             $data['status_project'] = $values['status_project'];
             
-            #project tasks
+            // project tasks
             $data['tasksList'] = $pdoTasks;
         }
 
@@ -638,22 +648,17 @@ class ProjectsController extends ControllerBase
             $timezone = new DateTimeZone($session->timezone);
             $current_date = $currentDateTime->setTimezone($timezone)->format("Y-m-d H:i:s");
 
-            // older pause
-            $paused_time = null;
-            if($values['date_pause'] != null)
-            
-            // current progress
-            $total_progress = Utils::diffDates($current_date, $values['date_ini'], 'S', false);
-            $data['total_progress'] = $total_progress;
-            
             //paused status = 3
             $status = 3;
-            
+
+            //paused time
+//            $time_paused += $values['time_paused'];
+
             //pause project
             $result = $model->updateProject($session->id_tenant, $id_project, $values['code_project']
                     , $values['label_project'], $values['date_ini'], null
-                    , null, $values['desc_project'], $status, $current_date, null);
-            
+                    , null, $values['desc_project'], $status, $current_date, $values['time_paused']);
+
             if($result != null){
                 $error = $result->errorInfo();
                 if($error[0] == 00000){
@@ -701,13 +706,18 @@ class ProjectsController extends ControllerBase
 
             // current progress
             $total_progress = Utils::diffDates($current_date, $values['date_ini'], 'S', false);
-            // paused progress
-            $paused_progress = Utils::diffDates($values['date_pause'], $values['date_ini'], 'S', false);
             
-            $total_progress = $total_progress - $paused_progress;
+            // paused progress
+            $paused_progress = Utils::diffDates($current_date, $values['date_pause'], 'S', false);
+            if($values['time_paused'] != null)
+                $paused_progress += $values['time_paused'];
             
             //normal status = 1
             $status = 1;
+            
+//            print(Utils::formatTime($total_progress));
+//            print("<br>");
+//            print(Utils::formatTime($paused_progress));
             
             //pause project
             $result = $model->updateProject($session->id_tenant, $id_project, $values['code_project']
