@@ -101,6 +101,7 @@ $(document).ready(function(){
             customClock(tiempo_string);
         else if(status == 3){
             var paused_seconds = <?php if($paused_date == null): echo 0; else: echo $paused_date; endif;?>;
+            console.log(paused_seconds);
             var paused_array = secondsToTime(paused_seconds);
             var paused_string = paused_array['h']+':'+paused_array['m']+':'+paused_array['s'];
             $('#progress_clock').val(paused_string);
@@ -209,14 +210,10 @@ function pausaTrabajo(){
         if(response !== null){
             console.log(response);
             if(response[0] === "0"){
-//                window.location.replace("?controller=projects&action=projectsView&id_project=<?php #echo $id_project;?>");
-//                location.reload();
-//                $("#cbocustomers").append('<option value="'+response[0]+'" selected="selected">'+response[1]+'</option>');
 //                $("#flash").hide();
                 $('#btn_play').removeAttr('disabled');
                 $('#btn_pause').attr('disabled', 'disabled');
 
-//                alert("Trabajo en pausa.");
                 window.location.replace("?controller=projects&action=projectsView&id_project=<?php echo $id_project;?>");
             }
             else{
