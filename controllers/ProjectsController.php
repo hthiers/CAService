@@ -488,7 +488,17 @@ class ProjectsController extends ControllerBase
             $currentDateTime = new DateTime($now);
             $timezone = new DateTimeZone($session->timezone);
             $currentDateTime = $currentDateTime->setTimezone($timezone);
-            $currentTime = $currentDateTime->format("Y-m-d H:i:s");
+            $current_date = $currentDateTime->setTimezone($timezone)->format("Y-m-d H:i:s");
+
+            // total time (s)
+            $total_progress = Utils::diffDates($current_date, $values['date_ini'], 'S');
+            
+            // total real time (s)
+            if($values['time_paused'] != null && empty($values['time_paused']) == false){
+                $total_real_progress = $total_progress - $values['time_paused'];
+            }
+            else
+                $total_real_progress = $total_progress;
             
             // Stop all project tasks            
             require_once 'models/TasksModel.php';
@@ -497,10 +507,10 @@ class ProjectsController extends ControllerBase
             $result = $model->getAllTasksByTenantProject($session->id_tenant, $frm_id_project);
             while($tasks = $result->fetch(PDO::FETCH_ASSOC)){
                 // get times diff
-                $total_time = Utils::diffDates($stop_date, $tasks['date_ini'], 'S', false);
+                $total_time = Utils::diffDates($current_date, $tasks['date_ini'], 'S', false);
 
                 $resultQuery = $model->updateTask($session->id_tenant, $tasks['id_task'], $tasks['code_task']
-                        , $tasks['label_task'], $tasks['date_ini'], $currentTime, $total_time, $tasks['desc_task'], 2);
+                        , $tasks['label_task'], $tasks['date_ini'], $current_date, $total_time, $tasks['desc_task'], 2);
                 
                 $error = $resultQuery->errorInfo();
                 if($error[0] != '00000' && $error_flag == false){
@@ -518,11 +528,11 @@ class ProjectsController extends ControllerBase
             $result = $model->getProjectById($frm_id_project, $session->id_tenant);
             $values = $result->fetch(PDO::FETCH_ASSOC);
 
-            $total_time = Utils::diffDates($stop_date, $values['date_ini'], 'S', false);
+            $total_time = Utils::diffDates($current_date, $values['date_ini'], 'S', false);
 
             $result = $model->updateProject($session->id_tenant, $frm_id_project, $values['code_project']
                     , $session->id_user, $values['id_customer'], $values['label_project'], $values['date_ini']
-                    , $currentTime, $total_time, $values['desc_project'], 2);
+                    , $current_date, $total_time, $values['desc_project'], 2);
 
             if($result != null){
                 $error = $result->errorInfo();
