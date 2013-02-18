@@ -6,7 +6,7 @@ class TasksController extends ControllerBase
     ***************************************************************************/
 
     /**
-     * Show projects dt
+     * Show tasks dt
      * @param type $error_flag
      * @param type $message 
      */
