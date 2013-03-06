@@ -36,7 +36,7 @@ class UsersController extends ControllerBase
                 $session->name_user = $values['name_user'];
                 $session->timezone = $this->timezone;
 
-                header("Location: ".$this->root."?controller=Projects&action=projectsDt");
+                header("Location: ".$this->root."?controller=Tasks&action=tasksDt");
             }
             else
                 header("Location: ".$this->root."?controller=index&action=indexErrorLogin");
