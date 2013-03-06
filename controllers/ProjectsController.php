@@ -492,14 +492,21 @@ class ProjectsController extends ControllerBase
 
             // total time (s)
             $total_progress = Utils::diffDates($current_date, $values['date_ini'], 'S');
+
+            // paused progress (s)
+            $paused_progress = Utils::diffDates($current_date, $values['date_pause'], 'S', false);
+            if($values['time_paused'] != null)
+                $paused_progress += $values['time_paused'];
             
             // total real time (s)
-            if($values['time_paused'] != null && empty($values['time_paused']) == false){
-                $total_real_progress = $total_progress - $values['time_paused'];
-            }
-            else
-                $total_real_progress = $total_progress;
-            
+//            if($values['time_paused'] != null && empty($values['time_paused']) == false){
+//                $total_real_progress = $total_progress - $values['time_paused'];
+//            }
+//            else
+//                $total_real_progress = $total_progress;
+
+            $total_progress = $total_progress - $paused_progress;
+
             // Stop all project tasks            
             require_once 'models/TasksModel.php';
             $model = new TasksModel();
@@ -528,11 +535,11 @@ class ProjectsController extends ControllerBase
             $result = $model->getProjectById($frm_id_project, $session->id_tenant);
             $values = $result->fetch(PDO::FETCH_ASSOC);
 
-            $total_time = Utils::diffDates($current_date, $values['date_ini'], 'S', false);
+//            $total_time = Utils::diffDates($current_date, $values['date_ini'], 'S', false);
 
             $result = $model->updateProject($session->id_tenant, $frm_id_project, $values['code_project']
-                    , $session->id_user, $values['id_customer'], $values['label_project'], $values['date_ini']
-                    , $current_date, $total_time, $values['desc_project'], 2);
+                    , $values['label_project'], $values['date_ini'], $current_date, $total_progress
+                    , $values['desc_project'], 2, $values['date_pause'], $values['time_paused']);
 
             if($result != null){
                 $error = $result->errorInfo();

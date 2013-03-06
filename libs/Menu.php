@@ -86,9 +86,9 @@ class Menu extends ModelBase
         function loadTestMenu()
         {
             $menuFullString = '<ul id="menu">';
-                $menuFullString.= '<li><a class="menu_sup" href="?controller=projects&amp;action=projectsDt">TRABAJOS</a>';
+                $menuFullString.= '<li><a class="menu_sup" href="?controller=tasks&amp;action=tasksDt">TRABAJOS</a>';
                 $menuFullString.= '</li>';
-                $menuFullString.= '<li><a class="menu_sup" href="?controller=projects&amp;action=projectsNewForm">NUEVO TRABAJO</a>';
+                $menuFullString.= '<li><a class="menu_sup" href="?controller=tasks&amp;action=tasksNewForm">NUEVO TRABAJO</a>';
                 $menuFullString.= '</li>';
                 $menuFullString.= '<li><a class="menu_sup" href="?controller=customers&amp;action=customersDt">CLIENTES</a>';
                 $menuFullString.= '</li>';

@@ -1,7 +1,7 @@
 CAService
 =========
 
-Proyecto CA Service
+Proyecto CA Service - 0.1.1
 
 Hernan Thiers
 

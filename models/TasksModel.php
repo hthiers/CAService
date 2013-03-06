@@ -46,7 +46,6 @@ class TasksModel extends ModelBase
      */
     public function getAllTasksByTenant($id_tenant)
     {
-        //realizamos la consulta de todos los segmentos
         $consulta = $this->db->prepare("
                 SELECT 
                     a.id_task
@@ -58,7 +57,10 @@ class TasksModel extends ModelBase
                     , a.time_total
                     , a.desc_task
                     , a.status_task
+                    , b.cas_project_id_project
                 FROM  cas_task a
+                LEFT OUTER JOIN cas_project_has_cas_task b
+                ON a.id_task = b.cas_task_id_task
                 WHERE a.id_tenant = $id_tenant
                 ORDER BY a.label_task");
 
