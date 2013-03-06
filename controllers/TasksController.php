@@ -329,14 +329,16 @@ class TasksController extends ControllerBase
         $session = FR_Session::singleton();
 
         require_once 'models/ProjectsModel.php';
+        require_once 'models/TasksModel.php';
         require_once 'models/UsersModel.php';
         require_once 'models/CustomersModel.php';
 
         $model = new ProjectsModel();
+        $modelTask = new TasksModel();
         $modelUser = new UsersModel();
         $modelCustomer = new CustomersModel();
 
-        $pdo = $model->getLastProject($session->id_tenant);
+        $pdo = $modelTask->getLastTask($session->id_tenant);
         $error = $pdo->errorInfo();
         $value = null;
         $value = $pdo->fetch(PDO::FETCH_ASSOC);
@@ -347,17 +349,17 @@ class TasksController extends ControllerBase
         }
         elseif($value != null)
         {
-            $last_code = $value['code_project'];
+            $last_code = $value['code_task'];
             $new_code = (int) $last_code + 1;
         }
         else
         {
             $new_code = 1;
-            $data['error'] = "NO PROJECTS";
+            $data['error'] = "No hay tareas";
         }
 
         $data['new_code'] = $new_code;
-        $data['titulo'] = "Nuevo Trabajo #".$new_code;
+        $data['titulo'] = "Nueva Tarea #".$new_code;
 
         $pdoUser = $modelUser->getUserAccountByID($session->id_user);
         $value = null;
@@ -370,6 +372,9 @@ class TasksController extends ControllerBase
 
         $pdoCustomer = $modelCustomer->getAllCustomers($session->id_tenant);
         $data['pdoCustomer'] = $pdoCustomer;
+        
+        $pdoProject = $model->getAllProjectsByTenant($session->id_tenant);
+        $data['pdoProject'] = $pdoProject;
 
         #fecha actual
         $now = date("Y-m-d H:i:s");
@@ -377,12 +382,10 @@ class TasksController extends ControllerBase
         $timezone = new DateTimeZone($session->timezone);
         $currentDateTime = $currentDateTime->setTimezone($timezone);
 
-        
-        
         $data['current_date'] = $currentDateTime->format("Y-m-d");
         $data['current_time'] = $currentDateTime->format("H:i:s");
 
-        $this->view->show("projects_new.php", $data);
+        $this->view->show("tasks_new.php", $data);
     }
 
     /*
