@@ -401,6 +401,9 @@ class TasksController extends ControllerBase
         $new_code = $_POST['new_code'];
         $user = $_POST['resp'];
         
+        if(isset($_POST['cboproject']))
+            $project = $_POST['cboproject'];
+        
         if(isset($_POST['cbocustomer']))
             $customer = $_POST['cbocustomer'];
         

@@ -96,22 +96,11 @@ if($session->id_tenant != null && $session->id_user != null):
            window.location.replace("<?php echo $rootPath;?>?controller=tasks&action=tasksDt");
         });
         $('#btn_stop').attr('disabled', 'disabled');
-        
-        // JQDialog popup event
-//        $('#pop_newcliente').click(function (event){
-//            var url = $(this).attr("href");
-//            var windowName = "popUp";//$(this).attr("name");
-//            var windowSize = windowSizeArray;
-//
-//            window.open(url, windowName, windowSize);
-//
-//            event.preventDefault();
-//        });
-        
-        // JQDialog Submit - Add new customer
+                
+        // JQDialog Submit - Add new project
         $(".dlgSbmCstr").click(function(){
             var name = $("#dlgSbm_name").val();
-            var contact = $("#dlgSbm_contact").val();
+            var customer = $("#dlgSbm_customer").val();
             //var dataString = 'name='+ name + '&contact=' + contact;
             if(name=='')
             {
@@ -123,16 +112,16 @@ if($session->id_tenant != null && $session->id_user != null):
                 //$("#flash").fadeIn(400).html('<img src="ajax-loader.gif" align="absmiddle"> loading.....');
                 $.ajax({
                     type: "POST",
-                    url: "?controller=customers&action=ajaxCustomersAdd",
-                    data: {name:name, contact:contact},
+                    url: "?controller=projects&action=projectsAdd",
+                    data: {name:name, customer:customer},
                     cache: false,
                     dataType: "json"
                 }).done(function(response){
                     if(response != null){
                         if(response[0] != 0){
-                            $("#cbocustomers").append('<option value="'+response[0]+'" selected="selected">'+response[1]+'</option>');       
+                            $("#cboprojects").append('<option value="'+response[0]+'" selected="selected">'+response[1]+'</option>');       
                             //$("#flash").hide();
-                            alert("Cliente agregado!");
+                            alert("Proyecto agregado!");
                         }
                         else
                             alert("Error: "+response[1]);
@@ -140,7 +129,7 @@ if($session->id_tenant != null && $session->id_user != null):
                     else{
                         alert("Ha ocurrido un error!");
                     }
-                    $("#dialog-form").dialog("close");
+                    $("#dialog-new-project").dialog("close");
                 }).fail(function(){
                     alert("Ha ocurrido un error!");
                 });
@@ -148,9 +137,6 @@ if($session->id_tenant != null && $session->id_user != null):
 
             return false;
 	});
-        
-        // JQDialog Submit - Add new project
-        //.... copiar el de arriba!!! agregar ademas el div dialog en el template de dialogs!!
     });
     
     // JQDatepicker
@@ -231,15 +217,19 @@ if($session->id_tenant != null && $session->id_user != null):
                 }
         }
 
-        $( "#dialog-form" ).dialog({
+        $( "#dialog-new-project" ).dialog({
                 autoOpen: false,
                 height: 300,
                 width: 350,
                 modal: true
         });
 
-        $( "#create-user" ).click(function() {
-                $( "#dialog-form" ).dialog( "open" );
+//        $( "#create-user" ).click(function() {
+//                $( "#dialog-form" ).dialog( "open" );
+//        });
+        $( "#create-project" ).click(function() {
+            console.log("dialog para project.");
+            $( "#dialog-new-project" ).dialog( "open" );
         });
     });
 </script>
@@ -314,23 +304,7 @@ if($session->id_tenant != null && $session->id_user != null):
                                 echo "</select>\n";
                                 ?>
                                 &nbsp;
-                                <a id="create-user" href="#">Nuevo</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="middle">Cliente</td>
-                            <td class="middle">
-                                <?php
-                                echo "<select class='input_box' id='cbocustomers' name='cbocustomer'>\n";
-                                echo "<option value='' selected='selected'>SELECCIONAR</option>\n";
-                                while($row = $pdoCustomer->fetch(PDO::FETCH_ASSOC))
-                                {
-                                    echo "<option value='$row[id_customer]'>$row[label_customer]</option>\n";
-                                }
-                                echo "</select>\n";
-                                ?>
-                                &nbsp;
-                                <a id="create-user" href="#">Nuevo</a>
+                                <a id="create-project" href="#">Nuevo</a>
                             </td>
                         </tr>
                         <tr>
