@@ -201,7 +201,7 @@ class ProjectsModel extends ModelBase
                         (id_project, code_project, id_tenant, label_project, date_ini, desc_project
                         , status_project) 
                             VALUES 
-                        (NULL, '$new_code', $id_tenant, '$etiqueta', '$fecha. .$hora_ini', '$descripcion', $estado)");
+                        (NULL, '$new_code', $id_tenant, '$etiqueta', '$fecha', '$descripcion', $estado)");
 
             $consulta->execute();
 

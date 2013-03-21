@@ -99,12 +99,12 @@ if($session->id_tenant != null && $session->id_user != null):
                 
         // JQDialog Submit - Add new project
         $(".dlgSbmCstr").click(function(){
-            var name = $("#dlgSbm_name").val();
-            var customer = $("#dlgSbm_customer").val();
+            var name = $("#dlgSbm_name_project").val();
+            var customer = $("#dlgSbm_customer_project").val();
             //var dataString = 'name='+ name + '&contact=' + contact;
             if(name=='')
             {
-                alert("Please Enter Some Text");
+                alert("Ingrese nombre del proyecto");
             }
             else
             {
@@ -112,7 +112,7 @@ if($session->id_tenant != null && $session->id_user != null):
                 //$("#flash").fadeIn(400).html('<img src="ajax-loader.gif" align="absmiddle"> loading.....');
                 $.ajax({
                     type: "POST",
-                    url: "?controller=projects&action=projectsAdd",
+                    url: "?controller=projects&action=ajaxProjectsAdd",
                     data: {name:name, customer:customer},
                     cache: false,
                     dataType: "json"
@@ -297,6 +297,7 @@ if($session->id_tenant != null && $session->id_user != null):
                                 <?php
                                 echo "<select class='input_box' id='cboprojects' name='cboprojects'>\n";
                                 echo "<option value='' selected='selected'>SELECCIONAR</option>\n";
+                                echo "<option value='noaplica' selected='selected'>Sin Proyecto</option>\n";
                                 while($row = $pdoProject->fetch(PDO::FETCH_ASSOC))
                                 {
                                     echo "<option value='$row[id_project]'>$row[label_project]</option>\n";

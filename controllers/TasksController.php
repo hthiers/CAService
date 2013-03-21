@@ -452,31 +452,48 @@ class TasksController extends ControllerBase
 
         $label = $_POST['label'];
         $desc = $_POST['desc'];
+        $new_code = $_POST['new_code'];
         $status = 1; // 1 by default
+        $project = null;
+        
+        if(isset($_POST['cboproject']))
+            $project = $_POST['cboproject'];
+        
+        #current time
+        $now = date("Y-m-d H:i:s");
+        $currentDateTime = new DateTime($now);
+        $timezone = new DateTimeZone($session->timezone);
+        $current_date = $currentDateTime->setTimezone($timezone)->format("Y-m-d H:i:s");
         
         #$code_customer = rand(1, 100);
         #$code_customer = "c".$code_customer;
         
-        //Incluye el modelo que corresponde
         require_once 'models/TasksModel.php';
         require_once 'models/ProjectsModel.php';
 
-        //Creamos una instancia de nuestro "modelo"
-        $model = new TasksModel();
+        $modelProject = new ProjectsModel();
+        $result = $modelProject->getLastProject($session->id_tenant);
+        $values = $result->fetch(PDO::FETCH_ASSOC);
+        $code = $values['code_project'];
+        $code = (int)$code + 1;
         
-        $result = $model->getLastTask($session->id_tenant);
+        $result = $modelProject->addNewProject($session->id_tenant, $code, 'Sin Proyecto #'.$code, null, null, 'Sin Proyecto #'.$code);
+        
+        $modelTask = new TasksModel();
+        
+        $result = $modelTask->getLastTask($session->id_tenant);
         $values = $result->fetch(PDO::FETCH_ASSOC);
         $code = $values['code_task'];
         $code = (int)$code + 1;
         $new_task[] = null;
-        
-        $result = $model->addNewTask($session->id_tenant, $code, $label, $hora_ini, $fecha, $desc, $status);
+                
+        $result = $modelTask->addNewTask($session->id_tenant, $code, $label, $current_date, null, $desc, $status);
 
         $error = $result->errorInfo();
         $rows_n = $result->rowCount();
         
         if($error[0] == 00000 && $rows_n > 0){
-            $result = $model->getLastTask($session->id_tenant);
+            $result = $modelTask->getLastTask($session->id_tenant);
             $values = $result->fetch(PDO::FETCH_ASSOC);
             
             $id_task = $values['id_task'];
@@ -485,12 +502,12 @@ class TasksController extends ControllerBase
             $new_task[1] = $label_task;
         }
         elseif($error[0] == 00000 && $rows_n < 1){
-            $new_customer[0] = "0";
-            $new_customer[1] = "No se ha podido ingresar el registro";
+            $new_task[0] = "0";
+            $new_task[1] = "No se ha podido ingresar el registro";
         }
         else{
-            $new_customer[0] = "0";
-            $new_customer[1] = $error[2];
+            $new_task[0] = "0";
+            $new_task[1] = $error[2];
         }
 
         print json_encode($new_task);

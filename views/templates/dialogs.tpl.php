@@ -27,14 +27,14 @@
 
 <!-- New Project -->
 <div id="dialog-new-project" title="Nuevo Proyecto">
-    <form action="?controller=projects&amp;action=projectsAdd" method="POST">
+    <form action="?controller=projects&amp;action=ajaxProjectsAdd" method="POST">
         <fieldset style="padding:0; border:0; margin-top:25px;">
             <label for="name">Nombre Proyecto</label>
-            <input style="margin-bottom:12px; width:95%; padding: .4em;" type="text" name="dlgSbm_name" id="dlgSbm_name" class="text ui-widget-content ui-corner-all" />
+            <input style="margin-bottom:12px; width:95%; padding: .4em;" type="text" name="dlgSbm_name_project" id="dlgSbm_name_project" class="text ui-widget-content ui-corner-all" value="" />
             <label for="email">Cliente</label>
-            <input style="margin-bottom:12px; width:95%; padding: .4em;" type="text" name="dlgSbm_contact" id="dlgSbm_contact" class="text ui-widget-content ui-corner-all" />
+            <input style="margin-bottom:12px; width:95%; padding: .4em;" type="text" name="dlgSbm_customer_project" id="dlgSbm_customer_project" class="text ui-widget-content ui-corner-all" value="" />
             
-            <input class="dlgSbmCstr" type="submit" value="GUARDAR" style="font-family: Verdana; font-size: 15px; padding: 2px;" />
+            <input class="dlgSbmCstr" type="submit" value="GUARDAR" />
         </fieldset>
     </form>
 </div>

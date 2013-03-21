@@ -467,6 +467,80 @@ class ProjectsController extends ControllerBase
             header("Location: ".$this->root."?controller=Projects&action=projectsDt&error_flag=10&message='Ha ocurrido un error: ".$error[2]."'");
         }
     }
+    
+    /*
+     * Ajax add project
+     */
+    public function ajaxProjectsAdd()
+    {
+        $session = FR_Session::singleton();
+        $customer = null;
+        $error_user = null;
+        $error_cust = null;
+
+//        $new_code = $_POST['new_code'];
+//        $user = $_POST['resp'];
+        
+//        if(isset($_POST['cbocustomer']))
+//            $customer = $_POST['cbocustomer'];
+        
+        $desc = $_POST['desc'];
+//        $hora_ini = $_POST['hora_ini'];
+//        $fecha = $_POST['fecha'];
+        $etiqueta = $_POST['name'];
+        $estado = 1; #active by default
+
+        //Fecha
+        $now = date("Y-m-d H:i:s");
+        $currentDateTime = new DateTime($now);
+        $timezone = new DateTimeZone($session->timezone);
+        $currentDateTime = $currentDateTime->setTimezone($timezone);
+        $current_date = $currentDateTime->setTimezone($timezone)->format("Y-m-d H:i:s");
+        
+        require_once 'models/ProjectsModel.php';
+        $model = new ProjectsModel();
+        
+        //Nuevo Codigo
+        $result = $model->getLastProject($session->id_tenant);
+        $values = $result->fetch(PDO::FETCH_ASSOC);
+        $code = $values['code_project'];
+        $code = (int)$code + 1;
+        
+        $result = $model->addNewProject($session->id_tenant, $code, $etiqueta, null, $current_date, $desc);
+
+        $error = $result->errorInfo();
+        $rows_n = $result->rowCount();
+        
+        if($error[0] == 00000 && $rows_n > 0){
+//            $id_new_project = $model->getProjectIDByCodeINT($new_code, $session->id_tenant);
+            $createdProject = $model->getProjectByCode($new_code, $session->id_tenant);
+//            $result_user = $model->addUserToProject($id_new_project, $session->id_user);            
+//            $error_user = $result_user->errorInfo();
+            
+//            if($customer != null){
+//                $result_cust = $model->addCustomerToProject($id_new_project, $customer);
+//                $error_cust = $result_cust->errorInfo();
+//            }
+            
+            $ajax_return[0] = $createdProject->fetchColumn(0);
+            $ajax_return[1] = $createdProject->fetchColumn(3);
+            
+            #$this->projectsDt(1);
+//            header("Location: ".$this->root."?controller=Projects&action=projectsDt&error_flag=1");
+        }
+        elseif($error[0] == 00000 && $rows_n < 1){
+            $ajax_return[0] = "0";
+            $ajax_return[1] = "No se lograron ingresar registros.";
+            #$this->projectsDt(10, "Ha ocurrido un error grave!");
+//            header("Location: ".$this->root."?controller=Projects&action=projectsDt&error_flag=10&message='Ha ocurrido un error grave'");
+        }
+        else{
+            $ajax_return[0] = "0";
+            $ajax_return[1] = $error[2];
+            #$this->projectsDt(10, "Ha ocurrido un error: ".$error[2]);
+//            header("Location: ".$this->root."?controller=Projects&action=projectsDt&error_flag=10&message='Ha ocurrido un error: ".$error[2]."'");
+        }
+    }
 
     /*
      * Stop project action
