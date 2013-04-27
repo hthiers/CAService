@@ -397,6 +397,7 @@ class TasksController extends ControllerBase
         $customer = null;
         $error_user = null;
         $error_cust = null;
+        $id_created_task = null;
 
         $new_code = $_POST['new_code'];
         $user = $_POST['resp'];
@@ -404,8 +405,8 @@ class TasksController extends ControllerBase
         if(isset($_POST['cboproject']))
             $project = $_POST['cboproject'];
         
-        if(isset($_POST['cbocustomer']))
-            $customer = $_POST['cbocustomer'];
+//        if(isset($_POST['cbocustomer']))
+//            $customer = $_POST['cbocustomer'];
         
         $desc = $_POST['descripcion'];
         $hora_ini = $_POST['hora_ini'];
@@ -413,17 +414,20 @@ class TasksController extends ControllerBase
         $etiqueta = $_POST['etiqueta'];
         $estado = 1; #active by default
 
-        require_once 'models/ProjectsModel.php';
+//        require_once 'models/ProjectsModel.php';
+        require_once 'models/TasksModel.php';
 
-        //Creamos una instancia de nuestro "modelo"
-        $model = new ProjectsModel();
-        $result = $model->addNewProject($session->id_tenant, $new_code, $etiqueta, $hora_ini, $fecha, $desc);
+//        $model = new ProjectsModel();
+        $model = new TasksModel();
+//        $result = $model->addNewProject($session->id_tenant, $new_code, $etiqueta, $hora_ini, $fecha, $desc);
+        $result = $model->addNewTask($session->id_tenant,$new_code, $etiqueta,$fecha,null,null,$desc );
 
         $error = $result->errorInfo();
         $rows_n = $result->rowCount();
         
         if($error[0] == 00000 && $rows_n > 0){
-            $id_new_project = $model->getProjectIDByCodeINT($new_code, $session->id_tenant);
+//            $id_new_project = $model->getProjectIDByCodeINT($new_code, $session->id_tenant);
+            $id_created_task = $model->getTaskIDByCode($session->id_tenant, $new_code);
             
             $result_user = $model->addUserToProject($id_new_project, $session->id_user);            
             $error_user = $result_user->errorInfo();

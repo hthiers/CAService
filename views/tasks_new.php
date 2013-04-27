@@ -284,7 +284,7 @@ if($session->id_tenant != null && $session->id_user != null):
         ?>
 
         <div id="dt_filtres">
-            <form id="formModule" name="formModule" method="post" action="?controller=projects&amp;action=projectsAdd">
+            <form id="formModule" name="formModule" method="post" action="?controller=tasks&amp;action=tasksAdd">
                 <div id="trabajo_info" style="float: left;">
                     <table class="table_left">
                         <tr>
