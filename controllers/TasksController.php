@@ -391,7 +391,7 @@ class TasksController extends ControllerBase
     /*
      * Add project action
      */
-    public function TasksAdd()
+    public function tasksAdd()
     {
         $session = FR_Session::singleton();
         $customer = null;
@@ -426,7 +426,7 @@ class TasksController extends ControllerBase
         $rows_n = $result->rowCount();
         
         if($error[0] == 00000 && $rows_n > 0){
-//            $id_new_project = $model->getProjectIDByCodeINT($new_code, $session->id_tenant);
+//            $id_new_project = $model->getProjectIDByCodeINT($new_code, $session->id_tenant);  ---------------------> AQUIIIIIIIIIIIIII
             $id_created_task = $model->getTaskIDByCode($session->id_tenant, $new_code);
             
             $result_user = $model->addUserToProject($id_new_project, $session->id_user);            
