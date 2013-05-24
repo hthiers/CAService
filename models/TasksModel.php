@@ -220,21 +220,42 @@ class TasksModel extends ModelBase
      * @param type $time_total
      * @param type $descripcion
      * @param type $estado
+     * @param type $id_project
      * @return PDO
      */
     public function addNewTask($id_tenant, $new_code, $etiqueta
-            , $date_ini, $date_end, $time_total, $descripcion, $estado = 1)
+            , $date_ini, $date_end, $time_total, $descripcion, $estado = 1, $id_project)
     {
         // force null values
         $date_end = empty($date_end) ? "NULL" : "'$date_end'";
         $time_total = empty($time_total) ? "NULL" : "'$time_total'";
+        $id_project = empty($id_project) ? "NULL" : "'$id_project'";
         
         $consulta = $this->db->prepare("INSERT INTO cas_task 
                     (id_task, code_task, id_tenant, label_task
-                    , date_ini, date_end, time_total, desc_task, status_task) 
+                    , date_ini, date_end, time_total, desc_task
+                    , status_task, cas_project_id_project) 
                         VALUES 
                     (NULL, '$new_code', $id_tenant, '$etiqueta'
-                        , '$date_ini', $date_end, $time_total, '$descripcion', $estado)");
+                        , '$date_ini', $date_end, $time_total, '$descripcion', $estado, $id_project)");
+
+        $consulta->execute();
+
+        return $consulta;
+    }
+    
+    /**
+     * Add user to task (allows multiple users in one task)
+     * @param type $id_task
+     * @param type $id_user
+     * @return type
+     */
+    public function addUserToTask($id_task, $id_user)
+    {
+        $consulta = $this->db->prepare("INSERT INTO cas_task_has_cas_user 
+                (cas_task_id_task, cas_user_id_user) 
+                    VALUES 
+                ($id_task, $id_user)");
 
         $consulta->execute();
 

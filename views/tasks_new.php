@@ -177,14 +177,14 @@ if($session->id_tenant != null && $session->id_user != null):
         $('#btn_pause').attr('disabled', 'disabled');
     }
     
-    // JQDialog new customer
+    // JQDialog new project
     $(function() {
         // a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
         $( "#dialog:ui-dialog" ).dialog( "destroy" );
 
         var name = $( "#name" ),
-            email = $( "#email" ),
-            allFields = $( [] ).add( name ).add( email ),
+            desc = $( "#desc" ),
+            allFields = $( [] ).add( name ).add( desc ),
             tips = $( ".validateTips" );
 
         function updateTips( t ) {
@@ -228,7 +228,7 @@ if($session->id_tenant != null && $session->id_user != null):
 //                $( "#dialog-form" ).dialog( "open" );
 //        });
         $( "#create-project" ).click(function() {
-            console.log("dialog para project.");
+//            console.log("dialog para project.");
             $( "#dialog-new-project" ).dialog( "open" );
         });
     });
@@ -257,6 +257,9 @@ if($session->id_tenant != null && $session->id_user != null):
                 print($error); 
                 print('<br />');
             }
+            
+            print('tenant: ');
+            print($session->id_tenant);
 
             print('</div>');
         }

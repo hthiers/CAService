@@ -474,6 +474,7 @@ class ProjectsController extends ControllerBase
     public function ajaxProjectsAdd()
     {
         $session = FR_Session::singleton();
+        $description = null;
         $customer = null;
         $error_user = null;
         $error_cust = null;
@@ -484,10 +485,10 @@ class ProjectsController extends ControllerBase
 //        if(isset($_POST['cbocustomer']))
 //            $customer = $_POST['cbocustomer'];
         
-        $desc = $_POST['desc'];
+        $etiqueta = $_POST['name'];
+        $description = $_POST['desc'];
 //        $hora_ini = $_POST['hora_ini'];
 //        $fecha = $_POST['fecha'];
-        $etiqueta = $_POST['name'];
         $estado = 1; #active by default
 
         //Fecha
@@ -503,10 +504,10 @@ class ProjectsController extends ControllerBase
         //Nuevo Codigo
         $result = $model->getLastProject($session->id_tenant);
         $values = $result->fetch(PDO::FETCH_ASSOC);
-        $code = $values['code_project'];
-        $code = (int)$code + 1;
+        $new_code = $values['code_project'];
+        $new_code = (int)$new_code + 1;
         
-        $result = $model->addNewProject($session->id_tenant, $code, $etiqueta, null, $current_date, $desc);
+        $result = $model->addNewProject($session->id_tenant, $new_code, $etiqueta, null, $current_date, $description, $estado);
 
         $error = $result->errorInfo();
         $rows_n = $result->rowCount();

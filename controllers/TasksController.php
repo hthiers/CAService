@@ -398,6 +398,7 @@ class TasksController extends ControllerBase
         $error_user = null;
         $error_cust = null;
         $id_created_task = null;
+        $project = null;
 
         $new_code = $_POST['new_code'];
         $user = $_POST['resp'];
@@ -409,8 +410,8 @@ class TasksController extends ControllerBase
 //            $customer = $_POST['cbocustomer'];
         
         $desc = $_POST['descripcion'];
-        $hora_ini = $_POST['hora_ini'];
         $fecha = $_POST['fecha'];
+        $hora_ini = $_POST['hora_ini'];
         $etiqueta = $_POST['etiqueta'];
         $estado = 1; #active by default
 
@@ -420,33 +421,38 @@ class TasksController extends ControllerBase
 //        $model = new ProjectsModel();
         $model = new TasksModel();
 //        $result = $model->addNewProject($session->id_tenant, $new_code, $etiqueta, $hora_ini, $fecha, $desc);
-        $result = $model->addNewTask($session->id_tenant,$new_code, $etiqueta,$fecha,null,null,$desc );
-
+        $result = $model->addNewTask($session->id_tenant,$new_code,$etiqueta,$fecha,null,null,$desc,$estado,$project);
+        
+        $query = $result->queryString;
+        
         $error = $result->errorInfo();
         $rows_n = $result->rowCount();
-        
+
         if($error[0] == 00000 && $rows_n > 0){
 //            $id_new_project = $model->getProjectIDByCodeINT($new_code, $session->id_tenant);  ---------------------> AQUIIIIIIIIIIIIII
             $id_created_task = $model->getTaskIDByCode($session->id_tenant, $new_code);
             
-            $result_user = $model->addUserToProject($id_new_project, $session->id_user);            
-            $error_user = $result_user->errorInfo();
+//            $result_user = $model->addUserToProject($id_new_project, $session->id_user);            
+//            $result_user = $model->addUserToTask($id_created_task, $session->id_user);
+//            $error_user = $result_user->errorInfo();
             
-            if($customer != null){
-                $result_cust = $model->addCustomerToProject($id_new_project, $customer);
-                $error_cust = $result_cust->errorInfo();
-            }
+            #customer movido a pop-up de nuevo project
+//            if($customer != null){
+//                $result_cust = $model->addCustomerToProject($id_new_project, $customer);
+//                $error_cust = $result_cust->errorInfo();
+//            }
             
             #$this->projectsDt(1);
-            header("Location: ".$this->root."?controller=Projects&action=projectsDt&error_flag=1");
+            header("Location: ".$this->root."?controller=Tasks&action=tasksDt&error_flag=1");
         }
         elseif($error[0] == 00000 && $rows_n < 1){
             #$this->projectsDt(10, "Ha ocurrido un error grave!");
-            header("Location: ".$this->root."?controller=Projects&action=projectsDt&error_flag=10&message='Ha ocurrido un error grave'");
+            header("Location: ".$this->root."?controller=Tasks&action=tasksDt&error_flag=10&message='Ha ocurrido un error grave'");
         }
         else{
             #$this->projectsDt(10, "Ha ocurrido un error: ".$error[2]);
-            header("Location: ".$this->root."?controller=Projects&action=projectsDt&error_flag=10&message='Ha ocurrido un error: ".$error[2]."'");
+            header("Location: ".$this->root."?controller=Tasks&action=tasksDt&error_flag=10&message='error sql: ".$query."'");
+//            header("Location: ".$this->root."?controller=Tasks&action=tasksDt&error_flag=10&message='Ha ocurrido un error: ".$error[2]."'");
         }
     }
 

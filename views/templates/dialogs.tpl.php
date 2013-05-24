@@ -31,8 +31,8 @@
         <fieldset style="padding:0; border:0; margin-top:25px;">
             <label for="name">Nombre Proyecto</label>
             <input style="margin-bottom:12px; width:95%; padding: .4em;" type="text" name="dlgSbm_name_project" id="dlgSbm_name_project" class="text ui-widget-content ui-corner-all" value="" />
-            <label for="email">Cliente</label>
-            <input style="margin-bottom:12px; width:95%; padding: .4em;" type="text" name="dlgSbm_customer_project" id="dlgSbm_customer_project" class="text ui-widget-content ui-corner-all" value="" />
+            <label for="desc">Descripci&oacute;n</label>
+            <input style="margin-bottom:12px; width:95%; padding: .4em;" type="text" name="dlgSbm_desc_project" id="dlgSbm_desc_project" class="text ui-widget-content ui-corner-all" value="" />
             
             <input class="dlgSbmCstr" type="submit" value="GUARDAR" />
         </fieldset>
