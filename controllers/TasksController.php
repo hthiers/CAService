@@ -21,13 +21,13 @@ class TasksController extends ControllerBase
             $message = $_GET['message'];
         
         //Incluye el modelo que corresponde
-        require_once 'models/ProjectsModel.php';
-        require_once 'models/UsersModel.php';
+//        require_once 'models/ProjectsModel.php';
+//        require_once 'models/UsersModel.php';
         require_once 'models/TasksModel.php';
 
         //Creamos una instancia de nuestro "modelo"
-        $projectsModel = new ProjectsModel();
-        $userModel = new UsersModel();
+//        $projectsModel = new ProjectsModel();
+//        $userModel = new UsersModel();
         $taskModel = new TasksModel();
 
         //Le pedimos al modelo todos los items
@@ -71,17 +71,19 @@ class TasksController extends ControllerBase
         #$sTable = $model->getTableName();
         $sTable = "cas_task";
 
-        $aColumns = array('a.cas_customer_id_customer'
-                    , 'b.cas_user_id_user'
-                    , 'a.label_task'
+        $aColumns = array('a.label_task'
+                    , 'c.label_customer'
+                    , 'e.name_user'
+                    , 'b.label_project'
                     , 'a.date_ini'
                     , 'a.date_end'
                     , 'a.time_total'
                     , 'a.id_task'
-                    , 'a.id_tenant');
+                    , 'a.id_tenant'
+                    , 'b.id_project'
+                    , 'c.id_customer'
+                    , 'e.id_user');
 
-        //, 'a.desc_task'
-        
         $sIndexColumn = "code_task";
         $aTotalColumns = count($aColumns);
 
@@ -202,8 +204,18 @@ class TasksController extends ControllerBase
         $sql = "
             SELECT SQL_CALC_FOUND_ROWS ".str_replace(" , ", " ", implode(", ", $aColumns))."
             FROM $sTable a
-            LEFT OUTER JOIN cas_task_has_cas_user b
-            ON a.id_task = b.cas_task_id_task
+            LEFT OUTER JOIN cas_project b
+            ON (a.cas_project_id_project = b.id_project
+                AND 
+                a.id_tenant = b.id_tenant)
+            LEFT OUTER JOIN cas_customer c
+            ON (a.cas_customer_id_customer = c.id_customer
+                AND 
+                a.id_tenant = b.id_tenant)
+            LEFT OUTER JOIN cas_task_has_cas_user d
+            ON a.id_task = d.cas_task_id_task
+            LEFT OUTER JOIN cas_user e
+            ON d.cas_user_id_user = e.id_user
             $sWhere
             $sOrder
             $sLimit";
@@ -320,6 +332,10 @@ class TasksController extends ControllerBase
             $data['date_pause'] = $values['date_pause'];
             $data['time_paused'] = $values['time_paused'];
             $data['status_task'] = $values['status_task'];
+            $data['id_project'] = $values['cas_project_id_project'];
+            $data['id_customer'] = $values['cas_customer_id_customer'];
+            $data['id_user'] = $values['id_user'];
+            $data['name_user'] = $values['name_user'];
             
             $data['total_progress'] = $total_progress;
             $data['paused_date'] = $paused_date;
@@ -375,10 +391,14 @@ class TasksController extends ControllerBase
         $value = null;
         $value = $pdoUser->fetch(PDO::FETCH_ASSOC);
 
-        if($value != null)
+        if($value != null){
             $data['name_user'] = $value['name_user'];
-        else
+            $data['id_user'] = $value['id_user'];
+        }
+        else{
             $data['name_user'] = "ERROR";
+            $data['id_user'] = 0;
+        }
 
         $pdoCustomer = $modelCustomer->getAllCustomers($session->id_tenant);
         $data['pdoCustomer'] = $pdoCustomer;
@@ -413,9 +433,13 @@ class TasksController extends ControllerBase
 
         $new_code = $_POST['new_code'];
         $user = $_POST['resp'];
+        $id_user = $_POST['id_user'];
         
-        if(isset($_POST['cboprojects']))
-            $id_project = $_POST['cboprojects'];
+        if(isset($_POST['cboprojects'])){
+            if(is_numeric($_POST['cboprojects']) && $_POST['cboprojects'] > 0){
+                $id_project = $_POST['cboprojects'];
+            }
+        }
         
 //        if(isset($_POST['cbocustomer']))
 //            $customer = $_POST['cbocustomer'];
@@ -441,11 +465,12 @@ class TasksController extends ControllerBase
 
         if($error[0] == 00000 && $rows_n > 0){
 //            $id_new_project = $model->getProjectIDByCodeINT($new_code, $session->id_tenant); 
-            $id_created_task = $model->getTaskIDByCode($session->id_tenant, $new_code);
+            $result = $model->getTaskIDByCode($session->id_tenant, $new_code);
+            $values = $result->fetch(PDO::FETCH_ASSOC);
             
 //            $result_user = $model->addUserToProject($id_new_project, $session->id_user);            
-//            $result_user = $model->addUserToTask($id_created_task, $session->id_user);
-//            $error_user = $result_user->errorInfo();
+            $result_user = $model->addUserToTask($values['id_task'], $id_user);
+            $error_user = $result_user->errorInfo();
             
             #customer movido a pop-up de nuevo project
 //            if($customer != null){
@@ -454,7 +479,7 @@ class TasksController extends ControllerBase
 //            }
             
             #$this->projectsDt(1);
-            header("Location: ".$this->root."?controller=Tasks&action=tasksDt&error_flag=1");
+            header("Location: ".$this->root."?controller=Tasks&action=tasksDt&error_flag=10&message='".$error_user[2]."'");
         }
         elseif($error[0] == 00000 && $rows_n < 1){
             #$this->projectsDt(10, "Ha ocurrido un error grave!");

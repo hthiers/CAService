@@ -288,22 +288,22 @@ function pausaTrabajo(){
                     <table class="table_left">
                         <tr>
                             <td class="middle">Responsable</td>
-                            <td class="middle"><input readonly="readonly" class="input_box" name="resp" type="text" value="<?php echo '$name_user'; ?>" /></td>
+                            <td class="middle"><input readonly="readonly" class="input_box" name="resp" type="text" value="<?php echo $name_user; ?>" /></td>
                         </tr>
                         <tr>
                             <td class="middle">Cliente</td>
-                            <td class="middle"><input readonly="readonly" class="input_box" name="cliente" type="text" value="<?php echo '$label_customer'; ?>" /></td>
+                            <td class="middle"><input readonly="readonly" class="input_box" name="cliente" type="text" value="<?php echo $label_customer; ?>" /></td>
                         </tr>
                         <tr>
                             <td class="middle">Etiqueta</td>
                             <td class="middle">
-                                <input type="text" class="input_box" readonly="readonly" name="etiqueta" value="<?php echo '$label_project'; ?>" />
+                                <input type="text" class="input_box" readonly="readonly" name="etiqueta" value="<?php echo $label_task; ?>" />
                             </td>
                         </tr>
                         <tr>
                             <td>Descripci&oacute;n</td>
                             <td>
-                                <textarea readonly="readonly" class="input_box" name="descripcion"><?php echo '$desc_project';?></textarea>
+                                <textarea readonly="readonly" class="input_box" name="descripcion"><?php echo $desc_task;?></textarea>
                             </td>
                         </tr>
                     </table>
@@ -374,12 +374,14 @@ function pausaTrabajo(){
                 </form>
             </div>
             <div id="project-tasks-box" style="margin-top:10px">
+                <!--
                 <table style="float:none;width:100%;border-top:1px solid #ccc;">
                     <tr>
                         <td colspan="6" style="text-align: center;">Lista de tareas asignadas</td>
                     </tr>
                     
                 </table>
+                -->
             </div>
             <?php
             #else:

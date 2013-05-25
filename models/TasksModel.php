@@ -59,11 +59,26 @@ class TasksModel extends ModelBase
                     , a.time_total
                     , a.desc_task
                     , a.status_task
-                    , a.cas_project_id_project
-                    , a.cas_customer_id_customer
+                    , b.id_project
+                    , b.label_project
+                    , c.id_customer
+                    , c.label_customer
+                    , e.id_user
+                    , e.name_user
                 FROM  cas_task a
-                WHERE a.id_tenant = $id_tenant
-                ORDER BY a.label_task");
+                LEFT OUTER JOIN cas_project b
+                ON (a.cas_project_id_project = b.id_project
+                    AND 
+                    a.id_tenant = b.id_tenant)
+                LEFT OUTER JOIN cas_customer c
+                ON (a.cas_customer_id_customer = c.id_customer
+                    AND 
+                    a.id_tenant = b.id_tenant)
+                LEFT OUTER JOIN cas_task_has_cas_user d
+                ON a.id_task = d.cas_task_id_task
+                LEFT OUTER JOIN cas_user e
+                ON d.cas_user_id_user = e.id_user
+                WHERE a.id_tenant = $id_tenant");
 
         $consulta->execute();
 
@@ -92,7 +107,13 @@ class TasksModel extends ModelBase
                     , a.status_task
                     , a.cas_project_id_project
                     , a.cas_customer_id_customer
+                    , c.id_user
+                    , c.name_user
                 FROM  cas_task a
+                LEFT OUTER JOIN cas_task_has_cas_user b
+                ON a.id_task = b.cas_task_id_task
+                LEFT OUTER JOIN cas_user c
+                ON b.cas_user_id_user = c.id_user
                 WHERE a.id_tenant = $id_tenant
                   AND a.id_task = $id_task
                 ORDER BY a.label_task

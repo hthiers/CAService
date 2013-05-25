@@ -70,17 +70,17 @@ $(document).ready(function() {
         
         "aoColumnDefs": [
             { "mDataProp": null, "aTargets": [-1] },
-            //{ "bVisible": false, "aTargets": [6,7,8,9,10,11,12,13] },
+            { "bVisible": false, "aTargets": [7,8,9,10] },
             {
                 "fnRender": function ( oObj ) {
-                    return '<button id=\"button\" class=\"input\" name=\"id_task\" onclick=\"submitToForm()\" value="'+oObj.aData[6]+'">VER</button>';
+                    return '<button id=\"button\" class=\"input\" name=\"id_task\" onclick=\"submitToForm()\" value="'+oObj.aData[7]+'">VER</button>';
                 },
                 "aTargets": [-1]
             },
             {
                 "fnRender": function ( oObj ) {
-                    if(oObj.aData[5] != null){
-                        var seconds = oObj.aData[5];
+                    if(oObj.aData[6] != null){
+                        var seconds = oObj.aData[6];
                         var total = secondsToTime(seconds);
 
                         return total['h']+':'+total['m']+':'+total['s'];
@@ -89,12 +89,12 @@ $(document).ready(function() {
                         return '';
                     }
                 },
-                "aTargets": [5]
+                "aTargets": [6]
             },
         ],
         
         "sPaginationType": "full_numbers",
-        "aaSorting": [[0, "asc"]]
+        "aaSorting": [[4, "desc"]]
     });
     
     $('#cboCliente').change(function() { oTable.fnDraw(); } );
@@ -175,8 +175,10 @@ require('templates/menu.tpl.php'); #banner & menu
         ?>
 
         <!-- CUSTOM FILTROS -->
+        <!--
         <div id="dt_filtres">
         </div>
+        -->
         <!-- END CUSTOM FILTROS -->
 
         <!--
@@ -197,12 +199,17 @@ require('templates/menu.tpl.php'); #banner & menu
                 <table class="display" id="example">
                     <thead>
                         <tr class="headers">
+                            <th>ETIQUETA</th>
                             <th>CLIENTE</th>
                             <th>RESPONSABLE</th>
-                            <th>ETIQUETA</th>
+                            <th>PROYECTO</th>
                             <th>INICIO</th>
                             <th>FIN</th>
                             <th>TIEMPO</th>
+                            <th>ID TASK</th>
+                            <th>ID TENANT</th>
+                            <th>ID PROJECT</th>
+                            <th>ID CUSTOMER</th>
                             <th>OPCIONES</th>
                         </tr>
                     </thead>

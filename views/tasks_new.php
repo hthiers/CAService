@@ -353,6 +353,7 @@ if($session->id_tenant != null && $session->id_user != null):
                 <div style="clear: both;">
                     <input id="hdnPicker" type="hidden" name="fecha" value="" />
                     <input id="hdnCode" type="hidden" name="new_code" value="<?php echo $new_code; ?>" />
+                    <input id="hdnUser" type="hidden" name="id_user" value="<?php echo $id_user; ?>" />
                 </div>
             </form>
         </div>
