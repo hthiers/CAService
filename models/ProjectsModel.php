@@ -188,16 +188,20 @@ class ProjectsModel extends ModelBase
          * @param type $fecha
          * @param type $descripcion
          * @param type $estado
+         * @param type $id_customer
          * @return PDO
          */
 	public function addNewProject($id_tenant, $new_code, $etiqueta
-                , $hora_ini, $fecha, $descripcion, $estado = 1)
+                , $hora_ini, $fecha, $descripcion, $estado = 1, $id_customer)
 	{
+            $id_customer = empty($id_customer) ? "NULL" : "'$id_customer'";
+            
             $consulta = $this->db->prepare("INSERT INTO cas_project 
                         (id_project, code_project, id_tenant, label_project, date_ini, desc_project
-                        , status_project) 
+                        , status_project, date_pause, time_paused, cas_customer_id_customer) 
                             VALUES 
-                        (NULL, '$new_code', $id_tenant, '$etiqueta', '$fecha', '$descripcion', $estado)");
+                        (NULL, '$new_code', $id_tenant, '$etiqueta', '$fecha', '$descripcion', $estado
+                            , NULL, NULL, $id_customer)");
 
             $consulta->execute();
 

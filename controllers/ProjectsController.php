@@ -474,10 +474,6 @@ class ProjectsController extends ControllerBase
     public function ajaxProjectsAdd()
     {
         $session = FR_Session::singleton();
-        $description = null;
-        $customer = null;
-        $error_user = null;
-        $error_cust = null;
 
 //        $new_code = $_POST['new_code'];
 //        $user = $_POST['resp'];
@@ -485,8 +481,12 @@ class ProjectsController extends ControllerBase
 //        if(isset($_POST['cbocustomer']))
 //            $customer = $_POST['cbocustomer'];
         
-        $etiqueta = $_POST['name'];
-        $description = $_POST['desc'];
+//        $etiqueta = $_POST['name'];
+//        $description = $_POST['desc'];
+        
+        $etiqueta = $_REQUEST['name'];
+        $description = $_REQUEST['desc'];
+        
 //        $hora_ini = $_POST['hora_ini'];
 //        $fecha = $_POST['fecha'];
         $estado = 1; #active by default
@@ -507,14 +507,26 @@ class ProjectsController extends ControllerBase
         $new_code = $values['code_project'];
         $new_code = (int)$new_code + 1;
         
-        $result = $model->addNewProject($session->id_tenant, $new_code, $etiqueta, null, $current_date, $description, $estado);
+        //null customer for dialog
+        $id_customer = null;
+        
+        $result = $model->addNewProject($session->id_tenant, $new_code, $etiqueta, null, $current_date, $description, $estado, $id_customer);
 
         $error = $result->errorInfo();
         $rows_n = $result->rowCount();
         
+        //DEBUG:
+//        print_r($result);
+        
         if($error[0] == 00000 && $rows_n > 0){
 //            $id_new_project = $model->getProjectIDByCodeINT($new_code, $session->id_tenant);
             $createdProject = $model->getProjectByCode($new_code, $session->id_tenant);
+            
+            $values = $createdProject->fetch(PDO::FETCH_NUM);
+            
+            $ajax_return[0] = $values[0];
+            $ajax_return[1] = $values[3];
+            
 //            $result_user = $model->addUserToProject($id_new_project, $session->id_user);            
 //            $error_user = $result_user->errorInfo();
             
@@ -522,9 +534,6 @@ class ProjectsController extends ControllerBase
 //                $result_cust = $model->addCustomerToProject($id_new_project, $customer);
 //                $error_cust = $result_cust->errorInfo();
 //            }
-            
-            $ajax_return[0] = $createdProject->fetchColumn(0);
-            $ajax_return[1] = $createdProject->fetchColumn(3);
             
             #$this->projectsDt(1);
 //            header("Location: ".$this->root."?controller=Projects&action=projectsDt&error_flag=1");
@@ -541,6 +550,10 @@ class ProjectsController extends ControllerBase
             #$this->projectsDt(10, "Ha ocurrido un error: ".$error[2]);
 //            header("Location: ".$this->root."?controller=Projects&action=projectsDt&error_flag=10&message='Ha ocurrido un error: ".$error[2]."'");
         }
+        
+        print json_encode($ajax_return);
+        
+        return true;
     }
 
     /*

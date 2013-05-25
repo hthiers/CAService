@@ -100,9 +100,9 @@ if($session->id_tenant != null && $session->id_user != null):
         // JQDialog Submit - Add new project
         $(".dlgSbmCstr").click(function(){
             var name = $("#dlgSbm_name_project").val();
-            var customer = $("#dlgSbm_customer_project").val();
-            //var dataString = 'name='+ name + '&contact=' + contact;
-            if(name=='')
+            var desc = $("#dlgSbm_desc_project").val();
+            //var dataString = 'name='+ name + '&desc=' + desc;
+            if(name == '')
             {
                 alert("Ingrese nombre del proyecto");
             }
@@ -113,7 +113,7 @@ if($session->id_tenant != null && $session->id_user != null):
                 $.ajax({
                     type: "POST",
                     url: "?controller=projects&action=ajaxProjectsAdd",
-                    data: {name:name, customer:customer},
+                    data: {name:name, desc:desc},
                     cache: false,
                     dataType: "json"
                 }).done(function(response){
@@ -121,13 +121,14 @@ if($session->id_tenant != null && $session->id_user != null):
                         if(response[0] != 0){
                             $("#cboprojects").append('<option value="'+response[0]+'" selected="selected">'+response[1]+'</option>');       
                             //$("#flash").hide();
+                            console.log(response);
                             alert("Proyecto agregado!");
                         }
                         else
                             alert("Error: "+response[1]);
                     }
                     else{
-                        alert("Ha ocurrido un error!");
+                        alert("Ha ocurrido un error! (nulo)");
                     }
                     $("#dialog-new-project").dialog("close");
                 }).fail(function(){

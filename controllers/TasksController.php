@@ -71,14 +71,17 @@ class TasksController extends ControllerBase
         #$sTable = $model->getTableName();
         $sTable = "cas_task";
 
-        $aColumns = array('a.label_task'
-                    , 'a.desc_task'
+        $aColumns = array('a.cas_customer_id_customer'
+                    , 'b.cas_user_id_user'
+                    , 'a.label_task'
                     , 'a.date_ini'
                     , 'a.date_end'
                     , 'a.time_total'
                     , 'b.id_project'
                     , 'a.id_tenant');
 
+        //, 'a.desc_task'
+        
         $sIndexColumn = "code_task";
         $aTotalColumns = count($aColumns);
 
@@ -199,7 +202,7 @@ class TasksController extends ControllerBase
         $sql = "
             SELECT SQL_CALC_FOUND_ROWS ".str_replace(" , ", " ", implode(", ", $aColumns))."
             FROM $sTable a
-            LEFT OUTER JOIN cas_project_has_cas_task b
+            LEFT OUTER JOIN cas_task_has_cas_user b
             ON a.id_task = b.cas_task_id_task
             $sWhere
             $sOrder
@@ -422,7 +425,7 @@ class TasksController extends ControllerBase
 //        $model = new ProjectsModel();
         $model = new TasksModel();
 //        $result = $model->addNewProject($session->id_tenant, $new_code, $etiqueta, $hora_ini, $fecha, $desc);
-        $result = $model->addNewTask($session->id_tenant,$new_code,$etiqueta,$fecha,null,null,$desc,$estado,$id_project, $id_customer);
+        $result = $model->addNewTask($session->id_tenant,$new_code,$etiqueta,$fecha, $hora_ini, null,null,$desc,$estado,$id_project, $id_customer);
         
         $query = $result->queryString;
         
@@ -430,7 +433,7 @@ class TasksController extends ControllerBase
         $rows_n = $result->rowCount();
 
         if($error[0] == 00000 && $rows_n > 0){
-//            $id_new_project = $model->getProjectIDByCodeINT($new_code, $session->id_tenant);  ---------------------> AQUIIIIIIIIIIIIII
+//            $id_new_project = $model->getProjectIDByCodeINT($new_code, $session->id_tenant); 
             $id_created_task = $model->getTaskIDByCode($session->id_tenant, $new_code);
             
 //            $result_user = $model->addUserToProject($id_new_project, $session->id_user);            
