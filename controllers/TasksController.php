@@ -398,13 +398,14 @@ class TasksController extends ControllerBase
         $error_user = null;
         $error_cust = null;
         $id_created_task = null;
-        $project = null;
+        $id_project = null;
+        $id_customer = null;
 
         $new_code = $_POST['new_code'];
         $user = $_POST['resp'];
         
-        if(isset($_POST['cboproject']))
-            $project = $_POST['cboproject'];
+        if(isset($_POST['cboprojects']))
+            $id_project = $_POST['cboprojects'];
         
 //        if(isset($_POST['cbocustomer']))
 //            $customer = $_POST['cbocustomer'];
@@ -421,7 +422,7 @@ class TasksController extends ControllerBase
 //        $model = new ProjectsModel();
         $model = new TasksModel();
 //        $result = $model->addNewProject($session->id_tenant, $new_code, $etiqueta, $hora_ini, $fecha, $desc);
-        $result = $model->addNewTask($session->id_tenant,$new_code,$etiqueta,$fecha,null,null,$desc,$estado,$project);
+        $result = $model->addNewTask($session->id_tenant,$new_code,$etiqueta,$fecha,null,null,$desc,$estado,$id_project, $id_customer);
         
         $query = $result->queryString;
         
@@ -451,8 +452,8 @@ class TasksController extends ControllerBase
         }
         else{
             #$this->projectsDt(10, "Ha ocurrido un error: ".$error[2]);
-            header("Location: ".$this->root."?controller=Tasks&action=tasksDt&error_flag=10&message='error sql: ".$query."'");
-//            header("Location: ".$this->root."?controller=Tasks&action=tasksDt&error_flag=10&message='Ha ocurrido un error: ".$error[2]."'");
+//            header("Location: ".$this->root."?controller=Tasks&action=tasksDt&error_flag=10&message='error sql: ".$query."'");
+            header("Location: ".$this->root."?controller=Tasks&action=tasksDt&error_flag=10&message='Ha ocurrido un error: ".$error[2]."'");
         }
     }
 

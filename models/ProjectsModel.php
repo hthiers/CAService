@@ -10,32 +10,28 @@ class ProjectsModel extends ModelBase
             //realizamos la consulta de todos los segmentos
             $consulta = $this->db->prepare("
                     SELECT 
-                        a.id_project
-                        , a.code_project
-                        , a.id_tenant
-                        , IFNULL(c.id_user, '') as id_user
-                        , IFNULL(c.code_user, '') as code_user
-                        , IFNULL(c.name_user, '') as name_user
-                        , IFNULL(e.id_customer, '') as id_customer
-                        , IFNULL(e.label_customer, '') as name_customer
-                        , a.label_project
-                        , a.date_ini
-                        , a.date_end
-                        , a.time_total
-                        , a.desc_project
-                        , a.status_project
-                    FROM  cas_project a
-                    LEFT OUTER JOIN cas_project_has_cas_user b
-                    ON a.id_project = b.cas_project_id_project
-                    LEFT OUTER JOIN cas_user c
-                    ON (b.cas_user_id_user = c.id_user
-                        AND
-                        c.id_tenant = $id_tenant)
-                    LEFT OUTER JOIN cas_project_has_cas_customer d
-                    ON a.id_project = d.cas_project_id_project
-                    LEFT OUTER JOIN cas_customer e
-                    ON d.cas_customer_id_customer = e.id_customer
-                    WHERE a.id_tenant = $id_tenant
+                        a.id_project 
+                        , a.code_project 
+                        , a.id_tenant 
+                        , IFNULL(c.id_user, '') as id_user 
+                        , IFNULL(c.code_user, '') as code_user 
+                        , IFNULL(c.name_user, '') as name_user 
+                        , IFNULL(e.id_customer, '') as id_customer 
+                        , IFNULL(e.label_customer, '') as name_customer 
+                        , a.label_project 
+                        , a.date_ini 
+                        , a.date_end 
+                        , a.time_total 
+                        , a.desc_project 
+                        , a.status_project 
+                    FROM cas_project a 
+                    LEFT OUTER JOIN cas_project_has_cas_user b 
+                            ON a.id_project = b.cas_project_id_project 
+                    LEFT OUTER JOIN cas_user c 
+                            ON (b.cas_user_id_user = c.id_user AND c.id_tenant = $id_tenant) 
+                    LEFT OUTER JOIN cas_customer e 
+                            ON a.cas_customer_id_customer = e.id_customer 
+                    WHERE a.id_tenant = $id_tenant 
                     ORDER BY a.label_project");
 
             $consulta->execute();

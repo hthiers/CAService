@@ -259,7 +259,8 @@ if($session->id_tenant != null && $session->id_user != null):
             }
             
             print('tenant: ');
-            print($session->id_tenant);
+            print($session->id_tenant);print('<br />');
+            print_r($pdoProject);print('<br />');
 
             print('</div>');
         }
@@ -299,7 +300,6 @@ if($session->id_tenant != null && $session->id_user != null):
                             <td class="middle">
                                 <?php
                                 echo "<select class='input_box' id='cboprojects' name='cboprojects'>\n";
-                                echo "<option value='' selected='selected'>SELECCIONAR</option>\n";
                                 echo "<option value='noaplica' selected='selected'>Sin Proyecto</option>\n";
                                 while($row = $pdoProject->fetch(PDO::FETCH_ASSOC))
                                 {

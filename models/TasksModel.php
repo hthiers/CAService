@@ -26,6 +26,8 @@ class TasksModel extends ModelBase
                     , IFNULL(a.time_total, 'n/a') as time_total
                     , IFNULL(a.desc_task, 'n/a') as desc_task
                     , a.status_task
+                    , a.cas_project_id_project
+                    , a.cas_customer_id_customer
                 FROM  cas_task a
                 INNER JOIN cas_project_has_cas_task b
                 ON a.id_task = b.cas_task_id_task
@@ -57,10 +59,9 @@ class TasksModel extends ModelBase
                     , a.time_total
                     , a.desc_task
                     , a.status_task
-                    , b.cas_project_id_project
+                    , a.cas_project_id_project
+                    , a.cas_customer_id_customer
                 FROM  cas_task a
-                LEFT OUTER JOIN cas_project_has_cas_task b
-                ON a.id_task = b.cas_task_id_task
                 WHERE a.id_tenant = $id_tenant
                 ORDER BY a.label_task");
 
@@ -89,6 +90,8 @@ class TasksModel extends ModelBase
                     , a.time_total
                     , a.desc_task
                     , a.status_task
+                    , a.cas_project_id_project
+                    , a.cas_customer_id_customer
                 FROM  cas_task a
                 WHERE a.id_tenant = $id_tenant
                   AND a.id_task = $id_task
@@ -119,6 +122,8 @@ class TasksModel extends ModelBase
                     , a.time_total
                     , a.desc_task
                     , a.status_task
+                    , a.cas_project_id_project
+                    , a.cas_customer_id_customer
                 FROM  cas_task a
                 INNER JOIN cas_tenant b
                 ON a.id_tenant = b.id_tenant
@@ -150,6 +155,8 @@ class TasksModel extends ModelBase
                     , a.time_total
                     , a.desc_task
                     , a.status_task
+                    , a.cas_project_id_project
+                    , a.cas_customer_id_customer
                 FROM  cas_task A
                 INNER JOIN cas_tenant B
                 ON A.id_tenant = B.id_tenant
@@ -221,23 +228,26 @@ class TasksModel extends ModelBase
      * @param type $descripcion
      * @param type $estado
      * @param type $id_project
+     * @param type $id_customer
      * @return PDO
      */
     public function addNewTask($id_tenant, $new_code, $etiqueta
-            , $date_ini, $date_end, $time_total, $descripcion, $estado = 1, $id_project)
+            , $date_ini, $date_end, $time_total, $descripcion, $estado = 1, $id_project, $id_customer)
     {
         // force null values
         $date_end = empty($date_end) ? "NULL" : "'$date_end'";
         $time_total = empty($time_total) ? "NULL" : "'$time_total'";
         $id_project = empty($id_project) ? "NULL" : "'$id_project'";
+        $id_customer = empty($id_customer) ? "NULL" : "'$id_customer'";
         
         $consulta = $this->db->prepare("INSERT INTO cas_task 
                     (id_task, code_task, id_tenant, label_task
                     , date_ini, date_end, time_total, desc_task
-                    , status_task, cas_project_id_project) 
+                    , status_task, cas_project_id_project, cas_customer_id_customer) 
                         VALUES 
                     (NULL, '$new_code', $id_tenant, '$etiqueta'
-                        , '$date_ini', $date_end, $time_total, '$descripcion', $estado, $id_project)");
+                        , '$date_ini', $date_end, $time_total, '$descripcion'
+                        , $estado, $id_project, $id_customer)");
 
         $consulta->execute();
 
@@ -275,11 +285,13 @@ class TasksModel extends ModelBase
      * @return PDO
      */
     public function updateTask($id_tenant, $id_task, $code_task, $etiqueta
-            , $init_date, $stop_date, $total_time, $desc, $status)
+            , $init_date, $stop_date, $total_time, $desc, $status, $id_project, $id_customer)
     {
         // force null values
         $stop_date = empty($stop_date) ? "NULL" : "'$stop_date'";
         $total_time = empty($total_time) ? "NULL" : "'$total_time'";
+        $id_project = empty($id_project) ? "NULL" : "'$id_project'";
+        $id_customer = empty($id_customer) ? "NULL" : "'$id_customer'";
         
         $consulta = $this->db->prepare("UPDATE cas_task 
                     SET
@@ -290,6 +302,8 @@ class TasksModel extends ModelBase
                     , time_total = $total_time
                     , desc_task = '$desc'
                     , status_task = '$status'
+                    , cas_project_id_project = $id_project
+                    , cas_customer_id_customer = $id_customer
                     WHERE id_tenant = $id_tenant
                       AND id_task = $id_task");
 
