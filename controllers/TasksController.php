@@ -77,7 +77,7 @@ class TasksController extends ControllerBase
                     , 'a.date_ini'
                     , 'a.date_end'
                     , 'a.time_total'
-                    , 'b.id_project'
+                    , 'a.id_task'
                     , 'a.id_tenant');
 
         //, 'a.desc_task'
@@ -285,7 +285,7 @@ class TasksController extends ControllerBase
 
         $pdo = $model->getTaskById($session->id_tenant, $id_task);
         
-        $values = $pdoProject->fetch(PDO::FETCH_ASSOC);
+        $values = $pdo->fetch(PDO::FETCH_ASSOC);
         if($values != null && $values != false){
             #time
             if($values['time_total'] != null){
@@ -317,6 +317,13 @@ class TasksController extends ControllerBase
             $data['date_end'] = $values['date_end'];
             $data['time_total'] = $values['time_total'];
             $data['desc_task'] = $values['desc_task'];
+            $data['date_pause'] = $values['date_pause'];
+            $data['time_paused'] = $values['time_paused'];
+            $data['status_task'] = $values['status_task'];
+            
+            $data['total_progress'] = $total_progress;
+            $data['paused_date'] = $paused_date;
+            $data['currentTime'] = $current_date;
         }
 
         $data['titulo'] = "Tarea #";
@@ -529,6 +536,74 @@ class TasksController extends ControllerBase
         return true;
     }
 
+    public function tasksContinue()
+    {
+        $session = FR_Session::singleton();
+        $id_task = $_REQUEST['$id_task'];
+        
+        require_once 'models/TasksModel.php';
+        require_once 'models/ProjectsModel.php';
+        
+//        $model = new ProjectsModel();
+        $model = new TasksModel();
+//        $pdoProject = $model->getProjectById($id_project, $session->id_tenant);
+        $pdoModel = $model->getTaskById($id_task, $session->id_tenant);
+        $error = null;
+        $response = null;
+        
+        $values = $pdoModel->fetch(PDO::FETCH_ASSOC);
+        if($values != null && $values != false){
+            // current time
+            $now = date("Y-m-d H:i:s");
+            $currentDateTime = new DateTime($now);
+            $timezone = new DateTimeZone($session->timezone);
+            $current_date = $currentDateTime->setTimezone($timezone)->format("Y-m-d H:i:s");
+
+            // current progress
+            $total_progress = Utils::diffDates($current_date, $values['date_ini'], 'S', false);
+            
+            // paused progress
+            $paused_progress = Utils::diffDates($current_date, $values['date_pause'], 'S', false);
+            if($values['time_paused'] != null)
+                $paused_progress += $values['time_paused'];
+            
+            //normal status = 1
+            $status = 1;
+            
+//            print(Utils::formatTime($total_progress));
+//            print("<br>");
+//            print(Utils::formatTime($paused_progress));
+            
+            //pause project
+            $result = $model->updateTask($session->id_tenant, $id_task, $values['code_task']
+                    , $values['label_task'], $values['date_ini'], null
+                    , null, $values['desc_task'], $status, $id_project, $id_customer
+                    , $values['date_pause'], $paused_progress);
+            
+            if($result != null){
+                $error = $result->errorInfo();
+                if($error[0] == 00000){
+                    $response[0] = "0";
+                    $response[1] = "Exito!";
+                }
+                else {
+                    $response[0] = $error[0];
+                    $response[1] = $error[2];
+                }
+            }
+            else{
+                $response[0] = "1";
+                $response[1] = "Error grave al intentar actualizar el proyecto";
+            }
+        }
+        else{
+            $response[0] = "2";
+            $response[1] = "Error grave al intentar encontrar el proyecto pedido (ID no existe).";
+        }
+
+        print json_encode($response);
+    }
+    
     /*
      * Stop task progress
      */

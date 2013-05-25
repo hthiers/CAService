@@ -286,13 +286,15 @@ class TasksModel extends ModelBase
      * @return PDO
      */
     public function updateTask($id_tenant, $id_task, $code_task, $etiqueta
-            , $init_date, $stop_date, $total_time, $desc, $status, $id_project, $id_customer)
+            , $init_date, $stop_date, $total_time, $desc, $status, $id_project, $id_customer, $date_pause, $time_paused)
     {
         // force null values
         $stop_date = empty($stop_date) ? "NULL" : "'$stop_date'";
         $total_time = empty($total_time) ? "NULL" : "'$total_time'";
         $id_project = empty($id_project) ? "NULL" : "'$id_project'";
         $id_customer = empty($id_customer) ? "NULL" : "'$id_customer'";
+        $date_pause = empty($date_pause) ? "NULL" : "'$date_pause'";
+        $time_paused = empty($time_paused) ? "NULL" : "'$time_paused'";
         
         $consulta = $this->db->prepare("UPDATE cas_task 
                     SET
@@ -305,6 +307,8 @@ class TasksModel extends ModelBase
                     , status_task = '$status'
                     , cas_project_id_project = $id_project
                     , cas_customer_id_customer = $id_customer
+                    , date_pause = '$date_pause'
+                    , time_paused = $time_paused
                     WHERE id_tenant = $id_tenant
                       AND id_task = $id_task");
 

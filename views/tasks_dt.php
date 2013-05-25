@@ -29,7 +29,7 @@ $(document).ready(function() {
         //Initial server side params
         "bProcessing": true,
         "bServerSide": true,
-        "sAjaxSource": '?controller=projects&action=ajaxProjectsDt',
+        "sAjaxSource": '?controller=tasks&action=ajaxTasksDt',
         "fnServerData": function ( sSource, aoData, fnDrawCallback ){
             $.ajax({
                 "dataType": 'json', 
@@ -60,20 +60,20 @@ $(document).ready(function() {
         },
         
         //Custom filters params
-        "fnServerParams": function ( aoData ){
-            aoData.push(
-                { "name": "filCliente", "value": $('#cboCliente').val() },
-                { "name": "filMes", "value": $('#cboMes').val() },
-                { "name": "filEstado", "value": $('#cboEstado').val() }
-            );
-        },
+//        "fnServerParams": function ( aoData ){
+//            aoData.push(
+//                { "name": "filCliente", "value": $('#cboCliente').val() },
+//                { "name": "filMes", "value": $('#cboMes').val() },
+//                { "name": "filEstado", "value": $('#cboEstado').val() }
+//            );
+//        },
         
         "aoColumnDefs": [
             { "mDataProp": null, "aTargets": [-1] },
-            { "bVisible": false, "aTargets": [6,7,8,9,10,11,12,13] },
+            //{ "bVisible": false, "aTargets": [6,7,8,9,10,11,12,13] },
             {
                 "fnRender": function ( oObj ) {
-                    return '<button id=\"button\" class=\"input\" name=\"id_project\" onclick=\"submitToForm()\" value="'+oObj.aData[6]+'">VER</button>';
+                    return '<button id=\"button\" class=\"input\" name=\"id_task\" onclick=\"submitToForm()\" value="'+oObj.aData[6]+'">VER</button>';
                 },
                 "aTargets": [-1]
             },
@@ -179,6 +179,18 @@ require('templates/menu.tpl.php'); #banner & menu
         </div>
         <!-- END CUSTOM FILTROS -->
 
+        <!--
+        ...
+        <th>ID PROJECT</th>
+        <th>CODE PROJECT</th>
+        <th>ID TENANT</th>
+        <th>ID USER</th>
+        <th>CODE USER</th>
+        <th>ID CUSTOMER</th>
+        <th>DESC PROJECT</th>
+        <th>STATUS PROJECT</th>
+        -->
+        
         <!-- DATATABLE -->
         <div id="dynamic">
             <form id="dt_form" method="POST" action="<?php echo "?controller=".$controller."&amp;action=".$action;?>">
@@ -191,14 +203,6 @@ require('templates/menu.tpl.php'); #banner & menu
                             <th>INICIO</th>
                             <th>FIN</th>
                             <th>TIEMPO</th>
-                            <th>ID PROJECT</th>
-                            <th>CODE PROJECT</th>
-                            <th>ID TENANT</th>
-                            <th>ID USER</th>
-                            <th>CODE USER</th>
-                            <th>ID CUSTOMER</th>
-                            <th>DESC PROJECT</th>
-                            <th>STATUS PROJECT</th>
                             <th>OPCIONES</th>
                         </tr>
                     </thead>
