@@ -328,7 +328,7 @@ class TasksModel extends ModelBase
                     , status_task = '$status'
                     , cas_project_id_project = $id_project
                     , cas_customer_id_customer = $id_customer
-                    , date_pause = '$date_pause'
+                    , date_pause = $date_pause
                     , time_paused = $time_paused
                     WHERE id_tenant = $id_tenant
                       AND id_task = $id_task");

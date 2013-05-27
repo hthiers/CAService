@@ -166,7 +166,7 @@ function iniTrabajo(){
     $('#btn_play').attr('disabled', 'disabled');
     $('#btn_pause').removeAttr('disabled');
     
-    var id_project = "<?php echo $id_project;?>";
+    var id_task = "<?php echo $id_task;?>";
     
     $.ajax({
         type: "POST",
@@ -221,6 +221,7 @@ function pausaTrabajo(){
             }
         }
         else{
+            console.log(response);
             alert("response null");
         }
     }).fail(function(jqXHR, textStatus){
@@ -369,7 +370,7 @@ function pausaTrabajo(){
                         <?php endif; ?>
                     </table>
                     <div style="clear: both;">
-                        <input type="hidden" name="id_project" value="<?php echo $id_task; ?>" />
+                        <input type="hidden" name="id_task" value="<?php echo $id_task; ?>" />
                     </div>
                 </form>
             </div>

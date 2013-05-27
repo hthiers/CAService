@@ -285,7 +285,7 @@ class TasksController extends ControllerBase
     /**
      * show project info 
      */
-    public function TasksView()
+    public function tasksView()
     {
         $session = FR_Session::singleton();
 
@@ -351,7 +351,7 @@ class TasksController extends ControllerBase
     /*
      * Show new project form 
      */
-    public function TasksNewForm(){
+    public function tasksNewForm(){
         $session = FR_Session::singleton();
 
         require_once 'models/ProjectsModel.php';
@@ -479,7 +479,7 @@ class TasksController extends ControllerBase
 //            }
             
             #$this->projectsDt(1);
-            header("Location: ".$this->root."?controller=Tasks&action=tasksDt&error_flag=10&message='".$error_user[2]."'");
+            header("Location: ".$this->root."?controller=Tasks&action=tasksDt&error_flag=1");
         }
         elseif($error[0] == 00000 && $rows_n < 1){
             #$this->projectsDt(10, "Ha ocurrido un error grave!");
@@ -561,6 +561,71 @@ class TasksController extends ControllerBase
         return true;
     }
 
+    public function tasksPause()
+    {
+        $session = FR_Session::singleton();
+        $id_task = $_REQUEST['id_task'];
+        
+        require_once 'models/TasksModel.php';
+        require_once 'models/ProjectsModel.php';
+        
+//        $model = new ProjectsModel();
+        $modelTask = new TasksModel();
+//        $pdoProject = $model->getProjectById($id_project, $session->id_tenant);
+        $pdoTask = $modelTask->getTaskById($session->id_tenant, $id_task);
+        $error = null;
+        $response = null;
+        $total_real_time = null;
+        
+        $values = $pdoTask->fetch(PDO::FETCH_ASSOC);
+        if($values != null && $values != false){
+            // current time
+            $now = date("Y-m-d H:i:s");
+            $currentDateTime = new DateTime($now);
+            $timezone = new DateTimeZone($session->timezone);
+            $current_date = $currentDateTime->setTimezone($timezone)->format("Y-m-d H:i:s");
+
+            // total time (s)
+            $total_progress = Utils::diffDates($current_date, $values['date_ini'], 'S');
+            
+            // total real time (s)
+            if($values['time_paused'] != null && empty($values['time_paused']) == false){
+                $total_real_progress = $total_progress - $values['time_paused'];
+            }
+            else
+                $total_real_progress = $total_progress;
+
+            //paused status = 3
+            $status = 3;
+
+            //pause project
+            $result = $modelTask->updateTask($session->id_tenant, $id_task, $values['code_task'], $values['label_task'], $values['date_ini'], null, null, $values['desc_task'], $status, $values['cas_project_id_project'], $values['cas_customer_id_customer'], $current_date, $values['time_paused']);
+
+            if($result != null){
+                $error = $result->errorInfo();
+                if($error[0] == 00000){
+                    $response[0] = "0";
+                    $response[1] = "Exito!";
+                }
+                else {
+                    $response[0] = $error[0];
+                    $response[1] = $error[2];
+                    $response[2] = $result->queryString;
+                }
+            }
+            else{
+                $response[0] = "1";
+                $response[1] = "Error grave al intentar actualizar el proyecto";
+            }
+        }
+        else{
+            $response[0] = "2";
+            $response[1] = "Error grave al intentar encontrar el proyecto pedido (ID no existe).";
+        }
+
+        print json_encode($response);
+    }
+    
     public function tasksContinue()
     {
         $session = FR_Session::singleton();
