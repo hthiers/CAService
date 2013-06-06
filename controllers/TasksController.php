@@ -288,6 +288,7 @@ class TasksController extends ControllerBase
     public function tasksView()
     {
         $session = FR_Session::singleton();
+        $paused_date = null;
 
         $id_task = $_POST['id_task'];
         $session->id_task = $id_task;
@@ -319,6 +320,17 @@ class TasksController extends ControllerBase
             #current progress
             $total_progress = Utils::diffDates($current_date, $values['date_ini'], 'S', false);
             $data['total_progress'] = $total_progress;
+            
+            #paused time
+            if($values['time_paused'] != null){
+                // real progress as total-paused (s)
+                $total_progress = $total_progress - $values['time_paused'];
+                
+                // date until pause
+                $paused_date = Utils::diffDates($values['date_pause'], $values['date_ini'], 'S', false);
+                $paused_date = $paused_date - $values['time_paused'];
+                
+            }
             
             #data
             $data['id_task'] = $values['id_task'];
@@ -726,11 +738,20 @@ class TasksController extends ControllerBase
             $result = $model->getTaskById($session->id_tenant, $id_task);
             $values = $result->fetch(PDO::FETCH_ASSOC);
 
-            $init_date = $values['date_ini'];
-            $total_time = Utils::diffDates($stop_date, $init_date, 'S', false);
+            #tiempo pausa
+            $paused_time = Utils::diffDates($stop_date, $values['date_pause'], 'S', FALSE);
+            if($values['time_paused'] != null)
+                $paused_time += $values['time_paused'];
 
+            #tiempo total
+            $last_time = Utils::diffDates($stop_date, $values['date_ini'], 'S', FALSE);
+            $total_time = $last_time - $paused_time;
+            
+            #stop tarea
             $result = $model->updateTask($session->id_tenant, $id_task, $values['code_task']
-                    , $values['label_task'], $values['date_ini'], $stop_date, $total_time, $values['desc_task'], 2);
+                    , $values['label_task'], $values['date_ini'], $stop_date, $total_time
+                    , $values['desc_task'], 2, $id_project, $values['cas_customer_id_customer']
+                    , $values['date_pause'], $values['time_paused']);
 
             if($result != null){
                 $error = $result->errorInfo();
@@ -755,7 +776,6 @@ class TasksController extends ControllerBase
             header("Location: ".$this->root."?controller=Projects&action=projectsDt&error_flag=10&message='Ha ocurrido un error grave!");
         }
     }
-    
     
     
     

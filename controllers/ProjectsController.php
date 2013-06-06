@@ -299,7 +299,7 @@ class ProjectsController extends ControllerBase
                 $data['time_m'] = $time_m;
                 $data['time_h'] = $time_h;
             }
-            
+
             // current time
             $now = date("Y-m-d H:i:s");
             $currentDateTime = new DateTime($now);

@@ -109,6 +109,8 @@ class TasksModel extends ModelBase
                     , a.cas_customer_id_customer
                     , c.id_user
                     , c.name_user
+                    , a.date_pause
+                    , a.time_paused
                 FROM  cas_task a
                 LEFT OUTER JOIN cas_task_has_cas_user b
                 ON a.id_task = b.cas_task_id_task
@@ -307,7 +309,8 @@ class TasksModel extends ModelBase
      * @return PDO
      */
     public function updateTask($id_tenant, $id_task, $code_task, $etiqueta
-            , $init_date, $stop_date, $total_time, $desc, $status, $id_project, $id_customer, $date_pause, $time_paused)
+            , $init_date, $stop_date, $total_time, $desc, $status, $id_project, $id_customer
+            , $date_pause, $time_paused)
     {
         // force null values
         $stop_date = empty($stop_date) ? "NULL" : "'$stop_date'";
