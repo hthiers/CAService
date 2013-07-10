@@ -644,7 +644,7 @@ class TasksController extends ControllerBase
     public function tasksContinue()
     {
         $session = FR_Session::singleton();
-        $id_task = $_REQUEST['$id_task'];
+        $id_task = $_REQUEST['id_task'];
         
         require_once 'models/TasksModel.php';
         require_once 'models/ProjectsModel.php';
@@ -652,58 +652,65 @@ class TasksController extends ControllerBase
 //        $model = new ProjectsModel();
         $model = new TasksModel();
 //        $pdoProject = $model->getProjectById($id_project, $session->id_tenant);
-        $pdoModel = $model->getTaskById($id_task, $session->id_tenant);
+        $pdoModel = $model->getTaskById($session->id_tenant, $id_task);
         $error = null;
         $response = null;
         
-        $values = $pdoModel->fetch(PDO::FETCH_ASSOC);
-        if($values != null && $values != false){
-            // current time
-            $now = date("Y-m-d H:i:s");
-            $currentDateTime = new DateTime($now);
-            $timezone = new DateTimeZone($session->timezone);
-            $current_date = $currentDateTime->setTimezone($timezone)->format("Y-m-d H:i:s");
+        if($pdoModel != null){
+            $values = $pdoModel->fetch(PDO::FETCH_ASSOC);
+            if($values != false){
+                // current time
+                $now = date("Y-m-d H:i:s");
+                $currentDateTime = new DateTime($now);
+                $timezone = new DateTimeZone($session->timezone);
+                $current_date = $currentDateTime->setTimezone($timezone)->format("Y-m-d H:i:s");
 
-            // current progress
-            $total_progress = Utils::diffDates($current_date, $values['date_ini'], 'S', false);
-            
-            // paused progress
-            $paused_progress = Utils::diffDates($current_date, $values['date_pause'], 'S', false);
-            if($values['time_paused'] != null)
-                $paused_progress += $values['time_paused'];
-            
-            //normal status = 1
-            $status = 1;
-            
-//            print(Utils::formatTime($total_progress));
-//            print("<br>");
-//            print(Utils::formatTime($paused_progress));
-            
-            //pause project
-            $result = $model->updateTask($session->id_tenant, $id_task, $values['code_task']
-                    , $values['label_task'], $values['date_ini'], null
-                    , null, $values['desc_task'], $status, $id_project, $id_customer
-                    , $values['date_pause'], $paused_progress);
-            
-            if($result != null){
-                $error = $result->errorInfo();
-                if($error[0] == 00000){
-                    $response[0] = "0";
-                    $response[1] = "Exito!";
+                // current progress
+                $total_progress = Utils::diffDates($current_date, $values['date_ini'], 'S', false);
+
+                // paused progress
+                $paused_progress = Utils::diffDates($current_date, $values['date_pause'], 'S', false);
+                if($values['time_paused'] != null)
+                    $paused_progress += $values['time_paused'];
+
+                //normal status = 1
+                $status = 1;
+
+    //            print(Utils::formatTime($total_progress));
+    //            print("<br>");
+    //            print(Utils::formatTime($paused_progress));
+
+                //pause project
+                $result = $model->updateTask($session->id_tenant, $id_task, $values['code_task']
+                        , $values['label_task'], $values['date_ini'], null
+                        , null, $values['desc_task'], $status, $id_project, $id_customer
+                        , $values['date_pause'], $paused_progress);
+
+                if($result != null){
+                    $error = $result->errorInfo();
+                    if($error[0] == 00000){
+                        $response[0] = "0";
+                        $response[1] = "Exito!";
+                    }
+                    else {
+                        $response[0] = $error[0];
+                        $response[1] = $error[2];
+                    }
                 }
-                else {
-                    $response[0] = $error[0];
-                    $response[1] = $error[2];
+                else{
+                    $response[0] = "1";
+                    $response[1] = "Error grave al intentar actualizar el proyecto";
                 }
             }
             else{
-                $response[0] = "1";
-                $response[1] = "Error grave al intentar actualizar el proyecto";
+                $errorSearch = $pdoModel->errorInfo();
+                $response[0] = "2";
+                $response[1] = "Error FETCH: ".print_r($values);
             }
         }
         else{
             $response[0] = "2";
-            $response[1] = "Error grave al intentar encontrar el proyecto pedido (ID no existe).";
+            $response[1] = "Error PDO NULO";
         }
 
         print json_encode($response);

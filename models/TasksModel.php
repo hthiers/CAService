@@ -116,14 +116,15 @@ class TasksModel extends ModelBase
                 ON a.id_task = b.cas_task_id_task
                 LEFT OUTER JOIN cas_user c
                 ON b.cas_user_id_user = c.id_user
-                WHERE a.id_tenant = $id_tenant
-                  AND a.id_task = $id_task
+                WHERE a.id_tenant = ?
+                  AND a.id_task = ?
                 ORDER BY a.label_task
                 LIMIT 1");
 
-        $consulta->execute();
-
-        return $consulta;
+        if($consulta->execute(array($id_tenant, $id_task)))
+            return $consulta;
+        else
+            return null;
     }
 
     /**

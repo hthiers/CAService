@@ -130,10 +130,10 @@ function iniTrabajo(){
                 $('#btn_pause').attr('disabled', 'disabled');
 
 //                alert("Trabajo activado!");
-                window.location.replace("?controller=tasks&action=tasksView&id_task=<?php echo $id_task;?>");
+//                window.location.replace("?controller=tasks&action=tasksView&id_task=<?php echo $id_task;?>");
             }
             else{
-                alert("sql error");
+                alert("sql error: "+response[1]);
             }
         }
         else{
