@@ -101,65 +101,13 @@ $(document).ready(function(){
             customClock(tiempo_string);
         else if(status == 3){
             var paused_seconds = <?php if($paused_date == null): echo 0; else: echo $paused_date; endif;?>;
+            console.log("paused!");
             console.log(paused_seconds);
             var paused_array = secondsToTime(paused_seconds);
             var paused_string = paused_array['h']+':'+paused_array['m']+':'+paused_array['s'];
             $('#progress_clock').val(paused_string);
         }
     }
-
-    // JQDialog open link
-    $( "#link-dialog" ).click(function() {
-        $( "#dialog-projectTask" ).dialog( "open" );
-    });
-
-    // JQDialog Submit - Add new task to project
-//    $(".dlgSbmCstr").click(function(){
-//        var label = $("#dlgSbm_name_task").val();
-//        var desc = $("#dlgSbm_desc_task").val();
-//        var id_project = <?php #echo $id_project;?>;
-//        if(label=='')
-//        {
-//            alert("Debe ingresar un nombre");
-//        }
-//        else
-//        {
-//            //$("#flash").show();
-//            //$("#flash").fadeIn(400).html('<img src="ajax-loader.gif" align="absmiddle"> loading.....');
-//            $.ajax({
-//                type: "POST",
-//                url: "?controller=projects&action=ajaxProjectsAddTask",
-//                data: {label:label, desc:desc, id_project:id_project},
-//                cache: false,
-//                dataType: "json"
-//            }).done(function(response){
-//                if(response != null){
-//                    if(response[0] != 0){
-////                            console.log('resp:'+response[0]+', '+response[1]);
-////                            console.log(response);
-//                        window.location.replace("?controller=projects&action=projectsView&id_project=<?php #echo $id_project;?>");
-////                            location.reload();
-////                            $("#cbocustomers").append('<option value="'+response[0]+'" selected="selected">'+response[1]+'</option>');
-//                        //$("#flash").hide();
-////                            alert("Tarea agregada!");
-//                    }
-//                    else
-//                        alert("Error: "+response[1]);
-//                }
-//                else{
-////                        console.log(response);
-//                    alert("Ha ocurrido un error!..."+response);
-//                    $("#dialog-form").dialog("close");
-//                }
-//                $("#dialog-form").dialog("close");
-//            }).fail(function(){
-//                alert("Ha ocurrido un error!");
-//                $("#dialog-form").dialog("close");
-//            });
-//        }
-//
-//        return false;
-//    });
 });
 
 function iniTrabajo(){
@@ -246,15 +194,18 @@ function pausaTrabajo(){
         if($debugMode)
         {
             print('<div id="debugbox">');
+            
             print("tenant: ".$session->id_tenant.", user: ".$session->id_user."<br/>");
             print($titulo); print('<br />');
             print_r($pdo); print('<br />');
-            
-            
-            
+                                  
             print(strtotime($date_ini));print('<br />');
             print(strtotime($currentTime));print('<br />');
             print($total_progress);print('<br />');
+            print("paused_date: ".$paused_date);print('<br />');
+            
+            print('<br />'); print("system: ".$system_message); print('<br />');
+            
             print('</div>');
         }
         ?>

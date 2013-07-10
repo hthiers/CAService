@@ -322,11 +322,11 @@ class TasksController extends ControllerBase
             $data['total_progress'] = $total_progress;
             
             #paused time
-            if($values['time_paused'] != null){
-                // real progress as total-paused (s)
+            if($values['status_task'] == 3){
+                #real progress as total-paused (s)
                 $total_progress = $total_progress - $values['time_paused'];
                 
-                // date until pause
+                #date until pause
                 $paused_date = Utils::diffDates($values['date_pause'], $values['date_ini'], 'S', false);
                 $paused_date = $paused_date - $values['time_paused'];
                 
@@ -356,7 +356,7 @@ class TasksController extends ControllerBase
 
         $data['titulo'] = "Tarea #";
         $data['pdo'] = $pdo;
-
+        
         $this->view->show("tasks_view.php", $data);
     }
 
@@ -611,7 +611,10 @@ class TasksController extends ControllerBase
             $status = 3;
 
             //pause project
-            $result = $modelTask->updateTask($session->id_tenant, $id_task, $values['code_task'], $values['label_task'], $values['date_ini'], null, null, $values['desc_task'], $status, $values['cas_project_id_project'], $values['cas_customer_id_customer'], $current_date, $values['time_paused']);
+            $result = $modelTask->updateTask($session->id_tenant, $id_task, $values['code_task']
+                    , $values['label_task'], $values['date_ini'], null, null, $values['desc_task']
+                    , $status, $values['cas_project_id_project'], $values['cas_customer_id_customer']
+                    , $current_date, $values['time_paused']);
 
             if($result != null){
                 $error = $result->errorInfo();
