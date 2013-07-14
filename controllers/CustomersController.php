@@ -327,7 +327,37 @@ class CustomersController extends ControllerBase
         endif;
     }
 
-    
+    /**
+     * show project info 
+     */
+    public function customersView()
+    {
+        $session = FR_Session::singleton();
+        $paused_date = null;
+
+        $id_customer = $_REQUEST['id_customer'];
+        $session->id_customer = $id_customer;
+
+        require_once 'models/CustomersModel.php';
+        $model = new CustomersModel();
+
+        $pdo = $model->getCustomerById($session->id_tenant, $id_customer);
+        
+        $values = $pdo->fetch(PDO::FETCH_ASSOC);
+        if($values != null && $values != false){
+            #data
+            $data['id_customer'] = $values['id_customer'];
+            $data['code_customer'] = $values['code_customer'];
+            $data['id_tenant'] = $values['id_tenant'];
+            $data['label_customer'] = $values['label_customer'];
+            $data['detail_customer'] = $values['detail_customer'];
+        }
+
+        $data['titulo'] = "Customer #";
+        $data['pdo'] = $pdo;
+
+        $this->view->show("customers_view.php", $data);
+    }
     
     /*************************
     * OLD STUFF
