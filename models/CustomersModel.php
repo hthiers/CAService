@@ -90,7 +90,7 @@ class CustomersModel extends ModelBase
                                     , id_tenant
                                     , label_customer
                                     , detail_customer
-                                FROM t_cliente a
+                                FROM cas_customer a
                                 WHERE id_customer = '$id_customer'
                                   and id_tenant = $id_tenant");
             
