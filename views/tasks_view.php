@@ -133,6 +133,7 @@ function iniTrabajo(){
                 $('#btn_play').attr('disabled', 'disabled');
 
                 console.log("Trabajo activado!");
+                current_time = $('#progress_clock').val();
                 customClock(current_time);
             }
             else{
