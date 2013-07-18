@@ -63,6 +63,8 @@ if($session->id_tenant != null && $session->id_user != null):
 <script type="text/javascript" language="javascript" src="views/lib/utils.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
+    var current_time = "";
+    
     $('.input_box').attr('disabled', 'disabled');
 //    $('#btn_play').attr('disabled', 'disabled');
 
@@ -97,12 +99,13 @@ $(document).ready(function(){
         var tiempo_array = secondsToTime(total_progress);
         var tiempo_string = tiempo_array['h']+':'+tiempo_array['m']+':'+tiempo_array['s'];
         
-        if(status == 1)
+        //active
+        if(status == 1){
             customClock(tiempo_string);
+        }
+        //paused
         else if(status == 3){
             var paused_seconds = <?php if($paused_date == null): echo 0; else: echo $paused_date; endif;?>;
-            console.log("paused!");
-            console.log(paused_seconds);
             var paused_array = secondsToTime(paused_seconds);
             var paused_string = paused_array['h']+':'+paused_array['m']+':'+paused_array['s'];
             $('#progress_clock').val(paused_string);
@@ -126,11 +129,11 @@ function iniTrabajo(){
         if(response !== null){
             console.log(response);
             if(response[0] === "0"){
-                $('#btn_play').removeAttr('disabled');
-                $('#btn_pause').attr('disabled', 'disabled');
+                $('#btn_pause').removeAttr('disabled');
+                $('#btn_play').attr('disabled', 'disabled');
 
-//                alert("Trabajo activado!");
-//                window.location.replace("?controller=tasks&action=tasksView&id_task=<?php echo $id_task;?>");
+                console.log("Trabajo activado!");
+                customClock(current_time);
             }
             else{
                 alert("sql error: "+response[1]);
@@ -161,8 +164,10 @@ function pausaTrabajo(){
 //                $("#flash").hide();
                 $('#btn_play').removeAttr('disabled');
                 $('#btn_pause').attr('disabled', 'disabled');
-
-                window.location.replace("?controller=tasks&action=tasksView&id_task=<?php echo $id_task;?>");
+                
+                console.log("task paused!");
+                current_time = $('#progress_clock').val();
+                clearTimeout(timeout);
             }
             else{
                 alert("sql error");

@@ -4,6 +4,7 @@
  */
 
 var customClock;
+var timeout = 0;
 
 /**
  * Round UP by number of decimals
@@ -78,7 +79,7 @@ function formatTime(seconds)
 customClock = (function() {
 
   var timeDiff;
-  var timeout;
+//  var timeout;
   var timeHours = 0;
   var timeArray = new Array;
 
