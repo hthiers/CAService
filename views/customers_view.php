@@ -53,26 +53,24 @@ if($session->id_tenant != null && $session->id_user != null):
 </style>
 <script type="text/javascript" language="javascript" src="views/lib/jquery.dataTables.min.js"></script>
 <script type="text/javascript" language="javascript" src="views/lib/utils.js"></script>
-<script>
-var action_type = <?php echo $action_type;?>
-</script>
-            
 <script type="text/javascript">
 $(document).ready(function(){
+    var action_type = 0;
+    action_type = <?php echo $action_type;?>;
+    console.log("valor action " + action_type);
     
-    alert("valor action" + action_type);
-    if(action_type == 1){
-        alert("entre por 1");
+    if(action_type === 1){
+        console.log("entre por 1");
         $('.input_box').attr('disabled', 'disabled');
-        alert("pasé por 1");
+        console.log("pasé por 1");
     }
-    else if(action_type == 2){
-        alert("entre por 2");
+    else if(action_type === 2){
+        console.log("entre por 2");
         $('.input_box').removeAttr('disabled');
         $('.input_box').removeAttr('readonly');
-        alert("pasé por 2");
+        console.log("pasé por 2");
     }
-    alert(action_type);
+//    alert(action_type);
 });
 </script>
 

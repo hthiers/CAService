@@ -353,7 +353,7 @@ class CustomersController extends ControllerBase
             $data['detail_customer'] = $values['detail_customer'];
         }
         
-        $data['action_type'] = 1;
+        $data['action_type'] = $id_customer;
         $data['titulo'] = "Customer #";
         $data['pdo'] = $pdo;
 
