@@ -319,17 +319,17 @@ class TasksController extends ControllerBase
             
             #current progress
             $total_progress = Utils::diffDates($current_date, $values['date_ini'], 'S', false);
-            $data['total_progress'] = $total_progress;
-            
+
             #paused time
-            if($values['status_task'] == 3){
+            if($values['date_pause'] != null){
                 #real progress as total-paused (s)
-                $total_progress = $total_progress - $values['time_paused'];
+//                if($values['time_paused'] != null)
+//                    $total_progress = $total_progress - $values['time_paused'];
                 
                 #date until pause
                 $paused_date = Utils::diffDates($values['date_pause'], $values['date_ini'], 'S', false);
-                $paused_date = $paused_date - $values['time_paused'];
-                
+//                $total_progress = $paused_date;
+//                $paused_date = $paused_date - $values['time_paused'];
             }
             
             #data
@@ -618,9 +618,12 @@ class TasksController extends ControllerBase
 
             if($result != null){
                 $error = $result->errorInfo();
+                $num_filas = $result->rowCount();
                 if($error[0] == 00000){
                     $response[0] = "0";
                     $response[1] = "Exito!";
+                    $response[2] = "filas: ".$num_filas;
+                    $response[3] = $result->queryString;
                 }
                 else {
                     $response[0] = $error[0];
@@ -683,7 +686,7 @@ class TasksController extends ControllerBase
                 //pause project
                 $result = $model->updateTask($session->id_tenant, $id_task, $values['code_task']
                         , $values['label_task'], $values['date_ini'], null
-                        , null, $values['desc_task'], $status, $id_project, $id_customer
+                        , null, $values['desc_task'], $status, null, null
                         , $values['date_pause'], $paused_progress);
 
                 if($result != null){

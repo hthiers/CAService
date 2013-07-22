@@ -96,16 +96,25 @@ $(document).ready(function(){
 
     // Set timer
     if(total_progress > 0){
-        var tiempo_array = secondsToTime(total_progress);
-        var tiempo_string = tiempo_array['h']+':'+tiempo_array['m']+':'+tiempo_array['s'];
-        
         //active
-        if(status == 1){
+        if(status === 1){
+            console.log("continued");
+            console.log("$pasued_date: <?php echo $paused_date;?>");
+            console.log("$time_paused: <?php echo $time_paused;?>");
+            
+            var tiempo_array = secondsToTime(total_progress);
+            var tiempo_string = tiempo_array['h']+':'+tiempo_array['m']+':'+tiempo_array['s'];
             customClock(tiempo_string);
         }
         //paused
-        else if(status == 3){
+        else if(status === 3){
+            console.log("paused");
+            console.log("$pasued_date: <?php echo $paused_date;?>");
+            console.log("$time_paused: <?php echo $time_paused;?>");
+            
             var paused_seconds = <?php if($paused_date == null): echo 0; else: echo $paused_date; endif;?>;
+            console.log(paused_seconds);
+            
             var paused_array = secondsToTime(paused_seconds);
             var paused_string = paused_array['h']+':'+paused_array['m']+':'+paused_array['s'];
             $('#progress_clock').val(paused_string);
