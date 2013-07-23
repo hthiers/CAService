@@ -322,14 +322,10 @@ class TasksController extends ControllerBase
 
             #paused time
             if($values['date_pause'] != null){
-                #real progress as total-paused (s)
-//                if($values['time_paused'] != null)
-//                    $total_progress = $total_progress - $values['time_paused'];
+                $total_progress = $total_progress - $values['time_paused'];
                 
-                #date until pause
                 $paused_date = Utils::diffDates($values['date_pause'], $values['date_ini'], 'S', false);
-//                $total_progress = $paused_date;
-//                $paused_date = $paused_date - $values['time_paused'];
+                $paused_date = $paused_date - $values['time_paused'];
             }
             
             #data
@@ -339,7 +335,7 @@ class TasksController extends ControllerBase
             $data['label_task'] = $values['label_task'];
             $data['date_ini'] = $values['date_ini'];
             $data['date_end'] = $values['date_end'];
-            $data['time_total'] = $values['time_total'];
+            $data['time_total'] = $values['time_total']; 
             $data['desc_task'] = $values['desc_task'];
             $data['date_pause'] = $values['date_pause'];
             $data['time_paused'] = $values['time_paused'];
