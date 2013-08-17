@@ -63,6 +63,7 @@ $(document).ready(function(){
     <!-- END CENTRAL -->
     
     <div id="ads">
+        &nbsp;
     </div>
 
 <!-- FOOTER -->
