@@ -291,7 +291,7 @@ function pausaTrabajo(){
                                 <br /><br />
                                 <input id="btn_play" class="time_control" type="button" value="INICIO" disabled="disabled" />
                                 <input id="btn_pause" class="time_control" type="button" value="PAUSA" />
-                                <input id="btn_stop" class="time_control" type="button" value="TERMINAR" />
+                                <!--<input id="btn_stop" class="time_control" type="button" value="TERMINAR" />-->
                             </td>
                         </tr>
                         <?php elseif($status_task == 1 && strtotime($currentTime) < strtotime($date_ini)):?>
@@ -300,7 +300,7 @@ function pausaTrabajo(){
                                 <br /><br />
                                 <input id="btn_play" class="time_control" type="button" value="INICIO" />
                                 <input id="btn_pause" class="time_control" type="button" value="PAUSA" disabled="disabled" />
-                                <input id="btn_stop" class="time_control" type="button" value="TERMINAR" disabled="disabled" />
+                                <!--<input id="btn_stop" class="time_control" type="button" value="TERMINAR" disabled="disabled" />-->
                             </td>
                         </tr>
                         <?php elseif($status_task == 3 && strtotime($currentTime) > strtotime($date_ini)):?>
@@ -315,7 +315,7 @@ function pausaTrabajo(){
                                 <br /><br />
                                 <input id="btn_play" class="time_control" type="button" value="INICIO" />
                                 <input id="btn_pause" class="time_control" type="button" value="PAUSA" disabled="disabled" />
-                                <input id="btn_stop" class="time_control" type="button" value="TERMINAR" />
+                                <!--<input id="btn_stop" class="time_control" type="button" value="TERMINAR" />-->
                             </td>
                         </tr>
                         <?php else: ?>
