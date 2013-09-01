@@ -279,7 +279,9 @@ function pausaTrabajo(){
                             <td class="middle">Fecha inicio</td>
                             <td class="middle"><input readonly="readonly" class="input_box" name="fecha_ini" type="text" value="<?php echo $date_ini; ?>" /></td>
                         </tr>
-                        <?php if($status_task == 1 && strtotime($currentTime) > strtotime($date_ini)): ?>
+                        <?php 
+                        // Active and on time
+                        if($status_task == 1 && strtotime($currentTime) > strtotime($date_ini)): ?>
                         <tr>
                             <td class="middle">Tiempo transcurrido</td>
                             <td class="middle">
@@ -291,19 +293,23 @@ function pausaTrabajo(){
                                 <br /><br />
                                 <input id="btn_play" class="time_control" type="button" value="INICIO" disabled="disabled" />
                                 <input id="btn_pause" class="time_control" type="button" value="PAUSA" />
-                                <!--<input id="btn_stop" class="time_control" type="button" value="TERMINAR" />-->
+                                <input id="btn_stop" class="time_control" type="button" value="TERMINAR" />
                             </td>
                         </tr>
-                        <?php elseif($status_task == 1 && strtotime($currentTime) < strtotime($date_ini)):?>
+                        <?php 
+                        // Active and scheduled in future
+                        elseif($status_task == 1 && strtotime($currentTime) < strtotime($date_ini)):?>
                         <tr>
                             <td colspan="2" style="text-align: center;">Control de tiempo 
                                 <br /><br />
-                                <input id="btn_play" class="time_control" type="button" value="INICIO" />
+                                <input id="btn_play" class="time_control" type="button" value="INICIO" disabled="disabled" />
                                 <input id="btn_pause" class="time_control" type="button" value="PAUSA" disabled="disabled" />
-                                <!--<input id="btn_stop" class="time_control" type="button" value="TERMINAR" disabled="disabled" />-->
+                                <input id="btn_stop" class="time_control" type="button" value="TERMINAR" disabled="disabled" />
                             </td>
                         </tr>
-                        <?php elseif($status_task == 3 && strtotime($currentTime) > strtotime($date_ini)):?>
+                        <?php 
+                        // Paused
+                        elseif($status_task == 3 && strtotime($currentTime) > strtotime($date_ini)):?>
                         <tr>
                             <td class="middle">Tiempo transcurrido</td>
                             <td class="middle">
@@ -315,10 +321,12 @@ function pausaTrabajo(){
                                 <br /><br />
                                 <input id="btn_play" class="time_control" type="button" value="INICIO" />
                                 <input id="btn_pause" class="time_control" type="button" value="PAUSA" disabled="disabled" />
-                                <!--<input id="btn_stop" class="time_control" type="button" value="TERMINAR" />-->
+                                <input id="btn_stop" class="time_control" type="button" value="TERMINAR" />
                             </td>
                         </tr>
-                        <?php else: ?>
+                        <?php 
+                        // Finalized
+                        else: ?>
                         <tr>
                             <td class="middle">Fecha fin</td>
                             <td class="middle"><input readonly="readonly" class="input_box" name="fecha_fin" type="text" value="<?php echo $date_end; ?>" /></td>

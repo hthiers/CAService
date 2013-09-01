@@ -721,45 +721,50 @@ class TasksController extends ControllerBase
     public function tasksStop()
     {
         $session = FR_Session::singleton();
-//        $frm_id_project = null;
-        $id_task = null;
-        $id_task = $_GET['task'];
-        $id_project = $_GET['project'];
+        $id_task = $_REQUEST['id_task'];
+        $id_project = $_REQUEST['id_project'];
+//        $total_real_time = null;
         
-//        if(isset($_POST['id_project']))
-//            $frm_id_project = $_POST['id_project'];
-
-//        if($frm_id_project != null && $session->id_project == $frm_id_project){
         if($id_task != null){
-//            $session->id_project = null;
+            require_once 'models/TasksModel.php';
+            $model = new TasksModel();
 
-            #fecha actual
+            $pdoTask = $model->getTaskById($session->id_tenant, $id_task);
+            $values = $pdoTask->fetch(PDO::FETCH_ASSOC);
+
+            // current time
             $now = date("Y-m-d H:i:s");
             $currentDateTime = new DateTime($now);
             $timezone = new DateTimeZone($session->timezone);
             $currentDateTime = $currentDateTime->setTimezone($timezone);
-            $stop_date = $currentDateTime->format("Y-m-d H:i:s");
-
-            require_once 'models/TasksModel.php';
-            $model = new TasksModel();
-
-            #get times diff
-            $result = $model->getTaskById($session->id_tenant, $id_task);
-            $values = $result->fetch(PDO::FETCH_ASSOC);
-
+            $current_date = $currentDateTime->format("Y-m-d H:i:s");
+            
+            // total time (s)
+            $total_progress = Utils::diffDates($current_date, $values['date_ini'], 'S');
+            
+            // total real time (s)
+            if($values['time_paused'] != null && empty($values['time_paused']) == false){
+                $total_progress = $total_progress - $values['time_paused'];
+            }
+            else
+                $total_progress = $total_progress;
+            
             #tiempo pausa
-            $paused_time = Utils::diffDates($stop_date, $values['date_pause'], 'S', FALSE);
-            if($values['time_paused'] != null)
-                $paused_time += $values['time_paused'];
+//            $paused_time = Utils::diffDates($stop_date, $values['date_pause'], 'S', FALSE);
+//            if($values['time_paused'] != null)
+//                $paused_time += $values['time_paused'];
 
             #tiempo total
-            $last_time = Utils::diffDates($stop_date, $values['date_ini'], 'S', FALSE);
-            $total_time = $last_time - $paused_time;
+//            $last_time = Utils::diffDates($stop_date, $values['date_ini'], 'S', FALSE);
+//            $total_time = $last_time - $paused_time;
+            
+            //stop status
+            $status = 2;
             
             #stop tarea
             $result = $model->updateTask($session->id_tenant, $id_task, $values['code_task']
-                    , $values['label_task'], $values['date_ini'], $stop_date, $total_time
-                    , $values['desc_task'], 2, $id_project, $values['cas_customer_id_customer']
+                    , $values['label_task'], $values['date_ini'], $current_date, $total_progress
+                    , $values['desc_task'], $status, $values['cas_project_id_project'], $values['cas_customer_id_customer']
                     , $values['date_pause'], $values['time_paused']);
 
             if($result != null){
@@ -768,21 +773,21 @@ class TasksController extends ControllerBase
 
                 if($error[0] == 00000 && $numr > 0){
                     #$this->projectsDt(1);
-                    header("Location: ".$this->root."?controller=projects&action=projectsView&id_project=".$id_project);
+                    header("Location: ".$this->root."?controller=tasks&action=tasksDt&error_flag=1");
                 }
                 else{
                     #$this->projectsDt(10, "Ha ocurrido un error o no se lograron aplicar cambios: ".$error[2]);
-                    header("Location: ".$this->root."?controller=Projects&action=projectsDt&error_flag=10&message='No se lograron aplicar cambios: ".$error[2]."'");
+                    header("Location: ".$this->root."?controller=tasks&action=tasksDt&error_flag=10&message='No se lograron aplicar cambios: ".$error[2]."'");
                 }
             }
             else{
                 #$this->projectsDt(10, "Ha ocurrido un error grave!");
-                header("Location: ".$this->root."?controller=Projects&action=projectsDt&error_flag=10&message='Ha ocurrido un error grave!");
+                header("Location: ".$this->root."?controller=tasks&action=tasksDt&error_flag=10&message='Error: actualizacion fallida!");
             }
         }
         else{
             #$this->projectsDt(10, "Error, el proyecto no ha sido encontrado.");
-            header("Location: ".$this->root."?controller=Projects&action=projectsDt&error_flag=10&message='Ha ocurrido un error grave!");
+            header("Location: ".$this->root."?controller=tasks&action=tasksDt&error_flag=10&message='Error: no existe tarea!");
         }
     }
     
