@@ -79,7 +79,7 @@ $(document).ready(function() {
             },
             {
                 "fnRender": function ( oObj ) {
-                    if(oObj.aData[6] != null){
+                    if(oObj.aData[6] !== null){
                         var seconds = oObj.aData[6];
                         var total = secondsToTime(seconds);
 

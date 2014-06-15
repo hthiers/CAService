@@ -99,6 +99,18 @@ class Menu extends ModelBase
             print $menuFullString;
         }
         
+        function loadCleanTestMenu()
+        {
+            $menuFullString = "<ul class='nav nav-pills'>";
+                $menuFullString.= "<li class='active'><a href='?controller=tasks&amp;action=tasksDt'>TRABAJOS</a></li>";
+                $menuFullString.= "<li><a href='?controller=tasks&amp;action=tasksNewForm'>NUEVO TRABAJO</a></li>";
+                $menuFullString.= "<li><a href='?controller=customers&amp;action=customersDt'>CLIENTES</a></li>";
+                $menuFullString.= "<li><a href='?controller=customers&amp;action=customersAddForm'>NUEVO CLIENTE</a></li>";
+            $menuFullString.= "</ul>";
+            
+            print $menuFullString;
+        }
+        
         function mimenu($root, $permiso, $controller)
 	{
             $code = '<li '. $this->getCurrentClass($controller, "admin", "users").'><a href="#">Menu</a>';
