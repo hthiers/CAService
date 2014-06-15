@@ -1,0 +1,12 @@
+/*
+* Custom style for Control Tiempos
+*/
+.panel-footer {
+    text-align: center;
+}
+.nav-pills{
+    margin: 0 auto;
+    display: table;
+    table-layout: fixed;
+    float:none;
+}
