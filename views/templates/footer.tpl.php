@@ -5,10 +5,8 @@ if($session->id_tenant != null && $session->id_user != null):
 #privs
 #if($session->privilegio > 0):
 ?>
-<div id="info">
-  <p class="Estilo1">
+<div class="panel-footer">
       Control tiempos de trabajo - Beta v0.1.1
-  </p>
 </div>
 
 </body>
@@ -19,6 +17,6 @@ if($session->id_tenant != null && $session->id_user != null):
 //endif; #privileges
 else:
     session_destroy();
-    echo '<script language="JavaScript">alert("Debe Identificarse"); document.location = "'.$rootPath.'"</script>';
+    //echo '<script language="JavaScript">alert("Debe Identificarse"); document.location = "'.$rootPath.'"</script>';
 endif; #session
 ?>

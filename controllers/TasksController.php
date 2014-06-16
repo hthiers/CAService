@@ -4,60 +4,6 @@ class TasksController extends ControllerBase
     /***************************************************************************
     * PROJECTS
     ***************************************************************************/
-
-    /**
-     * Show tasks dt
-     * @param type $error_flag
-     * @param type $message 
-     */
-    public function tasksCleanDt($error_flag = 0, $message = "")
-    {
-        $session = FR_Session::singleton();
-        
-        #support global messages
-        if(isset($_GET['error_flag']))
-            $error_flag = $_GET['error_flag'];
-        if(isset($_GET['message']))
-            $message = $_GET['message'];
-        
-        //Incluye el modelo que corresponde
-//        require_once 'models/ProjectsModel.php';
-//        require_once 'models/UsersModel.php';
-        require_once 'models/TasksModel.php';
-
-        //Creamos una instancia de nuestro "modelo"
-//        $projectsModel = new ProjectsModel();
-//        $userModel = new UsersModel();
-        $taskModel = new TasksModel();
-
-        //Le pedimos al modelo todos los items
-        $pdo = $taskModel->getAllTasksByTenant($session->id_tenant);
-
-        // Obtener permisos de edición
-//        $permisos = $userModel->getUserModulePrivilegeByModule($session->id, 7);
-//        if($row = $permisos->fetch(PDO::FETCH_ASSOC)){
-//            $data['permiso_editar'] = $row['EDITAR'];
-//        }
-        
-        # dates
-        $arrayDates = Utils::getMonths();
-        $data['arrayDates'] = $arrayDates;
-        
-        //Pasamos a la vista toda la información que se desea representar
-        $data['listado'] = $pdo;
-
-        //Titulo pagina
-        $data['titulo'] = "Lista de Tareas";
-
-        $data['controller'] = "tasks";
-        $data['action'] = "tasksView";
-//        $data['action_b'] = "trabajosDt";
-
-        //Posible error
-        $data['error_flag'] = $this->errorMessage->getError($error_flag, $message);
-
-        $this->view->show("tasks_clean_dt.php", $data);
-    }
     
     /**
      * Show tasks dt
