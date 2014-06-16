@@ -81,7 +81,7 @@ function submitToForm(){
     <div class="container">
         
         <?php
-        require('templates/menu_clean.tpl.php'); #banner & menu
+        require('templates/menu.tpl.php'); #banner & menu
         ?>
 
         <!-- DEBUG -->
@@ -147,5 +147,5 @@ function submitToForm(){
 <?php
 #endif; #privs
 endif; #session
-require('templates/footer_clean.tpl.php');
+require('templates/footer.tpl.php');
 ?>
