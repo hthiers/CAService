@@ -20,23 +20,38 @@ if($session->id_tenant != null && $session->id_user != null):
 <script type="text/javascript">
 $(document).ready(function() {
     var oTable = $('#tasksData').DataTable({
-        serverSide: true,
+        "processing": true,
+        "serverSide": true,
         ajax: {
-            url: '?controller=tasks&action=ajaxTasksDt',
-            type: 'GET'
+            type: 'GET',
+            url: '?controller=tasks&action=ajaxTasksDt'
         },
         columnDefs: [
-            {visible: false, tagets: [7,8,9,10]}
-        ]
-    });
-    
-    /*oTable.column(7).visible(false);
-    oTable.column(8).visible(false);
-    oTable.column(9).visible(false);
-    oTable.column(10).visible(false);*/
-    
-    /*oTable.column(11).data();*/
-    
+            {
+                "visible": false,
+                "targets": [7,8,9,10]
+            }
+        ],
+        "dom": '<"top"lfp>rt<"clear">',
+        "language": {
+            "lengthMenu": "_MENU_ por p&aacute;gina",
+            "zeroRecords": "0 registros",
+            "info": "Mostrando pagina _PAGE_ de _PAGES_",
+            "infoEmpty": "No hay registros",
+            "infoFiltered": "(de _MAX_ registros)",
+            "loadingRecords": "Cargando...",
+            "processing":     "Procesando...",
+            "search":         "Buscar ",
+            "paginate": {
+                "first":      "Primera",
+                "last":       "&Uacute;ltima",
+                "next":       "Siguiente",
+                "previous":   "Anterior"
+            }
+        },
+        "order": [[ 4, "desc" ]]
+        
+    });    
     
     //$('#cboCliente').change(function() { oTable.fnDraw(); } );
     //$('#cboMes').change(function() { oTable.fnDraw(); } );
@@ -111,7 +126,7 @@ function submitToForm(){
         
         <!-- DATATABLE -->
             <form method="POST" action="<?php echo "?controller=".$controller."&amp;action=".$action;?>">
-                <table id="tasksData" class="table table-striped table-bordered">
+                <table id="tasksData" class="table table-striped table-bordered" width="100%">
                     <thead>
                         <tr>
                             <th>ETIQUETA</th>
