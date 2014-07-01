@@ -24,15 +24,35 @@ $(document).ready(function() {
         "serverSide": true,
         ajax: {
             type: 'GET',
-            url: '?controller=tasks&action=ajaxTasksDt'
-        },
-        columnDefs: [
+            url: '?controller=tasks&action=ajaxTasksDtX'
+        }
+        ,columnDefs: [
             {
                 "visible": false,
                 "targets": [7,8,9,10]
+            },
+            {
+                "render": function(data, type, row){
+                    if(data != null){
+                        var seconds = data;
+                        var total = secondsToTime(seconds);
+                        
+                        return total['h']+':'+total['m']+':'+total['s'];
+                    }
+                    else{
+                        return "00";
+                    }
+                },
+                "targets": 6
+            },
+            {
+                "render": function(){
+                    return "[tal vez se saque]";
+                },
+                "targets": 11
             }
-        ],
-        "dom": '<"top"lfp>rt<"clear">',
+        ]
+        ,"dom": '<"top"lfp>rt<"clear">',
         "language": {
             "lengthMenu": "_MENU_ por p&aacute;gina",
             "zeroRecords": "0 registros",
@@ -48,8 +68,8 @@ $(document).ready(function() {
                 "next":       "Siguiente",
                 "previous":   "Anterior"
             }
-        },
-        "order": [[ 4, "desc" ]]
+        }
+        //,"order": [[ 4, "desc" ]]
         
     });    
     
@@ -143,11 +163,6 @@ function submitToForm(){
                             <th>OPCIONES</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td colspan="11" class="dataTables_empty">Loading data from server</td>
-                        </tr>
-                    </tbody>
                 </table>
                 <table>
                     <tr>

@@ -382,302 +382,106 @@ class TasksModel extends ModelBase
         return $consulta;
     }
 
+    public function getAllTasksDynamic($request){
+        //Tabla en BBDD
+        $table = 'cas_task';
 
-    /********************************
-     * OLD STUFF
-     ********************************
-     */
+        //Llave primaria
+        $primaryKey = 'id_task';
+        
+        //Columnas a Exportar
+        $columns = array(
+            array( 'db' => 'a.label_task', 'dt' => 0 ),
+            array( 'db' => 'c.label_customer',  'dt' => 1 ),
+            array( 'db' => 'e.name_user',   'dt' => 2 ),
+            array( 'db' => 'b.label_project',     'dt' => 3 ),
+            array( 'db' => 'a.date_ini',     'dt' => 4 ),
+            array( 'db' => 'a.date_end',     'dt' => 5 ),
+            array( 'db' => 'a.time_total',     'dt' => 6 ),
+            array( 'db' => 'a.id_task',     'dt' => 7 ),
+            array( 'db' => 'a.id_tenant',     'dt' => 8 ),
+            array( 'db' => 'b.id_project',     'dt' => 9 ),
+            array( 'db' => 'c.id_customer',     'dt' => 10 ),
+            array( 'db' => 'e.id_user',     'dt' => 11 )
+        );
+        
+        //Tablas para join
+        $joinString = "LEFT OUTER JOIN cas_project b
+            ON (a.cas_project_id_project = b.id_project
+                    AND 
+                a.id_tenant = b.id_tenant)
+            LEFT OUTER JOIN cas_customer c
+            ON (a.cas_customer_id_customer = c.id_customer
+                    AND 
+                a.id_tenant = b.id_tenant)
+            LEFT OUTER JOIN cas_task_has_cas_user d
+            ON a.id_task = d.cas_task_id_task
+            LEFT OUTER JOIN cas_user e
+            ON d.cas_user_id_user = e.id_user";
+        
+        require_once 'AjaxModelsModel.php';
+        $ajaxModel = new AjaxModelModel();
+        
+        $sql = $ajaxModel->buildQueryString($request, $table, $columns, $joinString);
+        #$sql = $ajaxModel->test($request);
 
-//    //GET ALL SEGMENTS
-//    public function getAllSegmentsSimple()
-//    {
-//        //realizamos la consulta de todos los segmentos
-//        $consulta = $this->db->prepare("
-//                SELECT 
-//                    DISTINCT
-//                    a.COD_SEGMENT
-//                    , a.NAME_SEGMENT
-//                FROM  t_segment a
-//                ORDER BY a.NAME_SEGMENT");
-//
-//        $consulta->execute();
-//
-//        //devolvemos la coleccion para que la vista la presente.
-//        return $consulta;
-//    }
-//
-//    //GET SEGMENT BY NAME
-//    public function getSegmentByName($name_segment)
-//    {
-//        //realizamos la consulta de todos los segmentos
-//        $consulta = $this->db->prepare("
-//                SELECT 
-//                    a.COD_SEGMENT
-//                    , a.NAME_SEGMENT
-//                    , b.COD_GBU AS GBU_COD_GBU
-//                    , b.NAME_GBU AS GBU_NAME_GBU
-//                FROM  t_segment a
-//                INNER JOIN t_gbu b 
-//                ON a.COD_GBU = b.COD_GBU
-//                WHERE A.NAME_SEGMENT = '$name_segment'");
-//
-//        $consulta->execute();
-//
-//        //devolvemos la coleccion para que la vista la presente.
-//        return $consulta;
-//    }
-//
-//    /**
-//     * Get array of segments by COD_GBU
-//     * @param string $cod_gbu
-//     * @return PDO
-//     */
-//    public function getAllSegmentsByGbu($cod_gbu)
-//    {
-//        //realizamos la consulta de todos los segmentos
-//        $consulta = $this->db->prepare("
-//                SELECT 
-//                    a.COD_SEGMENT
-//                    , a.NAME_SEGMENT
-//                    , b.COD_GBU AS GBU_COD_GBU
-//                    , b.NAME_GBU AS GBU_NAME_GBU
-//                FROM  t_segment a
-//                INNER JOIN t_gbu b 
-//                ON a.COD_GBU = b.COD_GBU
-//                WHERE A.COD_GBU = '$cod_gbu'");
-//
-//        $consulta->execute();
-//
-//        //devolvemos la coleccion para que la vista la presente.
-//        return $consulta;
-//    }
-//
-//
-//
-//
-//
-//    //EDIT SEGMENT
-//    public function editSegment($cod_segment, $name_segment, $cod_gbu, $old_cod_segment, $old_name_segment, $old_gbu)
-//    {
-//        require_once 'AdminModel.php';
-//        $logModel = new AdminModel();
-//        $sql = "UPDATE t_segment WHERE '$cod_segment'";
-//
-//        $session = FR_Session::singleton();
-//
-//        $consulta = $this->db->prepare("UPDATE t_segment
-//                        SET 
-//                            NAME_SEGMENT = '$name_segment'
-//                            , COD_GBU = '$cod_gbu'
-//                        WHERE COD_SEGMENT = '$old_cod_segment'
-//                            AND COD_GBU = '$old_gbu'");
-//
-//        $consulta->execute();
-//
-//        //Save log event - NOTE THAT IS ACTION IS NOT DEBUGGABLE
-//        $logModel->addNewEvent($session->usuario, $sql, 'SEGMENTS');
-//
-//        return $consulta;
-//    }
-//
-//
-//    /*******************************************************************************
-//    * SUB SEGMENTS
-//    *******************************************************************************/
-//
-//    //GET ALL SUB SEGMENTS
-//    public function getAllSubSegments()
-//    {
-//        //realizamos la consulta de todos los segmentos
-//        $consulta = $this->db->prepare("
-//                SELECT a.COD_SUB_SEGMENT
-//                    , a.NAME_SUB_SEGMENT
-//                    , b.COD_GBU AS GBU_COD_GBU
-//                    , b.NAME_GBU AS GBU_NAME_GBU
-//                FROM  t_sub_segment AS a
-//                INNER JOIN t_gbu AS b ON a.COD_GBU = b.COD_GBU");
-//
-//        $consulta->execute();
-//
-//        //devolvemos la coleccion para que la vista la presente.
-//        return $consulta;
-//    }
-//
-//    //GET NEW SUB SEGMENT CODE
-//    public function getNewSubSegmentCode()
-//    {
-//        //get last sub segment
-//        $consulta = $this->db->prepare("SELECT COD_SUB_SEGMENT 
-//                        FROM t_sub_segment 
-//                        WHERE COD_SUB_SEGMENT NOT LIKE '%N/A%' 
-//                        ORDER BY COD_SUB_SEGMENT DESC LIMIT 1");
-//
-//        $consulta->execute();
-//
-//        //devolvemos la coleccion para que la vista la presente.
-//        return $consulta;
-//    }
-//
-//    //GET SUB SEGMENT BY COD_GBU
-//    public function getSubSegmentsByGbu($cod_gbu)
-//    {
-//        //get last sub segment
-//        $consulta = $this->db->prepare("
-//                SELECT a.COD_SUB_SEGMENT
-//                    , a.NAME_SUB_SEGMENT
-//                    , b.COD_GBU AS GBU_COD_GBU
-//                    , b.NAME_GBU AS GBU_NAME_GBU
-//                FROM  t_sub_segment AS a
-//                INNER JOIN t_gbu AS b ON a.COD_GBU = b.COD_GBU
-//                WHERE A.COD_GBU = '$cod_gbu'");
-//
-//        $consulta->execute();
-//
-//        //devolvemos la coleccion para que la vista la presente.
-//        return $consulta;
-//    }
-//
-//    //ADD SUB SEGMENT
-//    public function addNewSubSegment($code, $name, $cod_gbu)
-//    {
-//        require_once 'AdminModel.php';
-//        $logModel = new AdminModel();
-//        $sql = "INSERT INTO t_sub_segment VALUES '$code', '$name'";
-//
-//        $session = FR_Session::singleton();
-//
-//        $consulta = $this->db->prepare("INSERT INTO t_sub_segment 
-//                (COD_SUB_SEGMENT, NAME_SUB_SEGMENT, COD_GBU) 
-//                VALUES ('$code','$name','$cod_gbu')");
-//        $consulta->execute();
-//
-//        //Save log event - NOTE THAT IS ACTION IS NOT DEBUGGABLE
-//        $logModel->addNewEvent($session->usuario, $sql, 'SUBSEGMENTS');
-//
-//        return $consulta;
-//    }
-//
-//    //EDIT SUB SEGMENT
-//    public function editSubSegment($code, $name, $cod_gbu, $old_code, $old_name, $old_gbu)
-//    {
-//        require_once 'AdminModel.php';
-//        $logModel = new AdminModel();
-//        $sql = "UPDATE t_sub_segment WHERE '$code'";
-//
-//        $session = FR_Session::singleton();
-//
-//        $consulta = $this->db->prepare("UPDATE t_sub_segment
-//                            SET 
-//                                NAME_SUB_SEGMENT = '$name'
-//                                , COD_GBU = '$cod_gbu'
-//                            WHERE COD_SUB_SEGMENT = '$old_code'
-//                                AND COD_GBU = '$old_gbu'");
-//
-//        $consulta->execute();
-//
-//        //Save log event - NOTE THAT IS ACTION IS NOT DEBUGGABLE
-//        $logModel->addNewEvent($session->usuario, $sql, 'SUBSEGMENTS');
-//
-//        return $consulta;
-//    }
-//
-//
-//    /*******************************************************************************
-//    * MICRO SEGMENTS
-//    *******************************************************************************/
-//
-//    //GET ALL MICRO SEGMENTS
-//    public function getAllMicroSegments()
-//    {
-//        //realizamos la consulta de todos los segmentos
-//        $consulta = $this->db->prepare("
-//                SELECT a.COD_MICRO_SEGMENT
-//                    , a.NAME_MICRO_SEGMENT
-//                    , b.COD_GBU AS GBU_COD_GBU
-//                    , b.NAME_GBU AS GBU_NAME_GBU
-//                FROM  t_micro_segment AS a
-//                INNER JOIN t_gbu AS b ON a.COD_GBU = b.COD_GBU");
-//
-//        $consulta->execute();
-//
-//        //devolvemos la coleccion para que la vista la presente.
-//        return $consulta;
-//    }
-//
-//    //GET ALL MICRO SEGMENTS BY COD_GBU
-//    public function getAllMicroSegmentsByGbu($cod_gbu)
-//    {
-//        //realizamos la consulta de todos los segmentos
-//        $consulta = $this->db->prepare("
-//                SELECT a.COD_MICRO_SEGMENT
-//                    , a.NAME_MICRO_SEGMENT
-//                    , b.COD_GBU AS GBU_COD_GBU
-//                    , b.NAME_GBU AS GBU_NAME_GBU
-//                FROM  t_micro_segment AS a
-//                INNER JOIN t_gbu AS b ON a.COD_GBU = b.COD_GBU
-//                WHERE A.COD_GBU = '$cod_gbu'");
-//
-//        $consulta->execute();
-//
-//        //devolvemos la coleccion para que la vista la presente.
-//        return $consulta;
-//    }
-//
-//    //GET NEW MICRO SEGMENT CODE
-//    public function getNewMicroSegmentCode()
-//    {
-//        //get last sub segment
-//        $consulta = $this->db->prepare("SELECT COD_MICRO_SEGMENT FROM t_micro_segment
-//                    WHERE COD_MICRO_SEGMENT NOT LIKE '%N/A%' 
-//                    ORDER BY COD_MICRO_SEGMENT DESC LIMIT 1");
-//        $consulta->execute();
-//
-//        //devolvemos la coleccion para que la vista la presente.
-//        return $consulta;
-//    }
-//
-//    //ADD MICRO SEGMENT
-//    public function addNewMicroSegment($code, $name, $cod_gbu)
-//    {
-//        require_once 'AdminModel.php';
-//        $logModel = new AdminModel();
-//        $sql = "INSERT INTO t_micro_segment VALUES '$code','$name'";
-//
-//        $session = FR_Session::singleton();
-//
-//        $consulta = $this->db->prepare("INSERT INTO t_micro_segment 
-//                (COD_MICRO_SEGMENT, NAME_MICRO_SEGMENT, COD_GBU) 
-//                VALUES ('$code','$name','$cod_gbu')");
-//        $consulta->execute();
-//
-//        //Save log event - NOTE THAT IS ACTION IS NOT DEBUGGABLE
-//        $logModel->addNewEvent($session->usuario, $sql, 'MICROSEGMENTS');
-//
-//        return $consulta;
-//    }
-//
-//    //EDIT MICRO SEGMENT
-//    public function editMicroSegment($code, $name, $cod_gbu, $old_code, $old_name, $old_gbu)
-//    {
-//        require_once 'AdminModel.php';
-//        $logModel = new AdminModel();
-//        $sql = "UPDATE t_micro_segment WHERE '$code'";
-//
-//        $session = FR_Session::singleton();
-//
-//        $consulta = $this->db->prepare("UPDATE t_micro_segment
-//                    SET 
-//                            NAME_MICRO_SEGMENT = '$name'
-//                            , COD_GBU = '$cod_gbu'
-//                    WHERE COD_MICRO_SEGMENT = '$old_code'
-//                        AND COD_GBU = '$old_gbu'");
-//
-//        $consulta->execute();
-//
-//        //Save log
-//        $logModel->addNewEvent($session->usuario, $sql, 'MICROSEGMENTS');
-//
-//        return $consulta;
-//    }
+        //Get data
+        $pdoData = $this->db->prepare($sql);
+        $pdoData->execute();
+        #$resultData = $pdoData->fetch(PDO::FETCH_BOTH);
+        $resultData = $pdoData->fetch(PDO::FETCH_NUM);
+        #$error = $result->errorInfo();
+        #$value = $result->fetch(PDO::FETCH_ASSOC);
+
+        //Get found by filters
+        $pdoFound = $this->db->prepare("SELECT FOUND_ROWS()");
+        $pdoFound->execute();
+        $resFilterLength = $pdoFound->fetch(PDO::FETCH_BOTH);
+        $recordsFiltered = $resFilterLength[0];
+
+        //Get total data
+        $pdoTotal = $this->db->prepare("SELECT COUNT($primaryKey) FROM $table");
+        $pdoTotal->execute();
+        $resTotalLength = $pdoTotal->fetch(PDO::FETCH_BOTH);
+        $recordsTotal = $resTotalLength[0];
+
+        $result_array = array(
+            "draw"            => intval( $request['draw'] ),
+            "recordsTotal"    => intval( $recordsTotal ),
+            "recordsFiltered" => intval( $recordsFiltered ),
+            "data"            => $ajaxModel->dataOutputX(count($columns), $pdoData)
+        );
+        
+        #$ajaxModel->dataOutput($columns, $resultData)
+
+        return $result_array;
+        #return $sql;
+
+        // Main query to actually get the data
+        /*$data = SSP::sql_exec( $db, $bindings,
+            "SELECT SQL_CALC_FOUND_ROWS '".implode("', '", SSP::pluck($columns, 'db'))."'
+            FROM '$table' a
+            $joins
+            $where
+            $order
+            $limit"
+        );*/
+
+        // Data set length after filtering
+        #$resFilterLength = SSP::sql_exec($db, "SELECT FOUND_ROWS()");
+        #$recordsFiltered = $resFilterLength[0][0];
+
+        // Total data set length
+        #$resTotalLength = SSP::sql_exec($db, "SELECT COUNT('{$primaryKey}') FROM '$table'");
+        #$recordsTotal = $resTotalLength[0][0];
+
+        // Output
+        /*return array(
+            "draw"            => intval( $request['draw'] ),
+            "recordsTotal"    => intval( $recordsTotal ),
+            "recordsFiltered" => intval( $recordsFiltered ),
+            "data"            => SSP::data_output( $columns, $data )
+        );*/
+    }
 }
 ?>

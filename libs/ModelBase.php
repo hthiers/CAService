@@ -5,6 +5,7 @@
 abstract class ModelBase 
 {
     protected $db;
+    protected $ssp;
     protected $apache;
     protected $root;
 
