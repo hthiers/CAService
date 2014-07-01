@@ -3,6 +3,7 @@
 */
 .panel-footer {
     text-align: center;
+    color: aqua !important;
 }
 .nav-pills{
     margin: 0 auto;
