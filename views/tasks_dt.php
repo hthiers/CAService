@@ -115,9 +115,7 @@ function submitToForm(){
     <!-- CENTRAL -->
     <div class="container">
         
-        <?php
-        require('templates/menu.tpl.php'); #banner & menu
-        ?>
+        <?php require('templates/menu.tpl.php'); ?>
 
         <!-- DEBUG -->
         <?php 

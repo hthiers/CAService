@@ -9,62 +9,14 @@ if($session->id_tenant != null && $session->id_user != null):
 ?>
 
 <!-- AGREGAR JS & CSS AQUI -->
-<style type="text/css" title="currentStyle">
-    .table_left {
-        margin-bottom: 10px;
-    }
-    .table_right {
-        margin-left: 70px;
-    }
-    td.middle {
-        padding-bottom: 15px;
-        text-align: left;
-    }
-    input.input_box, textarea.input_box, select.input_box{
-        border: 1px solid #989898;
-        border-radius: 4px
-    }
-    #dt_filtres table {
-        float: left;
-    }
-    #dt_filtres input, #dt_filtres textarea, #dt_filtres select {
-        margin-left: 5px;
-        width: 155px;
-        height: 20px;
-    }
-    #dt_filtres input.time_control {
-        width: 80px;
-        height: 30px;
-    }
-    #dt_filtres input.time_status {
-        margin-top: 10px;
-        height: 30px;
-        width: 250px;
-    }
-    #dt_filtres textarea{
-        width: 300px;
-        height: 100px;
-    }
-    #dt_filtres td {
-        text-align: left;
-    }
-    #dt_filtres {
-        padding: 10px;
-        /*height: 200px;*/
-    }
-    #btn_stop {
-        border: 1px solid #989898;
-        border-radius: 4px;
-        background-color: orangered;
-    }
-    #btn_stop:active {
-        background-color: brown;
-    }
-    #datepicker {
-        margin-left: 5px;
-    }
-</style>
-<script type="text/javascript" language="javascript" src="views/lib/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="views/css/bootstrap.min.css">
+<link rel="stylesheet" href="views/css/custom.css">
+<link rel="stylesheet" href="views/css/dataTables.bootstrap.css">
+
+<script type="text/javascript" src="views/lib/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="views/lib/jquery.dataTables.1.10.0.js"></script>
+<script type="text/javascript" src="views/lib/dataTables.bootstrap.js"></script>
+<script type="text/javascript" src="views/lib/utils.js"></script>
 <script type="text/javascript">
     // JQDialog window
     var windowSizeArray = [ "width=200,height=200","width=300,height=400,scrollbars=yes" ];
@@ -141,7 +93,7 @@ if($session->id_tenant != null && $session->id_user != null):
     });
     
     // JQDatepicker
-    $(function() {
+    /*$(function() {
         $.datepicker.regional['es'] = {
             monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
             'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
@@ -156,7 +108,7 @@ if($session->id_tenant != null && $session->id_user != null):
                 $("#hdnPicker").val(date);
             }
         });
-    });
+    });*/
     
     // Func submit new project
     function iniTrabajo(){
@@ -179,6 +131,7 @@ if($session->id_tenant != null && $session->id_user != null):
     }
     
     // JQDialog new project
+    /*
     $(function() {
         // a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
         $( "#dialog:ui-dialog" ).dialog( "destroy" );
@@ -232,18 +185,22 @@ if($session->id_tenant != null && $session->id_user != null):
 //            console.log("dialog para project.");
             $( "#dialog-new-project" ).dialog( "open" );
         });
-    });
+    });*/
 </script>
 
 </head>
-<body id="dt_example" class="ex_highlight_row">
+<body>
+    
+    <?php
+    require('templates/navbar.tpl.php'); #banner & menu
+    ?>
 
-    <?php require('templates/dialogs.tpl.php'); #session & header ?>
-    <?php require('templates/menu.tpl.php'); #banner & menu ?>
+    <?php #require('templates/dialogs.tpl.php'); #session & header ?>
     
     <!-- CENTRAL -->
-    <div id="central">
-    <div id="contenido">
+    <div class="container">
+        
+        <?php require('templates/menu.tpl.php'); ?>
 
         <!-- DEBUG -->
         <?php 
@@ -268,7 +225,7 @@ if($session->id_tenant != null && $session->id_user != null):
         ?>
         <!-- END DEBUG -->
 
-        <p class="titulos-form"><?php echo $titulo; ?></p>
+        <h4><?php echo $titulo; ?></h4>
 
         <!--
         <p style="font-size: 12px; color: #999;">
@@ -288,77 +245,54 @@ if($session->id_tenant != null && $session->id_user != null):
         }
         ?>
 
-        <div id="dt_filtres">
-            <form id="formModule" name="formModule" method="post" action="?controller=tasks&amp;action=tasksAdd">
-                <div id="trabajo_info" style="float: left;">
-                    <table class="table_left">
-                        <tr>
-                            <td class="middle">Responsable</td>
-                            <td class="middle"><input readonly="readonly" class="input_box" name="resp" type="text" value="<?php echo $name_user; ?>" /></td>
-                        </tr>
-                        <tr>
-                            <td class="middle">Proyecto</td>
-                            <td class="middle">
-                                <?php
-                                echo "<select class='input_box' id='cboprojects' name='cboprojects'>\n";
-                                echo "<option value='noaplica' selected='selected'>Sin Proyecto</option>\n";
-                                while($row = $pdoProject->fetch(PDO::FETCH_ASSOC))
-                                {
-                                    echo "<option value='$row[id_project]'>$row[label_project]</option>\n";
-                                }
-                                echo "</select>\n";
-                                ?>
-                                &nbsp;
-                                <a id="create-project" href="#">Nuevo</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="middle">Etiqueta</td>
-                            <td class="middle">
-                                <input type="text" class="input_box" name="etiqueta" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Descripci&oacute;n</td>
-                            <td>
-                                <textarea class="input_box" name="descripcion"></textarea>
-                            </td>
-                        </tr>
-                    </table>
-                    <table class="table_right">
-                        <tr>
-                            <td class="middle">Fecha inicio</td>
-                            <td class="middle"><div id="datepicker"></div></td>
-                        </tr>
-                        <tr>
-                            <td class="middle">Hora inicio</td>
-                            <td class="middle"><input id="hora_ini" class="input_box" name="hora_ini" type="text" value="" /></td>
-                        </tr>
-                    </table>
-                </div>
-                <table id="trabajo_timing" style="float: none; width: 100%; border-top: 1px solid #CCC;">
-                    <tr>
-                        <td colspan="2" style="text-align: center;">Control de tiempo 
-                            <br /><br />
-                            <input id="btn_play" class="time_control" type="button" value="INICIO" />
-                            <!--<input id="btn_pause" class="time_control" type="button" value="PAUSA" />-->
-                            <!--<input id="btn_stop" class="time_control" type="button" value="TERMINAR" />-->
-                            <!--
-                            <br />
-                            <input type="text" class="time_status" value="tiempo..." />
-                            -->
-                        </td>
-                    </tr>                    
-                </table>
-                <div style="clear: both;">
-                    <input id="hdnPicker" type="hidden" name="fecha" value="" />
-                    <input id="hdnCode" type="hidden" name="new_code" value="<?php echo $new_code; ?>" />
-                    <input id="hdnUser" type="hidden" name="id_user" value="<?php echo $id_user; ?>" />
-                </div>
-            </form>
+        <div>
+            <div>
+                <label>Responsable</label>
+                <input readonly="readonly" name="resp" type="text" value="<?php echo $name_user; ?>" /></td>
+                <label>Proyecto</label>
+                <?php
+                echo "<select class='input_box' id='cboprojects' name='cboprojects'>\n";
+                echo "<option value='noaplica' selected='selected'>Sin Proyecto</option>\n";
+                while($row = $pdoProject->fetch(PDO::FETCH_ASSOC))
+                {
+                    echo "<option value='$row[id_project]'>$row[label_project]</option>\n";
+                }
+                echo "</select>\n";
+                ?>
+                &nbsp;
+                <a id="create-project" href="#">Nuevo</a>
+                <label>Etiqueta</label>
+                <input type="text" name="etiqueta" />
+                <label>Descripci&oacute;n</label>
+                <textarea class="input_box" name="descripcion"></textarea>
+            </div>
+
+            <div>
+                <label>Fecha inicio</label>
+                <div id="datepicker"></div>
+                <label>Hora inicio</label>
+                <input id="hora_ini" name="hora_ini" type="text" value="" />
+            </div>
+            
+            <div>
+                <label>Control de tiempo</label>
+                <input id="btn_play" type="button" value="INICIO" />
+                <!--<input id="btn_pause" class="time_control" type="button" value="PAUSA" />-->
+                <!--<input id="btn_stop" class="time_control" type="button" value="TERMINAR" />-->
+                <!--
+                <br />
+                <input type="text" class="time_status" value="tiempo..." />
+                -->
+            </div>
+
+            <div style="clear: both;">
+                <input id="hdnPicker" type="hidden" name="fecha" value="" />
+                <input id="hdnCode" type="hidden" name="new_code" value="<?php echo $new_code; ?>" />
+                <input id="hdnUser" type="hidden" name="id_user" value="<?php echo $id_user; ?>" />
+            </div>
+                
         </div>
 
-    </div>
     </div>
     <!-- END CENTRAL -->
 
