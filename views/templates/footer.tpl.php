@@ -6,7 +6,7 @@ if($session->id_tenant != null && $session->id_user != null):
 #if($session->privilegio > 0):
 ?>
 <div class="panel-footer">
-      Control tiempos de trabajo - Beta v0.1.1
+      Control tiempos de trabajo - Beta v0.2
 </div>
 
 </body>

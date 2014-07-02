@@ -69,7 +69,7 @@ class TasksController extends ControllerBase
         
         echo json_encode($result);
         
-        //testing
+        //mirar valores en pantalla de testing
 //        $data['get'] = $_GET;
 //        $data['resultado'] = $result;
 //        $data['json'] = $jsonResult;

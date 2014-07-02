@@ -405,6 +405,20 @@ class TasksModel extends ModelBase
             array( 'db' => 'e.id_user',     'dt' => 11 )
         );
         
+        //arreglo limpio para metodo de busqueda antiguo (filter nuevo con problemas!)
+        $columnsClean = array('a.label_task',
+                    'c.label_customer',
+                    'e.name_user',
+                    'b.label_project',
+                    'a.date_ini',
+                    'a.date_end',
+                    'a.time_total',
+                    'a.id_task',
+                    'a.id_tenant',
+                    'b.id_project',
+                    'c.id_customer',
+                    'e.id_user');
+        
         //Tablas para join
         $joinString = "LEFT OUTER JOIN cas_project b
             ON (a.cas_project_id_project = b.id_project
@@ -422,14 +436,14 @@ class TasksModel extends ModelBase
         require_once 'AjaxModelsModel.php';
         $ajaxModel = new AjaxModelModel();
         
-        $sql = $ajaxModel->buildQueryString($request, $table, $columns, $joinString);
+        $sql = $ajaxModel->buildQueryString($request, $table, $columns, $columnsClean, $joinString);
         #$sql = $ajaxModel->test($request);
 
         //Get data
         $pdoData = $this->db->prepare($sql);
         $pdoData->execute();
         #$resultData = $pdoData->fetch(PDO::FETCH_BOTH);
-        $resultData = $pdoData->fetch(PDO::FETCH_NUM);
+        //$resultData = $pdoData->fetch(PDO::FETCH_NUM);
         #$error = $result->errorInfo();
         #$value = $result->fetch(PDO::FETCH_ASSOC);
 

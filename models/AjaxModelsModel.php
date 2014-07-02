@@ -39,7 +39,6 @@ class AjaxModelModel{
     }
     
     static function dataOutputX($totalColumns, $data){
-        $k = 1;
         $output = array();
         
         while($aRow = $data->fetch(PDO::FETCH_NUM))
@@ -54,8 +53,6 @@ class AjaxModelModel{
             }
 
             $output[] = $row;
-
-            $k++;
         }
         
         return $output;
@@ -168,8 +165,7 @@ class AjaxModelModel{
 
                 $str = $requestColumn['search']['value'];
 
-                if ( $requestColumn['searchable'] == 'true' &&
-                 $str != '' ) {
+                if ( $requestColumn['searchable'] == 'true' && $str != '' ) {
                         $binding = AjaxModelModel::bind( $bindings, '%'.$str.'%', PDO::PARAM_STR );
                         $columnSearch[] = "`".$column['db']."` LIKE ".$binding;
                 }
@@ -190,6 +186,50 @@ class AjaxModelModel{
 
         if ( $where !== '' ) {
                 $where = 'WHERE '.$where;
+        }
+
+        return $where;
+    }
+
+    static function filterX ( $request, $columns )
+    {
+        $where = "";
+
+        if ( isset($request['search']) && $request['search']['value'] != '' )
+        {
+            $str = $request['search']['value'];
+            $where = "WHERE (";
+            
+            for ( $i=0 ; $i<count($columns) ; $i++ )
+            {
+                $requestColumn = $request['columns'][$i];
+                
+                $where .= "".$columns[$i]." LIKE '%".$str."%' OR ";
+            }
+
+            $where = substr_replace( $where, "", -3 );
+            $where .= ')';
+        }
+
+        /********************* Individual column filtering */
+        for ( $i=0 ; $i<count($columns) ; $i++ )
+        {
+            $requestColumn = $request['columns'][$i];
+            $str = $requestColumn['search']['value'];
+            
+            if ( $request['searchable'][$i] == "true" && $str != '' )
+            {
+                if ( $where == "" )
+                {
+                    $where = "WHERE ";
+                }
+                else
+                {
+                    $where .= " AND ";
+                }
+
+                $where .= "".$columns[$i]." LIKE '%".$str."%' ";
+            }
         }
 
         return $where;
@@ -265,15 +305,16 @@ class AjaxModelModel{
      *  @param  array $columns Column information array
      *  @return array          Server-side processing response array
      */
-    public function buildQueryString($request, $table, $columns, $joins)
+    public function buildQueryString($request, $table, $columns, $columnsClean, $joins)
     {
-        #$bindings = array();
+        $bindings = array();
         #$db = AjaxModelModel::sql_connect( $sql_details );
 
         // Build the SQL query string from the request
         $limit = AjaxModelModel::limit( $request, $columns );
         $order = AjaxModelModel::order( $request, $columns );
-        $where = AjaxModelModel::filter( $request, $columns, $bindings );
+        #$where = AjaxModelModel::filter( $request, $columns, $bindings );
+        $where = AjaxModelModel::filterX( $request, $columnsClean, $bindings );
         $joins = AjaxModelModel::joins($joins);
 
         // Join parts

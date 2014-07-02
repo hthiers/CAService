@@ -40,7 +40,7 @@ $(document).ready(function() {
                         return total['h']+':'+total['m']+':'+total['s'];
                     }
                     else{
-                        return "00";
+                        return "";
                     }
                 },
                 "targets": 6
@@ -52,7 +52,7 @@ $(document).ready(function() {
                 "targets": 11
             }
         ]
-        ,"dom": '<"top"lfp>rt<"clear">',
+        ,"dom": '<"top"lf>rt<"bottom"p><"clear">',
         "language": {
             "lengthMenu": "_MENU_ por p&aacute;gina",
             "zeroRecords": "0 registros",
